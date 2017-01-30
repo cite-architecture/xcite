@@ -76,7 +76,12 @@ class CtsUrnMatchingSpec extends FlatSpec {
   }
 
 
-  it should "match ranges on the same leaf node" in pending
+  it should "match ranges or single nodes on the same leaf node" in {
+    val nodeUrn = CtsUrn("urn:cts:greekLit:tlg5026:1.1")
+    val subrefRange = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:1.1@μῆνιν-1.1@ἄ")
+    val spanningRef = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:1.1@μῆνιν-2.1@οὐλομένην")
+    assert (nodeUrn.urnMatch(spanningRef) == false)
+  }
 
 
 }

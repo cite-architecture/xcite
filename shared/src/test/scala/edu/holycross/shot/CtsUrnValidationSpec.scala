@@ -74,7 +74,7 @@ class CtsUrnValidationSpec extends FlatSpec {
       CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:-1.10")
       fail("Should not have formed URN")
     } catch {
-      case e: IllegalArgumentException => assert (e.getMessage() == "requirement failed: Invalid URN syntax.  Error in passage component -1.10")
+      case e: CiteException => assert (e.getMessage() ==   "No range beginning defined in urn:cts:greekLit:tlg0012.tlg001.msA:-1.10")
       case unknown: Throwable => fail("Unrecognized exception " + unknown)
     }
   }
@@ -144,11 +144,44 @@ class CtsUrnValidationSpec extends FlatSpec {
         case e: IllegalArgumentException => assert(e.getMessage() == "requirement failed: invalid work syntax in urn:cts:greekLit:tlg0012..tlg001:1.1")
       }
   }
-  it should "throw an exception if there are leading periods in the passage component" in pending
-  it should "throw an exception if there are trailing periods in the passage component" in pending
+  it should "throw an exception if there are leading periods in the passage component" in {
+    try {
+      val urn = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:.1.1")
+      fail("Should not have created URN with bad passage component inluding leading period")
+    } catch {
+      case e: IllegalArgumentException => assert (e.getMessage() == "requirement failed: invalid passage syntax in urn:cts:greekLit:tlg0012.tlg001:.1.1")
+      case exc: Throwable => fail("Should have thrown IllegalArgumentException, not " + exc.getMessage())
+    }
 
-  it should "throw an exception if there are leading periods in the range beginning part" in pending
-  it should "throw an exception if there are trailing periods in the range beginning part" in pending
+  }
+  it should "throw an exception if there are trailing periods in the passage component" in {
+    try {
+      val urn = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.1.")
+      fail("Should not have created URN with bad passage component inluding trailing period")
+    } catch {
+      case e: CiteException => assert (e.message == "Invalid URN syntax in passage component 1.1.: trailing period.")
+      case exc  : Throwable => fail("Should have thrown CiteException, not " + exc.getMessage())
+    }
+  }
+
+  it should "throw an exception if there are leading periods in the range beginning part" in {
+    try {
+      val urn = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:.1-12")
+      fail("Should not have created URN with bad range reference including leading period")
+    } catch {
+      case e: IllegalArgumentException => assert (e.getMessage() == "requirement failed: invalid passage syntax in range beginning of urn:cts:greekLit:tlg0012.tlg001:.1-12")
+      case exc  : Throwable => fail("Should have thrown IllegalArgumentException, not " + exc.getMessage())
+    }
+  }
+  it should "throw an exception if there are trailing periods in the range beginning part" in {
+    try {
+      val urn = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.-12")
+      fail("Should not have created URN with bad range reference including trailing period")
+    } catch {
+      case e: CiteException => assert (e.getMessage() == "Invalid URN: trailing period on range beginning reference 1.")
+      case exc  : Throwable => fail("Should have thrown CiteException, not " + exc.getMessage())
+    }
+  }
 
   it should "throw an exception if there are leading periods in the range ending part" in pending
   it should "throw an exception if there are trailing periods in the range ending part" in pending

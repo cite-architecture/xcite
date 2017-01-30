@@ -15,7 +15,7 @@ package cite {
     *
     * The Array will have 4 elements if the optional passage
     * component is omitted;  if will have 5 elements if the passage
-    * component is included.  
+    * component is included.
     */
     val components = urnString.split(":")
     require(components.size > 3, "Invalid URN syntax: too few components in " + urnString)
@@ -37,6 +37,7 @@ package cite {
     /** Textgroup part of work hierarchy.
     */
     val textGroup: String = workParts(0)
+
 
 
     // Verify syntax of submitted String:
@@ -119,7 +120,12 @@ package cite {
     */
     def passageComponentOption: Option[String] = {
       components.size match {
-        case 5 => Some(components(4))
+        case 5 => {
+          if (components(4).last == '.') {
+            throw CiteException("Invalid URN syntax in passage component " + components(4) + ": trailing period.") }  else {
+            Some(components(4))
+          }
+        }
         case _ => None
       }
     }
@@ -257,7 +263,13 @@ package cite {
     * or if the passage component is a node reference.
     */
     def rangeBeginOption: Option[String] = {
-      if (passageParts.size > 1) Some(passageParts(0)) else None
+      if (passageParts.size > 1) {
+        if (passageParts(0).last == '.') {
+          throw CiteException("Invalid URN: trailing period on range beginning reference " + passageParts(0))
+        }  else {
+          Some(passageParts(0))
+        }
+      } else None
     }
     def rangeBegin = {
       try {

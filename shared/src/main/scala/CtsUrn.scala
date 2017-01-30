@@ -355,7 +355,13 @@ package cite {
     * or if the passage component is a node reference.
     */
     def rangeEndOption: Option[String] = {
-      if (passageParts.size > 1) Some(passageParts(1)) else None
+      if (passageParts.size > 1) {
+        if (passageParts(1).last == '.') {
+          throw CiteException("Invalid URN: trailing period on range ending reference " + passageParts(1))
+        } else {
+          Some(passageParts(1))
+        }
+      } else None
     }
     def rangeEnd = {
       try {

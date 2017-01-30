@@ -74,4 +74,9 @@ class CtsUrnMatchingSpec extends FlatSpec {
     val noPassageUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:")
     assert  (passageUrn ~~ noPassageUrn)
   }
+
+
+  it should "match ranges on the same leaf node" in pending
+
+
 }

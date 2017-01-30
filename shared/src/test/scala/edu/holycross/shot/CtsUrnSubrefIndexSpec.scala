@@ -39,6 +39,7 @@ class CtsUrnSubrefIndexSpec extends FlatSpec {
     val noSubref = CtsUrn( "urn:cts:greekLit:tlg0012.tlg001.msA:1.1")
     try {
       noSubref.passageNodeSubrefIndex
+      fail("Should not have found subref index on passage")
     } catch {
       case citeEx: CiteException => assert(citeEx.message == "No individual node subreference index defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1")
       case ex: Throwable => fail("Unrecognized exception " + ex)
@@ -79,6 +80,7 @@ class CtsUrnSubrefIndexSpec extends FlatSpec {
     val noSubref = CtsUrn( "urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
     try {
       noSubref.rangeBeginSubrefIndex
+      fail("Should not have found subref index on range beginning")
     } catch {
       case citeEx: CiteException => assert(citeEx.message == "No range beginning subreference index defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
       case ex: Throwable => fail("Unrecognized exception " + ex)
@@ -118,6 +120,7 @@ class CtsUrnSubrefIndexSpec extends FlatSpec {
     val noSubref = CtsUrn( "urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
     try {
       noSubref.rangeEndSubrefIndex
+      fail("Should not have found subref index on range ending")
     } catch {
       case citeEx: CiteException => assert(citeEx.message == "No range ending subreference index defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
       case ex: Throwable => fail("Unrecognized exception " + ex)
@@ -149,12 +152,14 @@ class CtsUrnSubrefIndexSpec extends FlatSpec {
     val noSubref = CtsUrn( "urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
     try {
       noSubref.rangeBeginSubrefIndex
+      fail("Should not have found subref index")
     } catch {
       case citeEx: CiteException => assert(citeEx.message == "No range beginning subreference index defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
       case ex: Throwable => fail("Unrecognized exception " + ex)
     }
     try {
       noSubref.rangeEndSubrefIndex
+      fail("Should not have found subref index")
     } catch {
       case citeEx: CiteException => assert(citeEx.message == "No range ending subreference index defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
       case ex: Throwable => fail("Unrecognized exception " + ex)

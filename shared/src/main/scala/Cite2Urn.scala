@@ -286,6 +286,10 @@ package cite {
       (objectsMatch(u) && collectionsMatch(u))
     }
 
+    def ~~(u: Cite2Urn) : Boolean = {
+      urnMatch(u)
+    }
+
     /// stringifications
 
     override def toString() = {

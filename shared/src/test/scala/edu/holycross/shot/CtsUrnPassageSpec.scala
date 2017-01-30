@@ -19,6 +19,7 @@ class CtsUrnPassageSpec extends FlatSpec {
     val iliad = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:")
     try {
       iliad.passageComponent
+      fail("Should not have found passage component")
     } catch {
       case ctsEx: CiteException => assert(ctsEx.message == "No passage component defined in urn:cts:greekLit:tlg0012.tlg001:")
       case exc : Throwable => fail("Should have thrown a CiteException: " + exc)

@@ -89,6 +89,7 @@ class CtsUrnSubrefSpec extends FlatSpec {
     val noSubref = CtsUrn( "urn:cts:greekLit:tlg0012.tlg001.msA:1.1")
     try {
       noSubref.passageNodeSubref
+      fail("Should not have found subref")
     } catch {
       case citeEx: CiteException => assert(citeEx.message == "No individual node subref defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1")
       case ex: Throwable => fail("Unrecognized exception " + ex)
@@ -129,6 +130,7 @@ class CtsUrnSubrefSpec extends FlatSpec {
     val noSubref = CtsUrn( "urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
     try {
       noSubref.rangeBeginSubref
+      fail("Should not have found subref")
     } catch {
       case citeEx: CiteException => assert(citeEx.message == "No range beginning subreference defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
       case ex: Throwable => fail("Unrecognized exception " + ex)
@@ -169,6 +171,7 @@ class CtsUrnSubrefSpec extends FlatSpec {
     val noSubref = CtsUrn( "urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
     try {
       noSubref.rangeEndSubref
+      fail("Should not have found subref")
     } catch {
       case citeEx: CiteException => assert(citeEx.message == "No range ending subreference defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
       case ex: Throwable => fail("Unrecognized exception " + ex)
@@ -203,12 +206,14 @@ class CtsUrnSubrefSpec extends FlatSpec {
     val noSubref = CtsUrn( "urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
     try {
       noSubref.rangeBeginSubref
+      fail("Should not have found subref")
     } catch {
       case citeEx: CiteException => assert(citeEx.message == "No range beginning subreference defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
       case ex: Throwable => fail("Unrecognized exception " + ex)
     }
     try {
       noSubref.rangeEndSubref
+      fail("Should not have found subref")
     } catch {
       case citeEx: CiteException => assert(citeEx.message == "No range ending subreference defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
       case ex: Throwable => fail("Unrecognized exception " + ex)

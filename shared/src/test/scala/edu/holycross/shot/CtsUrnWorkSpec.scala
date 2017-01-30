@@ -40,6 +40,7 @@ class CtsUrnWorkSpec extends FlatSpec {
     val groupLevel = CtsUrn("urn:cts:greekLit:tlg0012:")
     try {
       groupLevel.work
+      fail("Should not have found work element")
     } catch {
       case ctsEx: CiteException => assert(ctsEx.message == "No work defined in urn:cts:greekLit:tlg0012:")
       case exc : Throwable => fail("Should have thrown a CiteException: " + exc)
@@ -54,6 +55,7 @@ class CtsUrnWorkSpec extends FlatSpec {
     val groupLevel = CtsUrn("urn:cts:greekLit:tlg0012:")
     try {
       groupLevel.version
+      fail("Should not have found version on group")
     } catch {
       case ctsEx: CiteException => assert(ctsEx.message == "No version defined in urn:cts:greekLit:tlg0012:")
       case exc : Throwable => fail("Should have thrown a CiteException: " + exc)
@@ -68,6 +70,7 @@ class CtsUrnWorkSpec extends FlatSpec {
     val groupLevel = CtsUrn("urn:cts:greekLit:tlg0012:")
     try {
       groupLevel.exemplar
+      fail("Should not have exemplar on group")
     } catch {
       case ctsEx: CiteException => assert(ctsEx.message == "No exemplar defined in urn:cts:greekLit:tlg0012:")
       case exc : Throwable => fail("Should have thrown a CiteException: " + exc)

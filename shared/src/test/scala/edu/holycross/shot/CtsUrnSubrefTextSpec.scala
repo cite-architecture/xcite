@@ -39,6 +39,7 @@ class CtsUrnSubrefTextSpec extends FlatSpec {
     val noSubref = CtsUrn( "urn:cts:greekLit:tlg0012.tlg001.msA:1.1")
     try {
       noSubref.passageNodeSubrefText
+      fail("Should not have found subref content")
     } catch {
       case citeEx: CiteException => assert(citeEx.message == "No individual node subreference defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1")
       case ex: Throwable => fail("Unrecognized exception " + ex)
@@ -77,6 +78,7 @@ class CtsUrnSubrefTextSpec extends FlatSpec {
      val noSubref = CtsUrn( "urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
      try {
        noSubref.rangeBeginSubrefText
+       fail("Should not have found subref content")
      } catch {
        case citeEx: CiteException => assert(citeEx.message == "No range beginning subreference text defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
        case ex: Throwable => fail("Unrecognized exception " + ex)
@@ -117,6 +119,7 @@ class CtsUrnSubrefTextSpec extends FlatSpec {
     val noSubref = CtsUrn( "urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
     try {
       noSubref.rangeEndSubrefText
+      fail("Should not have found subref content")
     } catch {
       case citeEx: CiteException => assert(citeEx.message == "No range ending subreference text defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
       case ex: Throwable => fail("Unrecognized exception " + ex)
@@ -152,12 +155,14 @@ class CtsUrnSubrefTextSpec extends FlatSpec {
     val noSubref = CtsUrn( "urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
     try {
       noSubref.rangeBeginSubrefText
+      fail("Should not have found subref content")
     } catch {
       case citeEx: CiteException => assert(citeEx.message == "No range beginning subreference text defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
       case ex: Throwable => fail("Unrecognized exception " + ex)
     }
     try {
       noSubref.rangeEndSubrefText
+      fail("Should not have found subref content")
     } catch {
       case citeEx: CiteException => assert(citeEx.message == "No range ending subreference text defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
       case ex: Throwable => fail("Unrecognized exception " + ex)

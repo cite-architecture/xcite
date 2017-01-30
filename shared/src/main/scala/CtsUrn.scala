@@ -15,10 +15,19 @@ package cite {
     *
     * The Array will have 4 elements if the optional passage
     * component is omitted;  if will have 5 elements if the passage
-    * component is included.
+    * component is included.  
     */
     val components = urnString.split(":")
-    require(components.size > 3, "Invalid URN syntax: " + urnString)
+    require(components.size > 3, "Invalid URN syntax: too few components in " + urnString)
+    require(components.size < 6, "Invalid URN syntax: too many components in " + urnString)
+    if (components.size == 5) {
+      urnString.last match {
+        case ':' => throw CiteException("Invalid URN syntax: trailing colon in " + urnString)
+        case _ => //
+      }
+    } else {}
+
+
     /** Required namespace component of the URN.*/
     val namespace: String = components(2)
     /** Required work component of the URN.*/
@@ -571,6 +580,11 @@ package cite {
         case urn: CtsUrn => urnMatch(urn)
         case _ => throw CiteException("Can only match CtsUrn against a second CtsUrn")
       }
+    }
+
+
+    def ~~(u: CtsUrn) : Boolean = {
+      urnMatch(u)
     }
 
     override def toString() = {

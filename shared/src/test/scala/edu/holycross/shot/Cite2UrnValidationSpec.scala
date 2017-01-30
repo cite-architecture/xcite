@@ -1,6 +1,4 @@
-
 package edu.holycross.shot.cite
-
 
 import org.scalatest.FlatSpec
 
@@ -24,6 +22,7 @@ class Cite2UrnValidationSpec extends FlatSpec {
   it should "throw an IllegalArgumentException if there are too few components" in {
      try {
       Cite2Urn("urn:cite2:hmt:")
+      fail("Should not have created too short URN")
      } catch {
        case e: IllegalArgumentException => assert(e.getMessage() == "requirement failed: wrong number of components in  urn:cite2:hmt: - 3")
        case ex : Throwable => fail("Constructor should have thrown an IllegalArgumentException exception " + ex)
@@ -31,15 +30,17 @@ class Cite2UrnValidationSpec extends FlatSpec {
   }
   it should   "throw an IllegalArgumentException if too many components" in  {
     try {
-      Cite2Urn("urn:cite2:hmt:msA.12r:subobject")
+      Cite2Urn("urn:cite2:hmt:msA:12r:subobject")
+      fail("Should not have created too long URN")
     } catch {
-      case e: IllegalArgumentException => assert(true)
+      case e: IllegalArgumentException => assert(e.getMessage() == "requirement failed: wrong number of components in  urn:cite2:hmt:msA:12r:subobject - 6")
       case ex: Throwable => fail ("Unrecognized error: " + ex)
    }
   }
  it should  "throw an IllegalArgumentException if 'urn' component is missing" in {
    try {
     Cite2Urn("XX:cite:hmt:msA:12r")
+    fail("Should not have created URN without 'urn' component")
   } catch {
     case e: IllegalArgumentException => assert(true)
     case ex: Throwable => fail("Unrecognized exception " + ex)
@@ -48,6 +49,7 @@ class Cite2UrnValidationSpec extends FlatSpec {
   it should "throw an IllegalArgumentException if required 'cite' component is missing" in  {
      try {
        Cite2Urn("urn:XX:hmt:msA:12r")
+       fail("Should not have created URN without 'urn' component")
      } catch {
        case e: java.lang.IllegalArgumentException => assert(true)
        case ex: Throwable => fail("Unrecognized exception: " + ex)
@@ -56,6 +58,7 @@ class Cite2UrnValidationSpec extends FlatSpec {
   it should "throw an IllegalArgumentException if the required collection hierarchy exceeds 2 levels" in {
     try {
      Cite2Urn("urn:cite2:hmt:msA.12r.v1.subversion:")
+     fail("Shold not have created URN with too long collection hierarchy")
    } catch {
      case e: java.lang.IllegalArgumentException => assert(true)
      case ex: Throwable => fail("Unrecognized exception: " + ex)

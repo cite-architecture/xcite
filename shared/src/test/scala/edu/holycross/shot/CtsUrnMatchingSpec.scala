@@ -68,4 +68,10 @@ class CtsUrnMatchingSpec extends FlatSpec {
     assert (noPassageUrn.urnMatch(passageUrn))
   }
 
+
+  it should "allow operator-like syntax with ~~" in {
+    val passageUrn = CtsUrn("urn:cts:greekLit:tlg5026:1.1")
+    val noPassageUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:")
+    assert  (passageUrn ~~ noPassageUrn)
+  }
 }

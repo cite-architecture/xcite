@@ -202,4 +202,11 @@ class CtsUrnValidationSpec extends FlatSpec {
     }
   }
 
+
+  it should "identify an empty passage as neither range nor node" in {
+    val urn = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:")
+    assert (urn.isRange == false)
+    assert (urn.isPoint == false)
+  }
+
 }

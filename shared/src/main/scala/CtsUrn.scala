@@ -445,10 +445,17 @@ package cite {
 
     /** True if the URN refers to a range.*/
     def isRange = {
-      passageComponent contains "-"
+      passageComponentOption match {
+        case None => false
+        case s: Some[String] =>   s.get contains "-"
+      }
     }
+    /** True if the URN refers to a point (leaf node or containing node).*/
     def isPoint = {
-      !(isRange)
+      passageComponentOption match {
+        case None => false
+        case s: Some[String] => ((!isRange) && s.nonEmpty)
+      }
     }
     /** True if URN's syntax for required components is valid.*/
     def componentSyntaxOk = {

@@ -1,4 +1,6 @@
 package edu.holycross.shot
+import scala.scalajs.js
+import js.annotation.JSExport
 
 package cite {
 
@@ -9,7 +11,7 @@ package cite {
   * @param urnString String representation of Cite2Urn validating
   * against the Cite2Urn specification
   */
-  case class Cite2Urn (val urnString: String) extends Urn {
+  @JSExport  case class Cite2Urn (val urnString: String) extends Urn {
 
 
     /** Array of four top-level, colon-delimited components.

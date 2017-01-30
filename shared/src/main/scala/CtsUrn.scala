@@ -1,4 +1,6 @@
 package edu.holycross.shot
+import scala.scalajs.js
+import js.annotation.JSExport
 
 package cite {
 
@@ -8,7 +10,7 @@ package cite {
   * @param urnString String representation of CtsUrn validating
   * againt the CtsUrn specification
   */
-  case class CtsUrn  (val urnString: String) extends Urn {
+  @JSExport case class CtsUrn  (val urnString: String) extends Urn {
     /** Array of top-level, colon-delimited components.
     *
     * The Array will have 4 elements if the optional passage

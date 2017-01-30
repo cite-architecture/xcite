@@ -9,7 +9,5 @@ object Main extends js.JSApp {
     println(mini)
 
     println("Match function: " + mini.urnMatch(CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:1")))
-
-
   }
 }

@@ -34,4 +34,31 @@ class Cite2UrnCollectionSpec extends FlatSpec {
     }
   }
 
+
+
+  it should "have a none option for property if no property is given" in {
+    val urn = Cite2Urn("urn:cite2:hmt:msA:12r")
+    urn.propertyOption match {
+      case None => assert(true)
+      case _ => fail("Should not have found a property option")
+    }
+  }
+  it should "retrieve a string value for a valid property" in {
+    val urn = Cite2Urn("urn:cite2:hmt:msA.release1.rv:12r")
+    assert (urn.property == "rv")
+  }
+
+
+  it should "throw a Cite exception when trying to retrieve a non-existent property identifier" in {
+    val urn = Cite2Urn("urn:cite2:hmt:msA:12r")
+    try {
+      urn.property
+      fail("Should not have reached this point")
+    } catch {
+      case ce: CiteException => assert (ce.message == "No property defined in urn:cite2:hmt:msA:12r")
+      case e: Throwable => fail("Unexpected exception " + e)
+    }
+  }
+
+
 }

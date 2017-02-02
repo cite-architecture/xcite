@@ -38,6 +38,7 @@ package cite {
     def versionOption: Option[String] = {
       collectionParts.size match {
         case 2 => Some(collectionParts(1))
+        case 3 => Some(collectionParts(1))
         case _ => None
       }
     }
@@ -50,8 +51,28 @@ package cite {
     }
 
 
+
+
+
+    def propertyOption: Option[String] = {
+      collectionParts.size match {
+        case 3 => Some(collectionParts(2))
+        case _ => None
+      }
+    }
+    def property = {
+      try {
+        propertyOption.get
+      } catch {
+        case e: java.util.NoSuchElementException => throw CiteException("No property defined in " + urnString)
+      }
+    }
+
     // final requirements for collection syntax
-    require(((collectionParts.size == 1) || (collectionParts.size == 2)), "invalid syntax in collection component of " + urnString)
+    // case x if 0 until 10 contains x
+    //require(((collectionParts.size == 1) || (collectionParts.size == 2)), "invalid syntax in collection component of " + urnString)
+
+    require((1 until 4 contains collectionParts.size), "invalid syntax in collection component of " + urnString + "; wrong size collectionParts = " + collectionParts.size)
 
     for (p <- collectionParts) {
       require(p.nonEmpty, "invalid value: empty value in collection component in " + urnString)

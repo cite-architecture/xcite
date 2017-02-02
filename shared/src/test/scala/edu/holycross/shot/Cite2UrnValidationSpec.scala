@@ -19,7 +19,7 @@ class Cite2UrnValidationSpec extends FlatSpec {
       case _ => fail("Failed to construct Cite2Urn")
     }
   }
-  it should "throw an IllegalArgumentException if there are too few components" in {
+  it should "throw an IllegalArgumentException if there are too few top-level components" in {
      try {
       Cite2Urn("urn:cite2:hmt:")
       fail("Should not have created too short URN")
@@ -28,7 +28,7 @@ class Cite2UrnValidationSpec extends FlatSpec {
        case ex : Throwable => fail("Constructor should have thrown an IllegalArgumentException exception " + ex)
      }
   }
-  it should   "throw an IllegalArgumentException if too many components" in  {
+  it should   "throw an IllegalArgumentException if there are too many top-level components" in  {
     try {
       Cite2Urn("urn:cite2:hmt:msA:12r:subobject")
       fail("Should not have created too long URN")
@@ -80,6 +80,12 @@ class Cite2UrnValidationSpec extends FlatSpec {
       case _ => fail("Should have created none option")
     }
   }
+
+  it should "allow a property-level identifier on the collection component" in {
+      val urn = Cite2Urn("urn:cite2:hmt:msA.release1.rv:")
+      assert (urn.collection == "msA")
+  }
+
   it should "identify a range reference as a range and not a node" in {
     val urn = Cite2Urn("urn:cite2:hmt:msA.release1:12r-24v")
     assert (urn.isRange)

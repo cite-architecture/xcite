@@ -1,5 +1,8 @@
 # xcite: release notes
 
+
+**1.3**: adds support for property-level references in CITE2URNs.
+
 **1.2**: introduces the twiddle operator `~~` for URN matching; addresses numerous issues testing exotically malformed URN strings.
 
 **1.1**: correctly exports the `CtsUrn` and `Cite2Urn` classes for use in javascript applications compiled from ScalaJS.

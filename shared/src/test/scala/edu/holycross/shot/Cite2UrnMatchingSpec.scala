@@ -106,6 +106,18 @@ class Cite2UrnMatchingSpec extends FlatSpec {
     assert (u4.urnMatch(u1))
 
   }
+
+
+  it should "match two URNs with the same collection component if either object component is empty" in {
+
+    val u1 = Cite2Urn("urn:cite2:hmt:msA.v1:12r")
+    val u2 = Cite2Urn("urn:cite2:hmt:msA.v1.rv:")
+    println(u1.toString + " ~~ " + u2 + " = " + (u1 ~~ u2))
+    //assert (u1 ~~ u2)
+    //assert (u2 ~~ u1)
+  }
+
+
   it should "allow operator-like syntax with ~~" in {
     val u1 = Cite2Urn("urn:cite2:hmt:msA.v1:12r-14v")
     val u2 = Cite2Urn("urn:cite2:hmt:msA:12r@x,y-14v")

@@ -94,5 +94,8 @@ class Cite2UrnValidationSpec extends FlatSpec {
     val urn = Cite2Urn("urn:cite2:hmt:msA.release1:12r")
     assert (urn.isObject)
   }
-  it should "identify a none optoion for passage as neither range nor node" in pending
+  it should "identify a none optoion for passage as neither range nor node" in {
+    val urn = Cite2Urn("urn:cite2:hmt:msA.release1:")
+    assert (urn.noObject)
+  }
 }

@@ -112,7 +112,12 @@ package cite {
     val isRange = {
       (objectParts.size == 2)
     }
-    val isObject = { objectParts.size == 1}
+    val isObject = {
+      objectParts.size == 1
+    }
+    val noObject = {
+      objectParts.isEmpty
+    }
 
 
     // single object
@@ -280,21 +285,29 @@ package cite {
       }
     }
 
+
+    def collectionContainedIn(urn: Cite2Urn): Boolean = {
+      val coll = urn.collectionComponent
+      val str = "(^" + coll + """\.)|(^""" + coll + "$)"
+      val pttrn = str.r
+
+      val res = pttrn.findFirstIn(collectionComponent.toString)
+      //println("Result of matching  " + str + " in " + urn.toString + " == " + res)
+      res match {
+        case None => false
+        case _ => true
+      }
+    }
     /// urn matching
     def collectionsMatch(u: Cite2Urn) : Boolean = {
-      if (collectionComponent == u.collectionComponent) {
-        true
-      }  else if ((u.collectionParts.size == 1) && (collection == u.collection)) {
-        true
-      } else if ((collectionParts.size == 1) &&  (collection == u.collection)) {
-        true
-      } else {
-        false
-      }
+        (collectionContainedIn(u) || u.collectionContainedIn(this))
     }
 
     def objectsMatch(u: Cite2Urn) : Boolean = {
-      dropExtensions == u.dropExtensions
+      objectComponentOption match {
+        case None => true
+        case _ =>  dropExtensions == u.dropExtensions
+      }
     }
 
     def urnMatch(u: Urn): Boolean = {

@@ -6,7 +6,7 @@
 
 ## Current version: 1.3
 
-[Release notes](releases.md)
+Status:  **active development**. [Release notes](releases.md)
 
 
 ## License

@@ -1,5 +1,6 @@
 # xcite: release notes
 
+**1.4**: adds `collapseTo` and `collapseBy` function on CtsUrns.
 
 **1.3**: adds support for property-level references in CITE2URNs.
 

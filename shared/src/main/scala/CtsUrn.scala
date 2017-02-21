@@ -67,6 +67,55 @@ package cite {
     }
 
 
+    def collapsePassageBy(i: Int) : CtsUrn = {
+      if (passageNodeParts.size == 0) {
+        this.dropPassage
+      } else {
+        val citationLevels = passageNodeParts(0).split("\\.")
+        if (citationLevels.size > 1) {
+          CtsUrn(this.dropPassage.toString + citationLevels.dropRight(1).mkString("."))
+        } else {
+          this.dropPassage
+        }
+      }
+    }
+
+
+    def collapseBy(i: Int) : CtsUrn = {
+      if (isRange) {
+        //collapseRangeBy(i)
+        throw CiteException("Collapsing passage component only supported on single nodes, not ranges")
+      }  else {
+        collapsePassageBy(i)
+      }
+    }
+
+
+
+    def collapsePassageTo(i: Int) : CtsUrn = {
+      if (passageNodeParts.size == 0) {
+        throw CiteException("Two few levels in " + urnString + " - cannot collapse to " +  i + " levels.")
+      } else {
+        val citationLevels = passageNodeParts(0).split("\\.")
+        if (citationLevels.size >= i) {
+          CtsUrn(this.dropPassage.toString + citationLevels.take(i).mkString("."))
+        } else {
+          throw CiteException("Two few levels in " + urnString + " - cannot collapse to " +  i + " levels.")
+        }
+      }
+    }
+
+
+    def collapseTo(i: Int) : CtsUrn = {
+      if (isRange) {
+        //collapseRangeBy(i)
+        throw CiteException("Collapsing passage component only supported on single nodes, not ranges")
+      }  else {
+        collapsePassageTo(i)
+      }
+    }
+
+
     /** Version part of work hierarchy.
     *
     * Value is an empty string if there is no version part.
@@ -606,8 +655,6 @@ package cite {
         case _ => throw CiteException("Can only match CtsUrn against a second CtsUrn")
       }
     }
-
-
     def ~~(u: CtsUrn) : Boolean = {
       urnMatch(u)
     }

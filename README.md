@@ -4,7 +4,7 @@
 
 `xcite` is a cross-platform library for semantic manipulation of scholarly references expressed in URN notation.
 
-## Current version: 1.3
+## Current version: 1.4.0
 
 Status:  **active development**. [Release notes](releases.md)
 
@@ -20,7 +20,7 @@ Status:  **active development**. [Release notes](releases.md)
 If you are using sbt, include `Resolver.jcenterRepo` in your list of resolvers
 
     resolvers += Resolver.jcenterRepo
-    
+
 and add this to your library dependencies:
 
     "edu.holycross.shot.cite" %%% "xcite" % VERSION

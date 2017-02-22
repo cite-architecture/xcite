@@ -1,5 +1,7 @@
 # xcite: release notes
 
+**2.0**: remove `urnMatch` function name in favor of `~~` throughout.
+
 **1.4**: adds `collapseTo` and `collapseBy` function on CtsUrns.
 
 **1.3**: adds support for property-level references in CITE2URNs.

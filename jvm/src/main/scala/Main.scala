@@ -6,7 +6,7 @@ object Main {
     val mini = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.1")
     println(mini)
 
-    println("Match function: " + mini.urnMatch(CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:1")))
+    println("Match function: " + mini.~~(CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:1")))
 
   }
 }

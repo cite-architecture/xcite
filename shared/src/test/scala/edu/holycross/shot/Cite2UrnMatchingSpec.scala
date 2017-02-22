@@ -53,57 +53,57 @@ class Cite2UrnMatchingSpec extends FlatSpec {
   it should "match URNs when they are identical" in {
     val u1 = Cite2Urn("urn:cite2:hmt:msA:12r-14v")
     val u2 = Cite2Urn("urn:cite2:hmt:msA:12r-14v")
-    assert (u1.urnMatch(u2))
-    assert (u2.urnMatch(u1))
+    assert (u1.~~(u2))
+    assert (u2.~~(u1))
   }
   it should "match URNs when they are differ only in collection level" in {
     val u1 = Cite2Urn("urn:cite2:hmt:msA.release1:12r-14v")
     val u2 = Cite2Urn("urn:cite2:hmt:msA:12r-14v")
-    assert (u1.urnMatch(u2))
-    assert (u2.urnMatch(u1))
+    assert (u1.~~(u2))
+    assert (u2.~~(u1))
   }
 
   it should "match URNs when objects differ only in object extensions" in {
     val u1 = Cite2Urn("urn:cite2:hmt:msA.release1:12r")
     val u2 = Cite2Urn("urn:cite2:hmt:msA:12r@x,y")
-    assert (u1.urnMatch(u2))
-    assert (u2.urnMatch(u1))
+    assert (u1.~~(u2))
+    assert (u2.~~(u1))
   }
   it should "match URNs when ranges differ only in object extensions" in {
     val u1 = Cite2Urn("urn:cite2:hmt:msA:12r-14v")
     val u2 = Cite2Urn("urn:cite2:hmt:msA:12r@x,y-14v")
-    assert (u1.urnMatch(u2))
-    assert (u2.urnMatch(u1))
+    assert (u1.~~(u2))
+    assert (u2.~~(u1))
 
     val u3 = Cite2Urn("urn:cite2:hmt:msA:12r-14v@x,y")
-    assert (u1.urnMatch(u3))
-    assert (u3.urnMatch(u1))
+    assert (u1.~~(u3))
+    assert (u3.~~(u1))
 
     val u4 = Cite2Urn("urn:cite2:hmt:msA:12r@a,b-14v@x,y")
-    assert (u1.urnMatch(u4))
-    assert (u4.urnMatch(u1))
+    assert (u1.~~(u4))
+    assert (u4.~~(u1))
 
   }
 
   it should "match URNs when objects differ only in collection level and object extensions" in {
     val u1 = Cite2Urn("urn:cite2:hmt:msA.release1:12r")
     val u2 = Cite2Urn("urn:cite2:hmt:msA:12r@x,y")
-    assert (u1.urnMatch(u2))
-    assert (u2.urnMatch(u1))
+    assert (u1.~~(u2))
+    assert (u2.~~(u1))
   }
   it should "match URNs when ranges differ only in object extensions and collection level" in {
     val u1 = Cite2Urn("urn:cite2:hmt:msA.v1:12r-14v")
     val u2 = Cite2Urn("urn:cite2:hmt:msA:12r@x,y-14v")
-    assert (u1.urnMatch(u2))
-    assert (u2.urnMatch(u1))
+    assert (u1.~~(u2))
+    assert (u2.~~(u1))
 
     val u3 = Cite2Urn("urn:cite2:hmt:msA:12r-14v@x,y")
-    assert (u1.urnMatch(u3))
-    assert (u3.urnMatch(u1))
+    assert (u1.~~(u3))
+    assert (u3.~~(u1))
 
     val u4 = Cite2Urn("urn:cite2:hmt:msA:12r@a,b-14v@x,y")
-    assert (u1.urnMatch(u4))
-    assert (u4.urnMatch(u1))
+    assert (u1.~~(u4))
+    assert (u4.~~(u1))
 
   }
 

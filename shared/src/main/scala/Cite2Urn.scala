@@ -310,19 +310,16 @@ package cite {
       }
     }
 
-    def urnMatch(u: Urn): Boolean = {
+    def ~~(u: Urn): Boolean = {
       u match {
-        case urn: Cite2Urn => urnMatch(urn)
+        case urn: Cite2Urn => ~~(urn)
         case _ => throw CiteException("Can only match Cite2Urn against a second Cite2Urn")
       }
     }
-    def urnMatch(u: Cite2Urn): Boolean = {
+    def ~~(u: Cite2Urn): Boolean = {
       (objectsMatch(u) && collectionsMatch(u))
     }
 
-    def ~~(u: Cite2Urn) : Boolean = {
-      urnMatch(u)
-    }
 
     /// stringifications
 

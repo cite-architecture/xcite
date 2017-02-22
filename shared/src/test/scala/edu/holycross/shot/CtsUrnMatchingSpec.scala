@@ -36,36 +36,36 @@ class CtsUrnMatchingSpec extends FlatSpec {
   it should "match two URNs differing only in the depth of work hierarchy" in {
     val notionalUrn = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.1")
     val editionUrn = CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:1.1")
-    assert  (notionalUrn.urnMatch(editionUrn))
-    assert (editionUrn.urnMatch(notionalUrn))
+    assert  (notionalUrn.~~(editionUrn))
+    assert (editionUrn.~~(notionalUrn))
   }
 
   it should "match two URNs differing only in the depth of the passage hierarchy" in {
     val containingUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
     val containedUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:1.1.lemma")
-    assert  (containingUrn.urnMatch(containedUrn))
-    assert (containedUrn.urnMatch(containingUrn))
+    assert  (containingUrn.~~(containedUrn))
+    assert (containedUrn.~~(containingUrn))
   }
 
   it should "match two URNs differing both in the depth of the passage hierarchy and depth of the work hierarchy" in {
     val urn1 = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
     val urn2 = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1.lemma")
-    assert  (urn1.urnMatch(urn2))
-    assert (urn2.urnMatch(urn1))
+    assert  (urn1.~~(urn2))
+    assert (urn2.~~(urn1))
   }
 
   it should "match two URNs with the same work component if either passage component is empty" in {
     val passageUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
     val noPassageUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:")
-    assert  (passageUrn.urnMatch(noPassageUrn))
-    assert (noPassageUrn.urnMatch(passageUrn))
+    assert  (passageUrn.~~(noPassageUrn))
+    assert (noPassageUrn.~~(passageUrn))
   }
 
   it should "match two URNs in the depth of work hierarchy if either passage component is empty" in {
     val passageUrn = CtsUrn("urn:cts:greekLit:tlg5026:1.1")
     val noPassageUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:")
-    assert  (passageUrn.urnMatch(noPassageUrn))
-    assert (noPassageUrn.urnMatch(passageUrn))
+    assert  (passageUrn.~~(noPassageUrn))
+    assert (noPassageUrn.~~(passageUrn))
   }
 
 
@@ -80,7 +80,7 @@ class CtsUrnMatchingSpec extends FlatSpec {
     val nodeUrn = CtsUrn("urn:cts:greekLit:tlg5026:1.1")
     val subrefRange = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:1.1@μῆνιν-1.1@ἄ")
     val spanningRef = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:1.1@μῆνιν-2.1@οὐλομένην")
-    assert (nodeUrn.urnMatch(spanningRef) == false)
+    assert (nodeUrn.~~(spanningRef) == false)
   }
 
 

@@ -646,18 +646,16 @@ package cite {
     }
 
 
-    def urnMatch(urn: CtsUrn): Boolean = {
+    def ~~(urn: CtsUrn): Boolean = {
       namespace == urn.namespace && workMatch(urn) && passageMatch(urn)
     }
-    def urnMatch (u: Urn) : Boolean = {
+    def ~~ (u: Urn) : Boolean = {
       u match {
-        case urn: CtsUrn => urnMatch(urn)
+        case urn: CtsUrn => ~~(urn)
         case _ => throw CiteException("Can only match CtsUrn against a second CtsUrn")
       }
     }
-    def ~~(u: CtsUrn) : Boolean = {
-      urnMatch(u)
-    }
+
 
     override def toString() = {
       urnString

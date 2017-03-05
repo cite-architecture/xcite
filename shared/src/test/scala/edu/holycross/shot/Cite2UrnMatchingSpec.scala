@@ -104,7 +104,6 @@ class Cite2UrnMatchingSpec extends FlatSpec {
     val u4 = Cite2Urn("urn:cite2:hmt:msA:12r@a,b-14v@x,y")
     assert (u1.~~(u4))
     assert (u4.~~(u1))
-
   }
 
 
@@ -122,5 +121,22 @@ class Cite2UrnMatchingSpec extends FlatSpec {
     val u1 = Cite2Urn("urn:cite2:hmt:msA.v1:12r-14v")
     val u2 = Cite2Urn("urn:cite2:hmt:msA:12r@x,y-14v")
     assert  (u1 ~~ u2)
+  }
+
+  it should "match two URNs differing only by level of object hierarchy" in {
+    val notional = Cite2Urn("urn:cite2:hmt:speeches:speech4")
+    val concrete =  Cite2Urn("urn:cite2:hmt:speeches.v1:speech4")
+    val wProp =  Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech4")
+    assert (notional ~~ concrete)
+    assert (notional ~~ wProp)
+    assert (concrete ~~ wProp)
+  }
+  it should "ensure that property-level matching is commutative" in {
+    val notional = Cite2Urn("urn:cite2:hmt:speeches:speech4")
+    val concrete =  Cite2Urn("urn:cite2:hmt:speeches.v1:speech4")
+    val wProp =  Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech4")
+    assert (concrete ~~ notional)
+    assert (wProp ~~ notional)
+    assert (wProp ~~ concrete)
   }
 }

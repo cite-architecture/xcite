@@ -1,5 +1,7 @@
 # xcite: release notes
 
+**2.0.1**: fixes a bug in matching `Cite2Urn`s with no object identifier.
+
 **2.0**: remove `urnMatch` function name in favor of `~~` throughout.
 
 **1.4**: adds `collapseTo` and `collapseBy` function on CtsUrns.

@@ -32,6 +32,14 @@ class Cite2UrnMatchingSpec extends FlatSpec {
     assert (u1.objectsMatch(u2))
   }
 
+
+  it should "match object values when one is empty" in {
+    val u1 = Cite2Urn("urn:cite2:hmt:msA:")
+    val u2 = Cite2Urn("urn:cite2:hmt:msA:12r")
+    assert (u1.objectsMatch(u2))
+    assert (u2.objectsMatch(u1))
+  }
+
   it should "match range values when they are identical" in {
     val u1 = Cite2Urn("urn:cite2:hmt:msA:12r-14v")
     val u2 = Cite2Urn("urn:cite2:hmt:msA.release1:12r-14v")
@@ -138,5 +146,17 @@ class Cite2UrnMatchingSpec extends FlatSpec {
     assert (concrete ~~ notional)
     assert (wProp ~~ notional)
     assert (wProp ~~ concrete)
+  }
+  it should "match URNs when selector component is empty" in {
+    val oneobject =  Cite2Urn("urn:cite2:hmt:speeches.v1:speech4")
+    val onecollection =  Cite2Urn("urn:cite2:hmt:speeches.v1:")
+
+    assert (onecollection ~~ oneobject)
+
+  }
+  it should "work commutatively on empty selector components" in {
+    val oneobject =  Cite2Urn("urn:cite2:hmt:speeches.v1:speech4")
+    val onecollection =  Cite2Urn("urn:cite2:hmt:speeches.v1:")
+    assert (oneobject ~~ onecollection)
   }
 }

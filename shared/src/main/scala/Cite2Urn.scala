@@ -304,9 +304,15 @@ package cite {
     }
 
     def objectsMatch(u: Cite2Urn) : Boolean = {
+
       objectComponentOption match {
         case None => true
-        case _ =>  dropExtensions == u.dropExtensions
+        case _ =>  {
+          u.objectComponentOption match {
+            case None => true
+            case _ => dropExtensions == u.dropExtensions
+          }
+        }
       }
     }
 

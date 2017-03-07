@@ -28,6 +28,18 @@ class Cite2UrnObjectSpec extends FlatSpec {
     }
   }
 
+  it should "be able to drop the selector component" in {
+    val urnObj = Cite2Urn("urn:cite2:hmt:msA.release1:12r")
+    val trimmedObj = Cite2Urn("urn:cite2:hmt:msA.release1:")
 
 
+    val urnProp = Cite2Urn("urn:cite2:hmt:msA.release1.side:12r")
+    val trimmedProp = Cite2Urn("urn:cite2:hmt:msA.release1.side:")
+
+
+    assert (urnObj.dropSelector ==  trimmedObj)
+    assert (urnProp.dropSelector ==  trimmedProp)
+
+  }
+//  urn:cite2:hmt:msA: did not equal urn:cite2:hmt:msA.release1:
 }

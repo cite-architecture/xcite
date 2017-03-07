@@ -285,6 +285,23 @@ package cite {
       }
     }
 
+    def dropSelector: Cite2Urn = {
+      ////  urn:cite2:hmt:msA: did not equal urn:cite2:hmt:msA.release1:
+      val baseStr = Vector("urn","cite2",namespace,collection).mkString(":")
+
+      this.versionOption match {
+        case s: Some[String] => {
+          val baseVersion = baseStr + "." + s.get
+          this.propertyOption match {
+            case s: Some[String] => Cite2Urn(baseVersion + "." + s.get + ":")
+            case None => Cite2Urn(baseVersion + ":")
+          }
+        }
+        case None => Cite2Urn(baseStr + ":")
+      }
+
+    }
+
 
     def collectionContainedIn(urn: Cite2Urn): Boolean = {
       val coll = urn.collectionComponent

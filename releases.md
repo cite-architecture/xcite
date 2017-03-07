@@ -1,5 +1,8 @@
 # xcite: release notes
 
+
+**2.2.0**: adds `dropProperty` function
+
 **2.1.0**: adds `dropSelector` function
 
 **2.0.1**: fixes a bug in matching `Cite2Urn`s with no object identifier.

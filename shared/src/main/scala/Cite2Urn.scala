@@ -68,9 +68,7 @@ package cite {
       }
     }
 
-    // final requirements for collection syntax
-    // case x if 0 until 10 contains x
-    //require(((collectionParts.size == 1) || (collectionParts.size == 2)), "invalid syntax in collection component of " + urnString)
+
 
     require((1 until 4 contains collectionParts.size), "invalid syntax in collection component of " + urnString + "; wrong size collectionParts = " + collectionParts.size)
 
@@ -273,7 +271,10 @@ package cite {
     }
 
 
-    // URN manipulations
+
+    /** Trims any extended citation components off of
+    * passage or range selectors.
+    */
     def dropExtensions: Cite2Urn = {
       val baseStr = Vector("urn","cite2",namespace,collection).mkString(":")
       if (isRange) {
@@ -285,8 +286,23 @@ package cite {
       }
     }
 
+    /** Trims the property identifier off of a URN,
+    * if it is present.  This effectively converts a
+    * property citation to an object citation.
+    */
+    def dropProperty: Cite2Urn = {
+      val baseStr = Vector("urn","cite2",namespace,collection).mkString(":") + "." + version
+      Cite2Urn(baseStr + ":" + objectComponent)
+    }
+
+
+    /** Trims the selector component off of a URN,
+    * if it is present.  This effectively converts a
+    * citation of a single value to a citation of a
+    * collection of values (objects or properties).
+    */
     def dropSelector: Cite2Urn = {
-      ////  urn:cite2:hmt:msA: did not equal urn:cite2:hmt:msA.release1:
+
       val baseStr = Vector("urn","cite2",namespace,collection).mkString(":")
 
       this.versionOption match {

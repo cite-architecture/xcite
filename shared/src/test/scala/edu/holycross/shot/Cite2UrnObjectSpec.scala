@@ -13,6 +13,15 @@ class Cite2UrnObjectSpec extends FlatSpec {
       case _ => fail("Should have created none option")
     }
   }
+  it should "throw an exception when it sees a trailing hyphen" in {
+    try {
+      Cite2Urn("urn:cite2:hmt:speeches.v1:speech1-speech4-")
+      fail("Should have failed.")
+    } catch {
+      case badArg: IllegalArgumentException => assert(badArg.getMessage() == "requirement failed: URN cannot end with trailing -")
+      case e: Throwable =>fail("Should have gotten IllegalArgument Exception instead of " + e.getMessage())
+    }
+  }
   it should "should retrieve a string value for a well-formed object component" in {
       val urn = Cite2Urn("urn:cite2:hmt:msA.release1:12r")
       assert (urn.objectComponent == "12r")
@@ -27,6 +36,7 @@ class Cite2UrnObjectSpec extends FlatSpec {
       case exc: Throwable => fail("Should have thrown CiteException:  " + exc)
     }
   }
+
 
   it should "be able to drop the selector component" in {
     val urnObj = Cite2Urn("urn:cite2:hmt:msA.release1:12r")

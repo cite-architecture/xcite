@@ -76,7 +76,7 @@ class Cite2UrnRangeSpec extends FlatSpec {
       val urn = Cite2Urn("urn:cite2:hmt:msA.release1:12r-")
       fail("Should not have created urn " + urn)
     } catch {
-      case e: IllegalArgumentException => assert(e.getMessage() == "requirement failed: invalid range syntax in object component of urn:cite2:hmt:msA.release1:12r-")
+      case e: IllegalArgumentException => assert(e.getMessage() == "requirement failed: URN cannot end with trailing -")
       case otherE: Throwable => fail("Unexpected exception " + otherE)
     }
   }

@@ -13,7 +13,7 @@ package cite {
   */
   @JSExport  case class Cite2Urn (val urnString: String) extends Urn {
 
-
+    require(urnString.endsWith("-") == false, "URN cannot end with trailing -")
     /** Array of four top-level, colon-delimited components.
     */
     val components = urnString.split(":")

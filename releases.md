@@ -1,6 +1,6 @@
 # xcite: release notes
 
-**2.2.1**: fixes a bug when constructing `Cite2Urn`s from a string with trailing hyphen.
+**2.2.1**: fixes a couple of bugs with edge cases of bad input to Cite2Urn constructor.
 
 **2.2.0**: adds `dropProperty` function
 

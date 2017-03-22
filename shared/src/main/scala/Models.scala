@@ -9,13 +9,17 @@ package cite {
     def ~~(u: Urn): Boolean
   }
 
+
+  class CiteExport(urn: Urn )
   /** Trait for any citable scholarly resource.
   *
   * Implementing classes must have a Urn value
-  * identifying the object.
+  * identifying the object, and a CitableExport function
+  * delivering a two-column string labelling URNs with a type.
   */
   trait Citable {
-    val urn: Urn
+    def urn: Urn
+    def citeExport: Vector[CiteExport]
   }
 
 }

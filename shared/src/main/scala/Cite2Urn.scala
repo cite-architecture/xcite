@@ -14,9 +14,10 @@ package cite {
   @JSExport  case class Cite2Urn (val urnString: String) extends Urn {
 
     require(urnString.endsWith("-") == false, "URN cannot end with trailing -")
-    /** Array of four top-level, colon-delimited components.
+    /** Array of top-level, colon-delimited components.
     */
     val components = urnString.split(":")
+
 
     require(((components.size == 4) || (components.size == 5)), "wrong number of components in  " + urnString + " - " + components.size)
 
@@ -292,7 +293,13 @@ package cite {
     */
     def dropProperty: Cite2Urn = {
       val baseStr = Vector("urn","cite2",namespace,collection).mkString(":") + "." + version
-      Cite2Urn(baseStr + ":" + objectComponent)
+
+      objectComponentOption match {
+        case obj: Some[String] =>   Cite2Urn(baseStr + ":" + objectComponent)
+        case None =>   Cite2Urn(baseStr + ":")
+      }
+
+
     }
 
 

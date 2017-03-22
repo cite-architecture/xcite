@@ -12,6 +12,7 @@ class CtsUrnMatchingSpec extends FlatSpec {
     assert(containedUrn.passageContainedIn(containingUrn))
   }
 
+/*
   it should "determine if either of two URNs' passage reference is contained by the either" in {
     val containingUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:1.1")
     val containedUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:1.1.lemma")
@@ -83,5 +84,5 @@ class CtsUrnMatchingSpec extends FlatSpec {
     assert (nodeUrn.~~(spanningRef) == false)
   }
 
-
+*/
 }

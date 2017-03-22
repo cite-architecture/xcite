@@ -616,11 +616,12 @@ package cite {
         true
       } else {
         val psg = urn.dropSubref.passageComponent
-        val str = "(^" + psg + """\.)|(^""" + psg + "$)"
+        val str = "(^" + psg + "\\.)|(^" + psg + "$)"
+
         val pttrn = str.r
 
         val res = pttrn.findFirstIn(dropSubref.passageComponent.toString)
-        //("Result of matching  " + str + " in " + urn.toString + " == " + res)
+        
         res match {
           case None => false
           case _ => true

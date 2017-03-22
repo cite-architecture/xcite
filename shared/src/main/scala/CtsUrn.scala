@@ -615,13 +615,13 @@ package cite {
       if ((passageParts.isEmpty) || (urn.passageParts.isEmpty)) {
         true
       } else {
-        val psg = urn.dropSubref.passageComponent
+        val psg = urn.dropSubref.passageComponent.replaceAll("\\.","\\\\.")
         val str = "(^" + psg + "\\.)|(^" + psg + "$)"
 
         val pttrn = str.r
 
         val res = pttrn.findFirstIn(dropSubref.passageComponent.toString)
-        
+    
         res match {
           case None => false
           case _ => true

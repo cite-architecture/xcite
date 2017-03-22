@@ -12,7 +12,14 @@ class CtsUrnMatchingSpec extends FlatSpec {
     assert(containedUrn.passageContainedIn(containingUrn))
   }
 
-/*
+  it should "properly protect periods in URN matching" in {
+    val u1 = CtsUrn("urn:cts:citedemo:arabic.quran.v1:1.1")
+    val u2 = CtsUrn("urn:cts:citedemo:arabic.quran.v1:111.7")
+
+    assert( u1.passageContainedIn(u2)  == false)
+    assert( u2.passageContainedIn(u1)  == false)
+  }
+
   it should "determine if either of two URNs' passage reference is contained by the either" in {
     val containingUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:1.1")
     val containedUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:1.1.lemma")
@@ -84,5 +91,5 @@ class CtsUrnMatchingSpec extends FlatSpec {
     assert (nodeUrn.~~(spanningRef) == false)
   }
 
-*/
+
 }

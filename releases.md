@@ -1,5 +1,8 @@
 # xcite: release notes
 
+
+**2.2.3**: properly protects periods in passage component when using regular expression for URN pattern matching.
+
 **2.2.2**: fixes a bug in URN pattern matching.
 
 **2.2.1**: fixes a couple of bugs with edge cases of bad input to Cite2Urn constructor.

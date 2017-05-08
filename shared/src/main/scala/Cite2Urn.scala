@@ -300,12 +300,29 @@ package cite {
       }
     }
 
+
+    /** Adds a version identifier to the object hierarchy.
+    *
+    * @param versionId Identifier for the property.
+    */
+    def addVersion(versionId: String) : Cite2Urn = {
+
+      require(versionOption == None, "cannot add version to a URN that already has one " + this.toString)
+      val baseStr = Vector("urn","cite2",namespace).mkString(":")
+      Cite2Urn(baseStr + ":" + collection + "." + versionId + ":")
+    }
+
     /** Adds a property identifier to the object hierarchy.
     *
     * @param propertyId Identifier for the property.
     */
     def addProperty(propertyId: String) : Cite2Urn = {
-      this
+      require(propertyOption == None, "cannot add a property to a URN that already has one " + this.toString)
+
+      require(versionOption != None, "cannot add a property to a URN that does not have a version " + this.toString)
+
+      val baseStr = Vector("urn","cite2",namespace,collection).mkString(":")
+      Cite2Urn(baseStr + "." + version + "." + propertyId + ":")
     }
 
 

@@ -1,5 +1,6 @@
 # xcite: release notes
 
+**2.3.0**: new functions to add versions, properties or object selectors to `Cite2Urn`s.
 
 **2.2.3**: properly protects periods in passage component when using regular expression for URN pattern matching.
 

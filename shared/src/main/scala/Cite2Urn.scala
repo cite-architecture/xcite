@@ -298,10 +298,30 @@ package cite {
         case obj: Some[String] =>   Cite2Urn(baseStr + ":" + objectComponent)
         case None =>   Cite2Urn(baseStr + ":")
       }
-
-
     }
 
+    /** Adds a property identifier to the object hierarchy.
+    *
+    * @param propertyId Identifier for the property.
+    */
+    def addProperty(propertyId: String) : Cite2Urn = {
+      this
+    }
+
+
+
+
+    /** Adds an object selector to the URN.
+    *
+    * @param selectorId Identifier for the selected object.
+    */
+    def addSelector(selectorId: String) : Cite2Urn = {
+      require(versionOption != None, "cannot add selector to unversioned URN " + this.toString)
+
+      require(objectOption == None, "cannot add an object selector to URN that already has one " + this.toString)
+
+      Cite2Urn(this.toString + selectorId)
+    }
 
     /** Trims the selector component off of a URN,
     * if it is present.  This effectively converts a

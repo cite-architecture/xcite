@@ -61,4 +61,39 @@ class Cite2UrnObjectSpec extends FlatSpec {
     assert (urnProp.dropProperty ==  trimmedProp)
   }
 
+
+  it should "be able to add an object selector to a version-level URN" in {
+    val urn = Cite2Urn("urn:cite2:hmt:msA.release1:")
+    val expected = Cite2Urn("urn:cite2:hmt:msA.release1:12r")
+    assert (urn.addSelector("12r") == expected)
+
+  }
+  it should "throw an exception if adding an object to a URN that does not have a version ID" in {
+    val urn = Cite2Urn("urn:cite2:hmt:msA:")
+    try {
+      urn.addSelector("12r")
+      fail("Should not have been able to add selector")
+    } catch {
+      case iae: IllegalArgumentException => {
+        assert(iae.getMessage() == "requirement failed: cannot add selector to unversioned URN urn:cite2:hmt:msA:")
+      }
+    }
+  }
+  it should "throw an exception if adding an object selector to a URN that already has an object ID" in {
+    val urn = Cite2Urn("urn:cite2:hmt:msA.release1:12v")
+    try {
+      urn.addSelector("12r")
+      fail("Should not have been able to add selector")
+    } catch {
+      case iae: IllegalArgumentException => {
+        assert(iae.getMessage() == "requirement failed: cannot add an object selector to URN that already has one urn:cite2:hmt:msA.release1:12v")
+      }
+    }
+  }
+
+  it should "be able to add a property to an object-level URN" in pending
+  it should "throw an exception if adding a property to a URN that already has a property ID" in pending
+  it should "throw an exception if adding a property to a URN that already does not have an version ID" in pending
+  it should "be able to add a selector to an object- or property-level URN" in pending
+
 }

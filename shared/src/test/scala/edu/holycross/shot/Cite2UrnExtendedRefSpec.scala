@@ -7,7 +7,7 @@ import org.scalatest.FlatSpec
 class Cite2UrnExtendedRefSpec extends FlatSpec {
 
   "A Cite2Urn" should " have a none value for all subref options when no subref is defined" in {
-    val urn = Cite2Urn("urn:cite2:hmt.release1:12r")
+    val urn = Cite2Urn("urn:cite2:hmt:msA.release1:12r")
     urn.objectExtensionOption match {
       case None => assert (true)
       case _ => fail("Should not have created extended reference on object")

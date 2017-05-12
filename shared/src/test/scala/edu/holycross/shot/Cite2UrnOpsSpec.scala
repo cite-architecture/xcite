@@ -32,5 +32,14 @@ class Cite2UrnOpsSpec extends FlatSpec {
     val u = Cite2Urn("urn:cite2:hmt:speeches.r1.speaker:")
     assert (u.dropProperty == Cite2Urn("urn:cite2:hmt:speeches.r1:"))
   }
+/*
+/*
+> val test = Cite2Urn("urn:cite2:hmt:vaimg.v1:VA012RN_0013@0.165,0.2755,0.335,0.022")
+test: edu.holycross.shot.cite.Cite2Urn = urn:cite2:hmt:vaimg.v1:VA012RN_0013@0.165,0.2755,0.335,0.022
 
+scala> test.dropExtensions
+res19: edu.holycross.shot.cite.Cite2Urn = urn:cite2:hmt:vaimg:VA012RN_0013
+
+*/
+*/
 }

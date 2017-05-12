@@ -17,9 +17,13 @@ package cite {
     /** Array of top-level, colon-delimited components.
     */
     val components = urnString.split(":")
+    if (components.size == 4) {
+      require(urnString.endsWith(":") == true, "Collection component must be separated from empty object selection with :")
+    } else {
+      require((components.size == 5), "wrong number of components in  " + urnString + " - " + components.size)
+    }
 
 
-    require(((components.size == 4) || (components.size == 5)), "wrong number of components in  " + urnString + " - " + components.size)
 
     // Verify syntax of submitted String:
     require(components(0) == "urn", "invalid URN syntax: " + urnString + ". First component must be 'urn'.")
@@ -36,6 +40,8 @@ package cite {
     val collection = collectionParts(0)
 
 
+    /** Optional version part of collection component.
+    */
     def versionOption: Option[String] = {
       collectionParts.size match {
         case 2 => Some(collectionParts(1))
@@ -43,6 +49,10 @@ package cite {
         case _ => None
       }
     }
+
+    /** String value of optional version part of
+    * collection component.
+    */
     def version = {
       try {
         versionOption.get
@@ -51,16 +61,18 @@ package cite {
       }
     }
 
-
-
-
-
+    /** Optional property part of collection component.
+    */
     def propertyOption: Option[String] = {
       collectionParts.size match {
         case 3 => Some(collectionParts(2))
         case _ => None
       }
     }
+
+    /** String value of optional property part of
+    * collection component.
+    */
     def property = {
       try {
         propertyOption.get
@@ -69,23 +81,31 @@ package cite {
       }
     }
 
-
-
     require((1 until 4 contains collectionParts.size), "invalid syntax in collection component of " + urnString + "; wrong size collectionParts = " + collectionParts.size)
 
     for (p <- collectionParts) {
       require(p.nonEmpty, "invalid value: empty value in collection component in " + urnString)
     }
-    /////////// Object component
+
+
+
+    //
+    /////////// End collectoin component verification.
+    /////////// Begin object component.
     //
 
 
+    /** Optional object selector component.
+    */
     def objectComponentOption: Option[String] = {
       components.size match {
         case 5 => Some(components(4))
         case _ => None
       }
     }
+
+    /** String value of optional object selector component.
+    */
     def objectComponent = {
       try {
         objectComponentOption.get
@@ -95,6 +115,9 @@ package cite {
       }
     }
 
+    /** For non-empty object component, hyphen-separated
+    * parts allowed in ordered collections.
+    */
     val objectParts: Vector[String] = {
       objectComponentOption match {
         case None => Vector.empty[String]
@@ -108,12 +131,24 @@ package cite {
         }
       }
     }
+
+    /** True if URN identifies a range within
+    * an ordered collection.
+    */
     val isRange = {
       (objectParts.size == 2)
     }
+
+    /** True if URN includes a selector
+    * for a single object.
+    */
     val isObject = {
       objectParts.size == 1
     }
+
+    /** True if URN does not include an
+    * object selector component.
+    */
     val noObject = {
       objectParts.isEmpty
     }

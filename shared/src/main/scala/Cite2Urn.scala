@@ -7,7 +7,11 @@ package cite {
 
   /** A URN for a citable object in a collection.
   *
-  * @constructor create a new Cite2Urn
+  * @constructor create a new Cite2Urn.  The long
+  * constructor validates a submitted string
+  * against the complex syntactic requirements of the CITE2 URN
+  * specification, and defines a number of functions for manipulating
+  * CITE2 URN values.
   * @param urnString String representation of Cite2Urn validating
   * against the Cite2Urn specification
   */
@@ -23,9 +27,7 @@ package cite {
       require((components.size == 5), "wrong number of components in  " + urnString + " - " + components.size)
     }
 
-
-
-    // Verify syntax of submitted String:
+    /////////// Validate component-level syntax of submitted String:
     require(components(0) == "urn", "invalid URN syntax: " + urnString + ". First component must be 'urn'.")
     require(components(1) == "cite2", "invalid URN syntax: " + urnString + ". Second component must be 'cite2'.")
 
@@ -33,7 +35,7 @@ package cite {
     val namespace = components(2)
 
 
-    /////////// Collection component
+    /////////// Validate collection component
     /** Required work component of the URN.*/
     val collectionComponent = components(3)
     val collectionParts = collectionComponent.split("""\.""").toVector
@@ -87,13 +89,10 @@ package cite {
       require(p.nonEmpty, "invalid value: empty value in collection component in " + urnString)
     }
 
-
-
     //
-    /////////// End collectoin component verification.
-    /////////// Begin object component.
+    /////////// End collection component validation.
     //
-
+    /////////// Validate object selector component.
 
     /** Optional object selector component.
     */
@@ -154,7 +153,8 @@ package cite {
     }
 
 
-    // single object
+    /** Single object identifier as an Option.
+    */
     val objectOption: Option[String] = {
       objectParts.size match {
         case 1 => Some(objectParts(0))
@@ -163,7 +163,8 @@ package cite {
     }
 
 
-    // ranges
+    /** First part of range identifier as an Option.
+    */
     val rangeBeginOption : Option[String] = {
       objectParts.size match {
         case 2 => Some(objectParts(0))
@@ -171,6 +172,8 @@ package cite {
       }
     }
 
+    /** String value of first part of range identifier.
+    */
     def rangeBegin: String = {
       try {
         rangeBeginOption.get
@@ -180,14 +183,17 @@ package cite {
       }
     }
 
-
-
+    /** Second part of range identifier as an Option.
+    */
     val rangeEndOption : Option[String] = {
       objectParts.size match {
         case 2 => Some(objectParts(1))
         case _ => None
       }
     }
+
+    /** String value of second part of range identifier.
+    */
     def rangeEnd = {
       try {
         rangeEndOption.get
@@ -197,8 +203,7 @@ package cite {
       }
     }
 
-    // final requirements for object syntax
-
+    // final requirements for syntax of object selector
     require(((objectParts.size >= 0) && (objectParts.size <= 2)), "invalid syntax in object component of " + urnString)
     if (isObject) {
       require ((urnString.contains("-") == false),"invalid range syntax in object component of " + urnString)
@@ -359,9 +364,6 @@ package cite {
       val baseStr = Vector("urn","cite2",namespace,collection).mkString(":")
       Cite2Urn(baseStr + "." + version + "." + propertyId + ":")
     }
-
-
-
 
     /** Adds an object selector to the URN.
     *

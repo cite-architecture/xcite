@@ -317,7 +317,8 @@ package cite {
     * passage or range selectors.
     */
     def dropExtensions: Cite2Urn = {
-      val baseStr = Vector("urn","cite2",namespace,collection).mkString(":")
+      val baseStr = Vector("urn","cite2",namespace,collectionComponent).mkString(":")
+
       if (isRange) {
         Cite2Urn(baseStr + ":" + rangeBeginParts(0) + "-" + rangeEndParts(0))
       } else if (singleObjectParts.size > 0) {
@@ -424,7 +425,7 @@ package cite {
         case _ =>  {
           u.objectComponentOption match {
             case None => true
-            case _ => dropExtensions == u.dropExtensions
+            case _ => this.dropExtensions.objectComponent == u.dropExtensions.objectComponent
           }
         }
       }

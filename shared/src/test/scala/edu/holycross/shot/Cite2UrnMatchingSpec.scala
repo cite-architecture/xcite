@@ -159,4 +159,5 @@ class Cite2UrnMatchingSpec extends FlatSpec {
     val onecollection =  Cite2Urn("urn:cite2:hmt:speeches.v1:")
     assert (oneobject ~~ onecollection)
   }
+  
 }

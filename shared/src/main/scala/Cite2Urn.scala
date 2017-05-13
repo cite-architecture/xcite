@@ -363,7 +363,11 @@ package cite {
       require(versionOption != None, "cannot add a property to a URN that does not have a version " + this.toString)
 
       val baseStr = Vector("urn","cite2",namespace,collection).mkString(":")
-      Cite2Urn(baseStr + "." + version + "." + propertyId + ":")
+
+      objectComponentOption match {
+        case None => Cite2Urn(baseStr + "." + version + "." + propertyId + ":")
+        case o: Some[String] => Cite2Urn(baseStr + "." + version + "." + propertyId + ":" + o.get)
+      }
     }
 
     /** Adds an object selector to the URN.

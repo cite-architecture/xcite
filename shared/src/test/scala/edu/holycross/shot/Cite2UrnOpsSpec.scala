@@ -37,4 +37,10 @@ class Cite2UrnOpsSpec extends FlatSpec {
      assert (u.dropExtensions == Cite2Urn("urn:cite2:hmt:vaimg.v1:VA012RN_0013"))
   }
 
+  it should "be able to add a property to a URN" in {
+    val u = Cite2Urn("urn:cite2:hmt:msA.v1:12r")
+    val expected = Cite2Urn("urn:cite2:hmt:msA.v1.rv:12r")
+    assert (u.addProperty("rv") == expected)
+  }
+
 }

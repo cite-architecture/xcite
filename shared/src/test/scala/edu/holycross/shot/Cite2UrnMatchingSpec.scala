@@ -119,9 +119,9 @@ class Cite2UrnMatchingSpec extends FlatSpec {
 
     val u1 = Cite2Urn("urn:cite2:hmt:msA.v1:12r")
     val u2 = Cite2Urn("urn:cite2:hmt:msA.v1.rv:")
-    println(u1.toString + " ~~ " + u2 + " = " + (u1 ~~ u2))
-    //assert (u1 ~~ u2)
-    //assert (u2 ~~ u1)
+
+    assert (u1 ~~ u2)
+    assert (u2 ~~ u1)
   }
 
 
@@ -159,5 +159,5 @@ class Cite2UrnMatchingSpec extends FlatSpec {
     val onecollection =  Cite2Urn("urn:cite2:hmt:speeches.v1:")
     assert (oneobject ~~ onecollection)
   }
-  
+
 }

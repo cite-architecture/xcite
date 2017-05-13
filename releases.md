@@ -1,5 +1,7 @@
 # xcite: release notes
 
+**2.3.2**: fixes a bug in adding property part to collection component of a Cite2Urn.
+
 **2.3.1**: bug fixes.  Enforce requirement that CITE2 URN strings define five colon-separated components, even if object selector component is empty.  Correctly preserve collection component when extensions dropped from object selector.
 
 **2.3.0**: new functions to add versions, properties or object selectors to `Cite2Urn`s.

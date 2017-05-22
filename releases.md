@@ -1,5 +1,7 @@
 # xcite: release notes
 
+**2.4.0**: adds `rangeBeginUrn` and `rangeBeginUrn` functions on `Cite2Urn`.
+
 **2.3.2**: fixes a bug in adding property part to collection component of a Cite2Urn.
 
 **2.3.1**: bug fixes.  Enforce requirement that CITE2 URN strings define five colon-separated components, even if object selector component is empty.  Correctly preserve collection component when extensions dropped from object selector.

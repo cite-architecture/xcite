@@ -267,6 +267,23 @@ package cite {
       }
     }
 
+
+    def rangeBeginUrn: Cite2Urn = {
+      if (this.isRange) {
+        Cite2Urn(this.dropSelector + this.rangeBegin)
+      } else {
+        throw CiteException(s"Function rangeBeginUrn only applicable to range expressions: ${urnString}")
+      }
+    }
+
+    def rangeEndUrn: Cite2Urn = {
+      if (this.isRange) {
+        Cite2Urn(this.dropSelector + this.rangeEnd)
+      } else {
+        throw CiteException(s"Function rangeEndUrn only applicable to range expressions: ${urnString}")
+      }
+    }
+
     def objectExtensionOption : Option[String] = {
       singleObjectParts.size match {
         case 0 => None

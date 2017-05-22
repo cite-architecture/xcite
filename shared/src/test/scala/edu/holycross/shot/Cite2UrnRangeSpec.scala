@@ -81,5 +81,16 @@ class Cite2UrnRangeSpec extends FlatSpec {
     }
   }
 
+  it should "create a URN for range beginning" in {
+    val urn = Cite2Urn("urn:cite2:hmt:msA.release1:1r-12r")
+    val expected = Cite2Urn("urn:cite2:hmt:msA.release1:1r")
+    assert(urn.rangeBeginUrn == expected)
+  }
+
+  it should "create a URN for range end" in {
+    val urn = Cite2Urn("urn:cite2:hmt:msA.release1:1r-12r")
+    val expected = Cite2Urn("urn:cite2:hmt:msA.release1:12r")
+    assert(urn.rangeEndUrn == expected)
+  }
 
 }

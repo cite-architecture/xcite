@@ -34,8 +34,7 @@ package cite {
     val workComponent: String = components(3)
     /** Array of dot-separate parts of the workComponent.*/
     val workParts = workComponent.split("""\.""")
-    /** Textgroup part of work hierarchy.
-    */
+    /** Required textgroup part of work hierarchy.*/
     val textGroup: String = workParts(0)
 
 
@@ -47,10 +46,7 @@ package cite {
     require((workParts.size < 5), "invalid URN syntax. Too many parts in work component " + workComponent )
 
 
-    /** Work part of work hierarchy.
-    *
-    * Value is an empty string if there is no work part.
-    */
+    /** Optional work part of work hierarchy.    */
     def workOption: Option[String] = {
       workParts.size match {
         case w if 2 until 5 contains w => Some(workParts(1))
@@ -58,6 +54,7 @@ package cite {
       }
     }
 
+    /** String value of optional work part of work hierarchy.  */
     def work = {
       try {
         workOption.get
@@ -66,7 +63,10 @@ package cite {
       }
     }
 
-
+    /** Create a new URN by collapsing the passage hierarchy by `i` levels.
+    *
+    * @param i Number of levels to drop from passage hierarchy.
+    */
     def collapsePassageBy(i: Int) : CtsUrn = {
       if (passageNodeParts.size == 0) {
         this.dropPassage
@@ -81,6 +81,11 @@ package cite {
     }
 
 
+
+    /** Create a new URN by collapsing the passage hierarchy by `i` levels.
+    *
+    * @param i Number of levels to drop from passage hierarchy.
+    */
     def collapseBy(i: Int) : CtsUrn = {
       if (isRange) {
         //collapseRangeBy(i)
@@ -91,7 +96,10 @@ package cite {
     }
 
 
-
+    /** Create a new URN by collapsing the passage hierarchy to a specified level.
+    *
+    * @param i Number of levels to include in the passage hierarchy.
+    */
     def collapsePassageTo(i: Int) : CtsUrn = {
       if (passageNodeParts.size == 0) {
         throw CiteException("Two few levels in " + urnString + " - cannot collapse to " +  i + " levels.")
@@ -105,7 +113,10 @@ package cite {
       }
     }
 
-
+    /** Create a new URN by collapsing the passage hierarchy to a specified level.
+    *
+    * @param i Number of levels to include in the passage hierarchy.
+    */
     def collapseTo(i: Int) : CtsUrn = {
       if (isRange) {
         //collapseRangeBy(i)
@@ -116,9 +127,7 @@ package cite {
     }
 
 
-    /** Version part of work hierarchy.
-    *
-    * Value is an empty string if there is no version part.
+    /** Optional version part of work hierarchy.
     */
     def versionOption: Option[String] = {
       workParts.size match {
@@ -126,6 +135,9 @@ package cite {
         case _ => None
       }
     }
+
+    /** String value of optional version part of work hierarchy.
+    */
     def version: String = {
       try {
         versionOption.get
@@ -134,9 +146,7 @@ package cite {
       }
     }
 
-    /** Exemplar part of work hierarchy.
-    *
-    * Value is an empty string if there is no exemplar part.
+    /** Optional exemplar part of work hierarchy.
     */
     def exemplarOption: Option[String] = {
       workParts.size match {
@@ -145,6 +155,8 @@ package cite {
       }
     }
 
+    /** String value of optional exemplar part of work hierarchy.
+    */
     def exemplar: String = {
       try {
         exemplarOption.get
@@ -164,8 +176,6 @@ package cite {
     }
 
     /** Optional passage component of the URN.
-    *
-    * Value is an empty string if there is no passage component.
     */
     def passageComponentOption: Option[String] = {
       components.size match {
@@ -178,6 +188,9 @@ package cite {
         case _ => None
       }
     }
+
+    /** String value of optional passage component of the URN.
+    */
     def passageComponent = {
       try {
         passageComponentOption.get
@@ -201,14 +214,14 @@ package cite {
     }
 
 
-    /** Single node of the passage component of the URN.
-    *
-    * Value is an empty string if there is no passage component
-    * or if the passage component is a range reference.
+    /** Optional single passage node.
     */
     val passageNodeOption: Option[String] = {
       if (passageParts.size == 1) Some(passageParts(0)) else None
     }
+
+    /** String value of the optional single passage node.
+    */
     def passageNode: String = {
       try {
         passageNodeOption.get
@@ -218,15 +231,23 @@ package cite {
       }
     }
 
+    /** Array splitting optional single passage node into reference and extended reference.
+    */
     def passageNodeParts: Array[String] = {
       passageNodeOption match {
         case None => Array.empty[String]
         case _ => passageNode.split("@")
       }
     }
+
+    /** Reference part of optional passage node.
+    */
     def passageNodeRefOption: Option[String] = {
       if (passageNodeParts.isEmpty) None else Some(passageNodeParts(0))
     }
+
+    /** String value of reference part of optional passage node.
+    */
     def passageNodeRef = {
       try {
         passageNodeRefOption.get
@@ -236,8 +257,8 @@ package cite {
       }
     }
 
-
-    /** Full string value of the passage node's subref.*/
+    /** Extract optional subference component from optional passage node
+    * using packag object's [[subrefOption]] function.*/
     def passageNodeSubrefOption: Option[String] = {
       try {
         subrefOption(passageNode)
@@ -248,6 +269,7 @@ package cite {
       }
     }
 
+    /** String value of optional subference component from optional passage node. */
     def passageNodeSubref = {
       try {
         passageNodeSubrefOption.get
@@ -256,7 +278,9 @@ package cite {
         case otherEx : Throwable => throw( otherEx)
       }
     }
-    /** Indexed text of the passage node's subref.*/
+
+
+    /** Optional indexed text of the optional passage node.*/
     def passageNodeSubrefTextOption: Option[String] = {
       passageNodeSubrefOption match {
         case None => None
@@ -274,6 +298,8 @@ package cite {
         }
       }
     }
+
+    /** String value of optional indexed text of the optional passage node.*/
     def passageNodeSubrefText = {
       try {
         passageNodeSubrefTextOption.get
@@ -284,7 +310,7 @@ package cite {
     }
 
 
-    /** Index value of the passage node's subref.*/
+    /** Optional index value of the optional passage node.*/
     def passageNodeSubrefIndexOption: Option[Int] = {
       try {
        subrefIndexOption(passageNode) match {
@@ -297,7 +323,9 @@ package cite {
         case otherEx : Throwable => throw( otherEx)
       }
     }
-    def passageNodeSubrefIndex = {
+
+    /** Integer value of 0ptional index of the optional passage node.*/
+    def passageNodeSubrefIndex: Int= {
       try {
         passageNodeSubrefIndexOption.get
       } catch {
@@ -306,10 +334,7 @@ package cite {
       }
     }
 
-    /** First range part of the passage component of the URN.
-    *
-    * Value is an empty string if there is no passage component
-    * or if the passage component is a node reference.
+    /** First part of an optional range expression in optional passage component.
     */
     def rangeBeginOption: Option[String] = {
       if (passageParts.size > 1) {
@@ -320,6 +345,9 @@ package cite {
         }
       } else None
     }
+
+    /** String value of first part of an optional range expression in optional passage component.
+    */
     def rangeBegin = {
       try {
         rangeBeginOption.get
@@ -328,12 +356,17 @@ package cite {
         case otherEx : Throwable => throw( otherEx)
       }
     }
+
+    /** Array splitting first part of optional range expression into reference and extended reference.
+    */
     def rangeBeginParts = {
       rangeBeginOption match {
         case None => Array.empty[String]
         case _ => rangeBegin.split("@")
       }
     }
+
+
     def rangeBeginRefOption: Option[String] = {
       if (rangeBeginParts.isEmpty) None else Some(rangeBeginParts(0))
     }
@@ -469,7 +502,7 @@ package cite {
       }
     }
 
-    /** Index value of the range Endning's subref.*/
+    /** Optional index value of the range Endning's extended reference.*/
     def rangeEndSubrefIndexOption = {
       try {
         subrefIndexOption(rangeEnd)
@@ -570,12 +603,18 @@ package cite {
     }
 
 
-
-    def dropPassage = {
+    /** Create a new CtsUrn by dropping the passage component from
+    * this URN.
+    */
+    def dropPassage: CtsUrn = {
       CtsUrn("urn:cts:" + namespace + ":" + workComponent + ":")
     }
 
-    def dropSubref = {
+
+    /** Create a new CtsUrn by dropping any extended reference
+    * parts from this CtsUrn.
+    */
+    def dropSubref: CtsUrn = {
       val baseString = dropPassage
       if (isRange) {
         if (rangeBeginRef == rangeEndRef) {
@@ -621,7 +660,7 @@ package cite {
         val pttrn = str.r
 
         val res = pttrn.findFirstIn(dropSubref.passageComponent.toString)
-    
+
         res match {
           case None => false
           case _ => true
@@ -647,9 +686,21 @@ package cite {
     }
 
 
+
+    /** True if this URN matches a given URN.
+    *
+    * @param u URN to compare.
+    */
     def ~~(urn: CtsUrn): Boolean = {
       namespace == urn.namespace && workMatch(urn) && passageMatch(urn)
     }
+
+
+    /** True if this URN matches a given URN.
+    * Comparison URN must be a CTS URN.
+    *
+    * @param u URN to compare.
+    */
     def ~~ (u: Urn) : Boolean = {
       u match {
         case urn: CtsUrn => ~~(urn)
@@ -657,7 +708,7 @@ package cite {
       }
     }
 
-
+    /** Override default toString function. */
     override def toString() = {
       urnString
     }

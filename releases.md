@@ -1,7 +1,7 @@
 # xcite: release notes
 
 
-**2.5.0**: 
+**2.5.0**: adds `dropVersion` function on `CtsUrn`.
 
 
 **2.4.0**: adds `rangeBeginUrn` and `rangeBeginUrn` functions on `Cite2Urn`.

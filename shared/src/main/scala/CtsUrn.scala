@@ -366,10 +366,12 @@ package cite {
       }
     }
 
-
+    /** Reference part of first part of range in optional passage node.*/
     def rangeBeginRefOption: Option[String] = {
       if (rangeBeginParts.isEmpty) None else Some(rangeBeginParts(0))
     }
+
+    /** String value of reference part of first part of range in optional passage node.*/
     def rangeBeginRef = {
       try {
         rangeBeginRefOption.get
@@ -379,13 +381,15 @@ package cite {
       }
     }
 
-    /** Full string value of the range beginning's subref.*/
+    /** Extract optional subference component from first part of ragne in optional passage node using packag object's [[subrefOption]] function.*/
     def rangeBeginSubrefOption = {
       rangeBeginOption match {
         case None => None
         case _ =>  subrefOption(rangeBegin)
       }
     }
+
+    /** String value of optional subference component from first part of range in optional passage node.*/
     def rangeBeginSubref = {
       try {
         rangeBeginSubrefOption.get
@@ -394,13 +398,17 @@ package cite {
         case otherEx : Throwable => throw( otherEx)
       }
     }
-    /** Indexed text of the range beginning's subref.*/
+
+    /** Optional indexed text of the first part of range in optional passage node. */
     def rangeBeginSubrefTextOption: Option[String] = {
       rangeBeginOption match {
         case None => None
         case _ => subrefTextOption(rangeBegin)
       }
     }
+
+    /** String value of optional indexed text of the the first part of range of optional passage node.
+    */
     def rangeBeginSubrefText = {
       try {
         rangeBeginSubrefTextOption.get
@@ -410,7 +418,7 @@ package cite {
       }
     }
 
-    /** Index value of the range beginning's subref.*/
+    /** Optional index value of the first part of range of optional passage node.*/
     def rangeBeginSubrefIndexOption: Option[Int] = {
       try {
         subrefIndexOption(rangeBegin)
@@ -421,6 +429,8 @@ package cite {
       }
     }
 
+
+    /** Integer value of optional index of the first part of range of optional passage node.*/
     def rangeBeginSubrefIndex = {
       try {
         rangeBeginSubrefIndexOption.get
@@ -431,11 +441,7 @@ package cite {
     }
 
 
-    /** Second range part of the passage component of the URN.
-    *
-    * Value is an empty string if there is no passage component
-    * or if the passage component is a node reference.
-    */
+    /** Second part of an optional range expression in optional passage component.*/
     def rangeEndOption: Option[String] = {
       if (passageParts.size > 1) {
         if (passageParts(1).last == '.') {
@@ -445,6 +451,8 @@ package cite {
         }
       } else None
     }
+
+    /** String value of second part of an optional range expression in optional passage component.*/
     def rangeEnd = {
       try {
         rangeEndOption.get
@@ -453,15 +461,21 @@ package cite {
         case otherEx : Throwable => throw( otherEx)
       }
     }
+
+    /** Array splitting second part of optional range expression into reference and extended reference.*/
     def rangeEndParts = {
       rangeEndOption match {
         case None => Array.empty[String]
         case _ => rangeEnd.split("@")
       }
     }
+
+    /** Reference part of second part of range in optional passage node.*/
     def rangeEndRefOption: Option[String] = {
       if (rangeEndParts.isEmpty) None else Some(rangeEndParts(0))
     }
+
+    /** String value of reference part of second part of range in optional passage node.*/
     def rangeEndRef = {
       try {
         rangeEndRefOption.get
@@ -471,13 +485,16 @@ package cite {
       }
     }
 
-    /** Full string value of the range Endning's subref.*/
+    /** Extract optional subference component from second part of ragne in optional passage node using packag object's [[subrefOption]] function*/
     def rangeEndSubrefOption = {
       rangeEndOption match {
         case None => None
         case _ =>  subrefOption(rangeEnd)
       }
     }
+
+    /** String value of optional subference component from second part of range in optional passage node
+    */
     def rangeEndSubref = {
       try {
         rangeEndSubrefOption.get
@@ -486,13 +503,17 @@ package cite {
         case otherEx : Throwable => throw( otherEx)
       }
     }
-    /** Indexed text of the range Endning's subref.*/
+
+
+    /** Optional indexed text of the second part of range in optional passage node. */
     def rangeEndSubrefTextOption: Option[String] = {
       rangeEndOption match {
         case None => None
         case _ => subrefTextOption(rangeEnd)
       }
     }
+
+    /** String value of optional indexed text of the second part of range in optional passage node. */
     def rangeEndSubrefText = {
       try {
         rangeEndSubrefTextOption.get
@@ -502,7 +523,7 @@ package cite {
       }
     }
 
-    /** Optional index value of the range Endning's extended reference.*/
+    /** Optional index value of the second part of range of optional passage node.*/
     def rangeEndSubrefIndexOption = {
       try {
         subrefIndexOption(rangeEnd)
@@ -513,6 +534,7 @@ package cite {
       }
     }
 
+    /** Integer value of optional index of the second part of range of optional passage component.*/
     def rangeEndSubrefIndex = {
       try {
         rangeEndSubrefIndexOption.get

@@ -633,6 +633,18 @@ package cite {
     }
 
 
+    /** Create a new CtsUrn by dropping the passage component from
+    * this URN.
+    */
+    def dropVersion: CtsUrn = {
+      workLevel match {
+        case  WorkLevel.TextGroup => this
+        case WorkLevel.Work => this
+        case WorkLevel.Version =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + ":")
+        case WorkLevel.Exemplar =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + ":")
+      }
+    }
+
     /** Create a new CtsUrn by dropping any extended reference
     * parts from this CtsUrn.
     */

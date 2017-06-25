@@ -1,5 +1,9 @@
 # xcite: release notes
 
+
+**2.5.0**: 
+
+
 **2.4.0**: adds `rangeBeginUrn` and `rangeBeginUrn` functions on `Cite2Urn`.
 
 **2.3.2**: fixes a bug in adding property part to collection component of a Cite2Urn.

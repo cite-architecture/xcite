@@ -22,7 +22,7 @@ package cite {
     */
     val components = urnString.split(":")
     if (components.size == 4) {
-      require(urnString.endsWith(":") == true, "Collection component must be separated from empty object selection with :")
+      require(urnString.endsWith(":") == true, s"${urnString} is invalid: collection component must be separated from empty object selection with :")
     } else {
       require((components.size == 5), "wrong number of components in  " + urnString + " - " + components.size)
     }

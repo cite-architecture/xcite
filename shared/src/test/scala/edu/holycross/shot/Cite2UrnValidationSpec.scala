@@ -24,7 +24,7 @@ class Cite2UrnValidationSpec extends FlatSpec {
       val u = Cite2Urn("urn:cite2:NAMESPACE:COLL")
       fail ("Should not have created short urn: too short")
     } catch {
-      case iae: IllegalArgumentException => assert(iae.getMessage() == "requirement failed: Collection component must be separated from empty object selection with :")
+      case iae: IllegalArgumentException => assert(iae.getMessage() == "requirement failed: urn:cite2:NAMESPACE:COLL is invalid: collection component must be separated from empty object selection with :")
       case thr : Throwable => throw thr
     }
   }

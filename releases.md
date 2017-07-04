@@ -1,5 +1,6 @@
 # xcite: release notes
 
+**2.5.1**: fix error message to include offending value.
 
 **2.5.0**: adds `dropVersion` function on `CtsUrn`.
 

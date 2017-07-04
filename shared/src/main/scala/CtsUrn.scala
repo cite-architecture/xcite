@@ -633,15 +633,40 @@ package cite {
     }
 
 
-    /** Create a new CtsUrn by dropping the passage component from
-    * this URN.
+    /** Create a new CtsUrn by dropping the version part  from
+    * the work component.
     */
     def dropVersion: CtsUrn = {
+      val psg = passageComponentOption match {
+        case None => ""
+        case _ => passageComponentOption.get
+      }
       workLevel match {
         case  WorkLevel.TextGroup => this
         case WorkLevel.Work => this
-        case WorkLevel.Version =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + ":")
-        case WorkLevel.Exemplar =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + ":")
+        case WorkLevel.Version =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + ":" + psg)
+        case WorkLevel.Exemplar =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + ":" + psg)
+      }
+    }
+
+
+    /** Create a new CtsUrn by adding or replacing the version part
+    * of the passage component with a given value.
+    *
+    * @param v Version identifier for new URN.
+    */
+    def addVersion(v: String): CtsUrn = {
+      val psg = passageComponentOption match {
+        case None => ""
+        case _ => passageComponentOption.get
+      }
+
+      workLevel match {
+
+        case  WorkLevel.TextGroup => throw (CiteException("Cannot add version to group-level URN"))
+        case WorkLevel.Work =>  CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + v + ":" + psg)
+        case WorkLevel.Version =>    CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + v + ":" + psg)
+        case WorkLevel.Exemplar =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + v + ":" + psg)
       }
     }
 

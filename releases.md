@@ -1,5 +1,7 @@
 # xcite: release notes
 
+**2.7.0**: update ScalaJS depenencies, publish binaries for Scala 2.12.3.
+
 **2.6.0**: add `addVersion` function on `CtsUrn`
 
 **2.5.1**: fix error message to include offending value.

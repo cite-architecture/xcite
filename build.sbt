@@ -1,6 +1,6 @@
 name := "Cross-compiled CITE library"
 
-crossScalaVersions := Seq("2.10.6","2.11.8", "2.12.1")
+crossScalaVersions := Seq("2.10.6","2.11.8", "2.12.3")
 
 
 lazy val root = project.in(file(".")).
@@ -15,7 +15,7 @@ lazy val crossed = crossProject.in(file(".")).
     settings(
       name := "xcite",
       organization := "edu.holycross.shot.cite",
-      version := "2.6.0",
+      version := "2.7.0",
       licenses += ("GPL-3.0",url("https://opensource.org/licenses/gpl-3.0.html")),
       libraryDependencies ++= Seq(
         "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided",
@@ -27,8 +27,7 @@ lazy val crossed = crossProject.in(file(".")).
     ).
     jsSettings(
       skip in packageJSDependencies := false,
-      persistLauncher in Compile := true,
-      persistLauncher in Test := false
+      scalaJSUseMainModuleInitializer in Compile := true
     )
 
 lazy val crossedJVM = crossed.jvm

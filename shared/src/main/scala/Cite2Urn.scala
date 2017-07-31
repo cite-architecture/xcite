@@ -1,6 +1,6 @@
 package edu.holycross.shot
 import scala.scalajs.js
-import js.annotation.JSExport
+import scala.scalajs.js.annotation._
 
 package cite {
 
@@ -15,7 +15,7 @@ package cite {
   * @param urnString String representation of Cite2Urn validating
   * against the Cite2Urn specification
   */
-  @JSExport  case class Cite2Urn (val urnString: String) extends Urn {
+  @JSExportAll  case class Cite2Urn (val urnString: String) extends Urn {
 
     require(urnString.endsWith("-") == false, "URN cannot end with trailing -")
     /** Array of top-level, colon-delimited components.

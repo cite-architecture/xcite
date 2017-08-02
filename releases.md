@@ -1,5 +1,8 @@
 # xcite: release notes
 
+
+**2.7.1**: improved error message when Cite2Urn syntax is wrong.
+
 **2.7.0**: update ScalaJS depenencies, publish binaries for Scala 2.12.3.
 
 **2.6.0**: add `addVersion` function on `CtsUrn`

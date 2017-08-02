@@ -34,7 +34,7 @@ class Cite2UrnValidationSpec extends FlatSpec {
       Cite2Urn("urn:cite2:hmt:")
       fail("Should not have created too short URN")
      } catch {
-       case e: IllegalArgumentException => assert(e.getMessage() == "requirement failed: wrong number of components in  urn:cite2:hmt: - 3")
+       case e: IllegalArgumentException => assert(e.getMessage() == "requirement failed: wrong number of components in  'urn:cite2:hmt:' (3)")
        case ex : Throwable => fail("Constructor should have thrown an IllegalArgumentException exception " + ex)
      }
   }
@@ -43,7 +43,7 @@ class Cite2UrnValidationSpec extends FlatSpec {
       Cite2Urn("urn:cite2:hmt:msA:12r:subobject")
       fail("Should not have created too long URN")
     } catch {
-      case e: IllegalArgumentException => assert(e.getMessage() == "requirement failed: wrong number of components in  urn:cite2:hmt:msA:12r:subobject - 6")
+      case e: IllegalArgumentException => assert(e.getMessage() == "requirement failed: wrong number of components in  'urn:cite2:hmt:msA:12r:subobject' (6)")
       case ex: Throwable => fail ("Unrecognized error: " + ex)
    }
   }

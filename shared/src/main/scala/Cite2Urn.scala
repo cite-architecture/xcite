@@ -24,7 +24,7 @@ package cite {
     if (components.size == 4) {
       require(urnString.endsWith(":") == true, s"${urnString} is invalid: collection component must be separated from empty object selection with :")
     } else {
-      require((components.size == 5), "wrong number of components in  " + urnString + " - " + components.size)
+      require((components.size == 5), s"wrong number of components in  '${urnString}' (${components.size})")
     }
 
     /////////// Validate component-level syntax of submitted String:

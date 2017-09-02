@@ -12,7 +12,7 @@ class CtsUrnMatchingSpec extends FlatSpec {
     assert(containedUrn.passageContains(containingUrn))
   }
 
-  it should "properly protect periods in URN matching" in {
+  it should "properly protect periods in comparing passage references" in {
     val u1 = CtsUrn("urn:cts:citedemo:arabic.quran.v1:1.1")
     val u2 = CtsUrn("urn:cts:citedemo:arabic.quran.v1:111.7")
 
@@ -27,19 +27,24 @@ class CtsUrnMatchingSpec extends FlatSpec {
     assert(containingUrn.passageMatch(containedUrn))
   }
 
-  it should "determine if a work reference in one URN appears in the work hierarchy of another URN" in {
+  it should "determine if a work reference in one URN contains the work hierarchy of another URN" in {
     val containingUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
     val containedUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:1.1")
     assert(containedUrn.workContains(containingUrn))
   }
+  it should "properly protect periods in comparing work references" in {
+    val u1 = CtsUrn("urn:cts:testurns:group.txt1.ed:1")
+    val u2 = CtsUrn("urn:cts:testurns:group.txt11.ed:1")
 
+    assert( u1.workContains(u2)  == false)
+    assert( u2.workContains(u1)  == false)
+  }
   it should "determine if two URNs' work references are URN-similar" in {
     val containingUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
     val containedUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:1.1")
     assert(containedUrn.workMatch(containingUrn))
     assert(containingUrn.workMatch(containedUrn))
   }
-
 
   it should "identify two URNs differing only in the depth of work hierarchy as URN-similar" in {
     val notionalUrn = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.1")
@@ -51,22 +56,46 @@ class CtsUrnMatchingSpec extends FlatSpec {
   it should "identify containment direction in two URNs differing only in the depth of work hierarchy" in {
     val notionalUrn = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.1")
     val editionUrn = CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:1.1")
-    //assert  (notionalUrn > editionUrn )
-    //assert (editionUrn < notionalUrn)
+    assert  (notionalUrn > editionUrn )
+    assert (editionUrn < notionalUrn)
   }
 
-  it should "identify two URNs differing only in the depth of the passage hierarchy as URN-similar" in {
+  it should "identify two URNs differing only in the depth of the passage hierarchy as URN-similar, commutatively" in {
     val containingUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
     val containedUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:1.1.lemma")
     assert  (containingUrn ~~ containedUrn)
     assert (containedUrn ~~ containingUrn)
   }
 
-  it should "match two URNs differing both in the depth of the passage hierarchy and depth of the work hierarchy" in {
+
+  it should "identify two URNs differing only in CTS namespace as non-similar, commutatively" in {
+    val u1 = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
+    val u2 = CtsUrn("urn:cts:myOwnNs:tlg5026.msA:1.1")
+    assert (u1 >< u2)
+    assert (u2 >< u1)
+  }
+
+  it should "identify two URNs with conflicting passage values as non-similar, commutatively" in {
+    val u1 = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
+    val u2 = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:2.1")
+    assert (u1 >< u2)
+    assert (u2 >< u1)
+  }
+
+  it should "identify two URNs with conflicting work values as non-similar, commutatively" in {
+    val u1 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1:1")
+    val u2 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v2:1")
+    assert (u1 >< u2)
+    assert (u2 >< u1)
+  }
+
+
+
+  it should "identify two URNs differing both in the depth of the passage hierarchy and depth of the work hierarchy when containment is maintained" in {
     val urn1 = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
     val urn2 = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1.lemma")
-    assert  (urn1.~~(urn2))
-    assert (urn2.~~(urn1))
+    assert  (urn1 ~~ urn2)
+    assert (urn2 ~~ urn1)
   }
 
   it should "identify two URNs with the same work component as URN-similar if either passage component is empty" in {
@@ -76,7 +105,7 @@ class CtsUrnMatchingSpec extends FlatSpec {
     assert (noPassageUrn ~~ passageUrn)
   }
 
-  it should "match two URNs in the depth of work hierarchy if either passage component is empty" in {
+  it should "identify two URNs with URN-similar passage components as URN-similar if either passage component is empty" in {
     val passageUrn = CtsUrn("urn:cts:greekLit:tlg5026:1.1")
     val noPassageUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:")
     assert  (passageUrn.~~(noPassageUrn))
@@ -96,6 +125,9 @@ class CtsUrnMatchingSpec extends FlatSpec {
     assert ((nodeUrn ~~ indexedSpanningRef) == false)
 
   }
+
+
+
   it should "recognize that a unindexed node is URN-similar to an identical unindexed endpoint in a range" in pending
   /*
     val simpleSpanningRef = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:1.1-2.1")

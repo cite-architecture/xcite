@@ -9,11 +9,11 @@ class CtsUrnOpsSpec extends FlatSpec {
 
   "A CTS URN" should "support collapsing the passage component by a specified number of levels" in {
     val twoTier = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.1")
-    assert (twoTier.collapseBy(1) == CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1"))
+    assert (twoTier.collapsePassageBy(1) == CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1"))
   }
   it should "return a URN with no passage component if there are fewer than 2 tiers to the citation hierarchy" in {
     val oneTier = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1")
-    assert (oneTier.collapseBy(1) == CtsUrn("urn:cts:greekLit:tlg0012.tlg001:"))
+    assert (oneTier.collapsePassageBy(1) == CtsUrn("urn:cts:greekLit:tlg0012.tlg001:"))
 
   }
 
@@ -21,7 +21,7 @@ class CtsUrnOpsSpec extends FlatSpec {
 
   it should "support collapsing the passage component to a specified level" in {
     val tokenUrn = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.1.1")
-    assert (tokenUrn.collapseTo(2) == CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.1"))
+    assert (tokenUrn.collapsePassageTo(2) == CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.1"))
   }
 
   "A CTS URN with passage component" should "allow dropping the passage component" in {

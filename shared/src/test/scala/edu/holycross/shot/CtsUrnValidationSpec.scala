@@ -69,12 +69,12 @@ class CtsUrnValidationSpec extends FlatSpec {
 
 
   // Syntax of passage component:
-  it should "throw an IllegalArgumentException if a range has an empty first node" in {
+  it should "throw a CiteException if a range has an empty first node" in {
     try {
       CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:-1.10")
       fail("Should not have formed URN")
     } catch {
-      case e: CiteException => assert (e.getMessage() ==   "No range beginning defined in urn:cts:greekLit:tlg0012.tlg001.msA:-1.10")
+      case e: CiteException => assert(e.getMessage() == "No range beginning defined in urn:cts:greekLit:tlg0012.tlg001.msA:-1.10")
       case unknown: Throwable => fail("Unrecognized exception " + unknown)
     }
   }

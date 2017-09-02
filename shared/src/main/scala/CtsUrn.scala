@@ -4,13 +4,15 @@ import scala.scalajs.js.annotation._
 
 package cite {
 
-  /** A URN for a canonically text or passage of text.
+  /** A URN for a canonically citable text or passage of text.
   *
-  * @constructor create a new CtsUrn
-  * @param urnString String representation of CtsUrn validating
+  * @constructor create a new [[CtsUrn]]
+  * @param urnString String representation of [[CtsUrn]] validating
   * againt the CtsUrn specification
   */
   @JSExportAll case class CtsUrn  (val urnString: String) extends Urn {
+
+
 
     /** Array of top-level, colon-delimited components.
     *
@@ -19,15 +21,6 @@ package cite {
     * component is included.
     */
     val components = urnString.split(":")
-    require(components.size > 3, "Invalid URN syntax: too few components in " + urnString)
-    require(components.size < 6, "Invalid URN syntax: too many components in " + urnString)
-    if (components.size == 5) {
-      urnString.last match {
-        case ':' => throw CiteException("Invalid URN syntax: trailing colon in " + urnString)
-        case _ => //
-      }
-    } else {}
-
 
     /** Required namespace component of the URN.*/
     val namespace: String = components(2)
@@ -37,15 +30,6 @@ package cite {
     val workParts = workComponent.split("""\.""")
     /** Required textgroup part of work hierarchy.*/
     val textGroup: String = workParts(0)
-
-
-
-    // Verify syntax of submitted String:
-    require(components(0) == "urn", "invalid URN syntax: " + urnString + ". First component must be 'urn'.")
-    require(components(1) == "cts", "invalid URN syntax: " + urnString + ". Second component must be 'cts'.")
-    require(componentSyntaxOk, "invalid URN syntax: " + urnString + ". Wrong number of components.")
-    require((workParts.size < 5), "invalid URN syntax. Too many parts in work component " + workComponent )
-
 
     /** Optional work part of work hierarchy.    */
     def workOption: Option[String] = {
@@ -64,7 +48,7 @@ package cite {
       }
     }
 
-    /** Create a new URN by collapsing the passage hierarchy by `i` levels.
+    /** Create a new [[CtsUrn]] by collapsing the passage hierarchy by `i` levels.
     *
     * @param i Number of levels to drop from passage hierarchy.
     */
@@ -81,23 +65,7 @@ package cite {
       }
     }
 
-
-
-    /** Create a new URN by collapsing the passage hierarchy by `i` levels.
-    *
-    * @param i Number of levels to drop from passage hierarchy.
-    */
-    def collapseBy(i: Int) : CtsUrn = {
-      if (isRange) {
-        //collapseRangeBy(i)
-        throw CiteException("Collapsing passage component only supported on single nodes, not ranges")
-      }  else {
-        collapsePassageBy(i)
-      }
-    }
-
-
-    /** Create a new URN by collapsing the passage hierarchy to a specified level.
+    /** Create a new [[CtsUrn]] by collapsing the passage hierarchy to a specified level.
     *
     * @param i Number of levels to include in the passage hierarchy.
     */
@@ -111,19 +79,6 @@ package cite {
         } else {
           throw CiteException("Two few levels in " + urnString + " - cannot collapse to " +  i + " levels.")
         }
-      }
-    }
-
-    /** Create a new URN by collapsing the passage hierarchy to a specified level.
-    *
-    * @param i Number of levels to include in the passage hierarchy.
-    */
-    def collapseTo(i: Int) : CtsUrn = {
-      if (isRange) {
-        //collapseRangeBy(i)
-        throw CiteException("Collapsing passage component only supported on single nodes, not ranges")
-      }  else {
-        collapsePassageTo(i)
       }
     }
 
@@ -176,7 +131,7 @@ package cite {
       }
     }
 
-    /** Optional passage component of the URN.
+    /** Optional passage component of the [[CtsUrn]].
     */
     def passageComponentOption: Option[String] = {
       components.size match {
@@ -546,9 +501,7 @@ package cite {
     }
 
 
-    require(passageSyntaxOk, "Invalid URN syntax.  Error in passage component " + passageComponent)
-
-    /** True if the URN refers to a range.*/
+    /** True if the passage component refers to a range.*/
     def isRange = {
       passageComponentOption match {
         case None => false
@@ -562,51 +515,13 @@ package cite {
         case s: Some[String] => ((!isRange) && s.nonEmpty)
       }
     }
+
     /** True if URN's syntax for required components is valid.*/
     def componentSyntaxOk = {
       components.size match {
         case 5 => true
         case 4 => if (urnString.takeRight(1) == ":") true else false
         case _ => false
-      }
-    }
-
-
-    for (p <- workParts) {
-      require(p.nonEmpty, "invalid work syntax in " + urnString)
-    }
-    for (p <- passageParts) {
-      require(p.nonEmpty,"invalid passage syntax in " + urnString)
-    }
-    for (p <- passageNodeParts) {
-      require(p.nonEmpty, "invalid passage syntax in passage node " + urnString)
-    }
-    for (p <- rangeBeginParts) {
-      require(p.nonEmpty,"invalid passage syntax in range beginning" + urnString)
-    }
-    for (p <- rangeEndParts) {
-      require(p.nonEmpty,"invalid passage syntax in range ending" + urnString)
-    }
-    passageComponentOption match {
-      case None => assert(true)
-      case _ => {
-        if (isRange) {
-          val r1DotParts = rangeBegin.split("""\.""")
-          for (p <- r1DotParts) {
-            require(p.nonEmpty,"invalid passage syntax in range beginning of " + urnString)
-          }
-
-          val r2DotParts = rangeEnd.split("""\.""")
-          for (p <- r2DotParts) {
-            require(p.nonEmpty,"invalid passage syntax in range ending of " + urnString)
-          }
-
-        }  else {
-          val nodeDotParts = passageNode.split("""\.""")
-          for (p <- nodeDotParts) {
-            require(p.nonEmpty,"invalid passage syntax in " + urnString)
-          }
-        }
       }
     }
 
@@ -626,7 +541,7 @@ package cite {
     }
 
 
-    /** Create a new CtsUrn by dropping the passage component from
+    /** Create a new [[CtsUrn]] by dropping the passage component from
     * this URN.
     */
     def dropPassage: CtsUrn = {
@@ -634,7 +549,7 @@ package cite {
     }
 
 
-    /** Create a new CtsUrn by dropping the version part  from
+    /** Create a new [[CtsUrn]] by dropping the version part  from
     * the work component.
     */
     def dropVersion: CtsUrn = {
@@ -651,7 +566,7 @@ package cite {
     }
 
 
-    /** Create a new CtsUrn by adding or replacing the version part
+    /** Create a new [[CtsUrn]] by adding or replacing the version part
     * of the passage component with a given value.
     *
     * @param v Version identifier for new URN.
@@ -671,7 +586,7 @@ package cite {
       }
     }
 
-    /** Create a new CtsUrn by dropping any extended reference
+    /** Create a new [[CtsUrn]] by dropping any extended reference
     * parts from this CtsUrn.
     */
     def dropSubref: CtsUrn = {
@@ -728,8 +643,8 @@ package cite {
       }
     }
 
-    /** true if the passage reference of either `urn`
-    * of this CtsUrn is contained by the other.
+    /** True if the passage reference of either  this
+    * or a given [[CtsUrn]] is contained by the other.
     *
     * @param urn CtsUrn to compare to this one
     */
@@ -745,7 +660,7 @@ package cite {
       workContains(urn) || urn.workContains(this)
     }
 
-    /** True is this CtsUrn contains a given CtsUrn.
+    /** True if this [[CtsUrn]] contains a given [[CtsUrn]].
     *
     * @param urn CtsUrn to compare with this one.
     */
@@ -754,7 +669,7 @@ package cite {
     }
 
 
-    /** True is this CtsUrn contains or is equal to a given CtsUrn.
+    /** True if this [[CtsUrn]] contains or is equal to a given [[CtsUrn]].
     *
     * @param urn CtsUrn to compare with this one.
     */
@@ -763,7 +678,7 @@ package cite {
     }
 
 
-    /** True is this CtsUrn is contained by or euqal to a given CtsUrn.
+    /** True if this [[CtsUrn]] is contained by or equal to a given [[CtsUrn]].
     *
     * @param urn CtsUrn to compare with this one.
     */
@@ -771,17 +686,15 @@ package cite {
       ((urn.workContains(this) || (urn.workComponent == this.workComponent )) && (urn.passageContains(this)) || (urn.passageComponent == this.passageComponent))
     }
 
+    /** True if this [[CtsUrn]] is contained by a given [[CtsUrn]].
+    *
+    * @param urn CtsUrn to compare with this one.
+    */
+    def <(urn: CtsUrn): Boolean = {
+        ((this <= urn) && (urn != this))
+    }
 
-
-      /** True is this CtsUrn is contained by a given CtsUrn.
-      *
-      * @param urn CtsUrn to compare with this one.
-      */
-      def <(urn: CtsUrn): Boolean = {
-          ((this <= urn) && (urn != this))
-      }
-
-    /** True if this URN matches a given URN.
+    /** True if this [[CtsUrn]] is URN-similar a given [[CtsUrn]].
     *
     * @param u URN to compare.
     */
@@ -790,7 +703,7 @@ package cite {
     }
 
 
-    /** True if this URN matches a given URN.
+    /** True if this [[CtsUrn]] is URN-similar to a given [[Urn]].
     * Comparison URN must be a CTS URN.
     *
     * @param u URN to compare.
@@ -802,10 +715,100 @@ package cite {
       }
     }
 
+
+
+
+
+    /** True if this [[CtsUrn]] is NOT URN-similar to a given [[CtsUrn]].
+    *
+    * @param urn URN to compare.
+    */
+    def ><(urn: CtsUrn): Boolean = {
+      namespace != urn.namespace || (! workMatch(urn)) || (! passageMatch(urn))
+    }
+
+
+    /** True if this [[CtsUrn]] is NOT URN-similar to a given [[Urn]].
+    * The comparison [[Urn]] must be a [[CtsUrn]]
+    *
+    * @param u URN to compare.
+    */
+    def >< (u: Urn) : Boolean = {
+      u match {
+        case urn: CtsUrn => ><(urn)
+        case _ => throw CiteException("Can only match CtsUrn against a second CtsUrn")
+      }
+    }
+
     /** Override default toString function. */
     override def toString() = {
       urnString
     }
+
+    /** True if value submitted to construct this [[CtsUrn]] complies
+    * fully with the CtsUrn specification.
+    */
+    def fullyValid: Boolean = {
+      require(components(0) == "urn", "invalid URN syntax: " + urnString + ". First component must be 'urn'.")
+      require(components(1) == "cts", "invalid URN syntax: " + urnString + ". Second component must be 'cts'.")
+      require(componentSyntaxOk, "invalid URN syntax: " + urnString + ". Wrong number of components.")
+      require((workParts.size < 5), "invalid URN syntax. Too many parts in work component " + workComponent )
+
+      require(passageSyntaxOk, "Invalid URN syntax.  Error in passage component " + passageComponent)
+
+      require(components.size > 3, "Invalid URN syntax: too few components in " + urnString)
+      require(components.size < 6, "Invalid URN syntax: too many components in " + urnString)
+
+
+      for (p <- workParts) {
+        require(p.nonEmpty, "invalid work syntax in " + urnString)
+      }
+      for (p <- passageParts) {
+        require(p.nonEmpty,"invalid passage syntax in " + urnString)
+      }
+      for (p <- passageNodeParts) {
+        require(p.nonEmpty, "invalid passage syntax in passage node " + urnString)
+      }
+      for (p <- rangeBeginParts) {
+        require(p.nonEmpty,"invalid passage syntax in range beginning" + urnString)
+      }
+      for (p <- rangeEndParts) {
+        require(p.nonEmpty,"invalid passage syntax in range ending" + urnString)
+      }
+      passageComponentOption match {
+        case None => assert(true)
+        case _ => {
+          if (isRange) {
+            val r1DotParts = rangeBegin.split("""\.""")
+            for (p <- r1DotParts) {
+              require(p.nonEmpty,"invalid passage syntax in range beginning of " + urnString)
+            }
+
+            val r2DotParts = rangeEnd.split("""\.""")
+            for (p <- r2DotParts) {
+              require(p.nonEmpty,"invalid passage syntax in range ending of " + urnString)
+            }
+
+          }  else {
+            val nodeDotParts = passageNode.split("""\.""")
+            for (p <- nodeDotParts) {
+              require(p.nonEmpty,"invalid passage syntax in " + urnString)
+            }
+          }
+        }
+      }
+      if (components.size == 5) {
+        urnString.last match {
+          case ':' => throw CiteException("Invalid URN syntax: trailing colon in " + urnString)
+          case _ =>  true
+        }
+      } else {
+        true
+      }
+    }
+
+    // Require fully valid syntax:
+    require(fullyValid)
   }
 
 

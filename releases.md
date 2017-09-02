@@ -1,5 +1,7 @@
 # xcite: release notes
 
+**3.0.0**: Technically a breaking change since it renames two functions primarily intended for internal use.  Adds new functions implementing algebra of CtsUrn containment and similarity.
+
 
 **2.7.1**: improved error message when Cite2Urn syntax is wrong.
 

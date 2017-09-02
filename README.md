@@ -13,6 +13,10 @@ Status:  **active development**. [Release notes](releases.md)
 
 [GPL 3.0](http://www.opensource.org/licenses/gpl-3.0.html)
 
+## Documentation
+
+In addition to the API documentation, see the [project wiki](https://github.com/cite-architecture/xcite/wiki).
+
 ## Using, building, testing
 
 `xcite` is compiled for both the JVM and ScalaJS using scala versions 2.10, 2.11 and 2.12.  Binaries for all platforms are available from jcenter.

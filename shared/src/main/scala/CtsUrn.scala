@@ -11,6 +11,7 @@ package cite {
   * againt the CtsUrn specification
   */
   @JSExportAll case class CtsUrn  (val urnString: String) extends Urn {
+
     /** Array of top-level, colon-delimited components.
     *
     * The Array will have 4 elements if the optional passage
@@ -687,12 +688,12 @@ package cite {
       }
     }
 
-    /** true if work reference in `urn` is contained
+    /** True if work reference in `urn` is contained
     * in or equal to the work reference of this CtsUrn.
     *
     * @param urn CtsUrn to compare to this one.
     */
-    def workContainedIn(urn: CtsUrn): Boolean = {
+    def workContains(urn: CtsUrn): Boolean = {
       val wrk = urn.workComponent
       val str = "(^" + wrk + """\.)|(^""" + wrk + "$)"
       val pttrn = str.r
@@ -709,7 +710,7 @@ package cite {
     *
     * @param urn CtsUrn to compare to this one.
     */
-    def passageContainedIn(urn: CtsUrn): Boolean = {
+    def passageContains(urn: CtsUrn): Boolean = {
       if ((passageParts.isEmpty) || (urn.passageParts.isEmpty)) {
         true
       } else {
@@ -733,7 +734,7 @@ package cite {
     * @param urn CtsUrn to compare to this one
     */
     def passageMatch(urn: CtsUrn): Boolean = {
-      passageContainedIn(urn) || urn.passageContainedIn(this)
+      passageContains(urn) || urn.passageContains(this)
     }
     /** true if the passage reference of either `urn`
     * of this CtsUrn is contained by the other.
@@ -741,10 +742,44 @@ package cite {
     * @param urn CtsUrn to compare to this one
     */
     def workMatch(urn: CtsUrn): Boolean = {
-      workContainedIn(urn) || urn.workContainedIn(this)
+      workContains(urn) || urn.workContains(this)
+    }
+
+    /** True is this CtsUrn contains a given CtsUrn.
+    *
+    * @param urn CtsUrn to compare with this one.
+    */
+    def >(urn: CtsUrn): Boolean = {
+      ((this >= urn) && (urn != this))
     }
 
 
+    /** True is this CtsUrn contains or is equal to a given CtsUrn.
+    *
+    * @param urn CtsUrn to compare with this one.
+    */
+    def >=(urn: CtsUrn): Boolean = {
+      ((workContains(urn) || (urn.workComponent == this.workComponent )) && (passageContains(urn)) || (urn.passageComponent == this.passageComponent))
+    }
+
+
+    /** True is this CtsUrn is contained by or euqal to a given CtsUrn.
+    *
+    * @param urn CtsUrn to compare with this one.
+    */
+    def <=(urn: CtsUrn): Boolean = {
+      ((urn.workContains(this) || (urn.workComponent == this.workComponent )) && (urn.passageContains(this)) || (urn.passageComponent == this.passageComponent))
+    }
+
+
+
+      /** True is this CtsUrn is contained by a given CtsUrn.
+      *
+      * @param urn CtsUrn to compare with this one.
+      */
+      def <(urn: CtsUrn): Boolean = {
+          ((this <= urn) && (urn != this))
+      }
 
     /** True if this URN matches a given URN.
     *

@@ -12,6 +12,7 @@ class Cite2UrnValidationSpec extends FlatSpec {
     }
   }
 
+
   it should "construct a URN object from a well-formed string with no object identifer" in {
     val urn = Cite2Urn("urn:cite2:hmt:msA.release1:")
     urn match {
@@ -108,4 +109,6 @@ class Cite2UrnValidationSpec extends FlatSpec {
     val urn = Cite2Urn("urn:cite2:hmt:msA.release1:")
     assert (urn.noObject)
   }
+
+
 }

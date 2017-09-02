@@ -21,6 +21,8 @@ package cite {
     * component is included.
     */
     val components = urnString.split(":")
+    require(components.size > 3, "Invalid URN syntax: too few components in " + urnString)
+    require(components.size < 6, "Invalid URN syntax: too many components in " + urnString)
 
     /** Required namespace component of the URN.*/
     val namespace: String = components(2)
@@ -749,15 +751,15 @@ package cite {
     * fully with the CtsUrn specification.
     */
     def fullyValid: Boolean = {
+
+
+
       require(components(0) == "urn", "invalid URN syntax: " + urnString + ". First component must be 'urn'.")
       require(components(1) == "cts", "invalid URN syntax: " + urnString + ". Second component must be 'cts'.")
       require(componentSyntaxOk, "invalid URN syntax: " + urnString + ". Wrong number of components.")
       require((workParts.size < 5), "invalid URN syntax. Too many parts in work component " + workComponent )
 
       require(passageSyntaxOk, "Invalid URN syntax.  Error in passage component " + passageComponent)
-
-      require(components.size > 3, "Invalid URN syntax: too few components in " + urnString)
-      require(components.size < 6, "Invalid URN syntax: too many components in " + urnString)
 
 
       for (p <- workParts) {

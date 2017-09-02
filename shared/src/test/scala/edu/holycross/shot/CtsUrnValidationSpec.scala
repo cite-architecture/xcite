@@ -209,4 +209,17 @@ class CtsUrnValidationSpec extends FlatSpec {
     assert (urn.isPoint == false)
   }
 
+
+
+    it should "throw an exception if the wrong number of components are give n" in {
+
+        try {
+          val u = CtsUrn("NOT_A_URN")
+          fail("Should not have made a URN from " + u)
+        } catch {
+          case iae: IllegalArgumentException => assert (iae.getMessage() == "requirement failed: Invalid URN syntax: too few components in NOT_A_URN")
+          case t : Throwable =>       fail("Should have thrown an IllegalArgumentException instead of " + t)
+        }
+      }
+
 }

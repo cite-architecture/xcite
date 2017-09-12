@@ -809,6 +809,40 @@ package cite {
       }
     }
 
+
+    /** True if URN is an exemplar.*/
+    def isExemplar: Boolean = {
+      workLevel match {
+        case  WorkLevel.Exemplar => true
+        case _ => false
+      }
+    }
+
+    /** True if URN is a version.*/
+    def isVersion: Boolean = {
+      workLevel match {
+        case  WorkLevel.Version => true
+        case _ => false
+      }
+    }
+
+    /** True if URN is a notional work.*/
+    def isNotional: Boolean = {
+      workLevel match {
+        case  WorkLevel.Work => true
+        case _ => false
+      }
+    }
+
+
+    /** True if URN is a notional work.*/
+    def isTextGroup: Boolean = {
+      workLevel match {
+        case  WorkLevel.TextGroup => true
+        case _ => false
+      }
+    }
+
     // Require fully valid syntax:
     require(fullyValid)
   }

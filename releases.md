@@ -1,5 +1,7 @@
 # xcite: release notes
 
+**3.1.0**: Added boolean functions on work level value for more convenient filtering of collections.
+
 **3.0.1**: Nicer exception handling when total garbage given as input to create CtsUrn.
 
 **3.0.0**: Technically a breaking change since it renames two functions primarily intended for internal use.  Adds new functions implementing algebra of CtsUrn containment and similarity.

@@ -1,5 +1,8 @@
 # xcite: release notes
 
+
+**3.2.0**: Add boolean function determining if a CTS URN is concrete or notional.
+
 **3.1.0**: Added boolean functions on work level value for more convenient filtering of collections.
 
 **3.0.1**: Nicer exception handling when total garbage given as input to create CtsUrn.

@@ -843,6 +843,12 @@ package cite {
       }
     }
 
+    /** True if URN is a version or exemplar.
+    */
+    def concrete: Boolean = {
+      isVersion || isExemplar
+    }
+    
     // Require fully valid syntax:
     require(fullyValid)
   }

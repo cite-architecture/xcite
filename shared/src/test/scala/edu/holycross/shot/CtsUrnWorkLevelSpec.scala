@@ -38,5 +38,15 @@ class CtsUrnWorkLevelSpec extends FlatSpec {
     assert(group.isTextGroup)
   }
 
+  it should "determine if a URN is concrete" in {
+    val ex = CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA.tokens:1.1.1")
+    val vers = CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:1.1")
+    val group = CtsUrn("urn:cts:greekLit:tlg0012:")
+
+    assert(ex.concrete)
+    assert(vers.concrete)
+    assert(group.concrete == false)
+  }
+
 
 }

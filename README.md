@@ -15,7 +15,7 @@ Status:  **active development**. [Release notes](releases.md)
 
 ## Documentation
 
-See <https://cite-architecture.github.io/xcite>.
+See <https://cite-architecture.github.io/xcite/>.
 
 ## Using, building, testing
 

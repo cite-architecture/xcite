@@ -622,24 +622,28 @@ package cite {
         case _ => true
       }
     }
-    /** true if passage reference in `urn` is contained
+    /** True if passage reference in `urn` is contained
     * in or equal to the passage reference of this CtsUrn.
     *
     * @param urn CtsUrn to compare to this one.
     */
     def passageContains(urn: CtsUrn): Boolean = {
-      if ((passageParts.isEmpty) || (urn.passageParts.isEmpty)) {
+      if (passageParts.isEmpty) {
         true
+
+      } else if (urn.passageParts.isEmpty) {
+          passageParts.isEmpty
+
       } else {
-        val psg = urn.dropSubref.passageComponent.replaceAll("\\.","\\\\.")
+        val psg = dropSubref.passageComponent.replaceAll("\\.","\\\\.")
         val str = "(^" + psg + "\\.)|(^" + psg + "$)"
-
         val pttrn = str.r
-
-        val res = pttrn.findFirstIn(dropSubref.passageComponent.toString)
+        //println("Use pattern " + pttrn )
+        //println("against " + dropSubref.passageComponent.toString)
+        val res = pttrn.findFirstIn(urn.dropSubref.passageComponent.toString)
 
         res match {
-          case None => false
+          case None =>  false
           case _ => true
         }
       }
@@ -848,7 +852,7 @@ package cite {
     def concrete: Boolean = {
       isVersion || isExemplar
     }
-    
+
     // Require fully valid syntax:
     require(fullyValid)
   }

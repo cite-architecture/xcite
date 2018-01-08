@@ -6,10 +6,10 @@ import org.scalatest.FlatSpec
 
 class CtsUrnMatchingSpec extends FlatSpec {
 
-  "CTS URN matching" should "determine if a passage reference in one URN contains the passage hierarchy of another URN" in {
+  "CTS URN matching" should "determine if a passage reference in one URN contains the passage hierarchy of another URN" in   {
     val containingUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:1.1")
     val containedUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:1.1.lemma")
-    assert(containedUrn.passageContains(containingUrn))
+    assert(containingUrn.passageContains(containedUrn))
   }
 
   it should "properly protect periods in comparing passage references" in {
@@ -105,6 +105,7 @@ class CtsUrnMatchingSpec extends FlatSpec {
     assert (noPassageUrn ~~ passageUrn)
   }
 
+
   it should "identify two URNs with URN-similar passage components as URN-similar if either passage component is empty" in {
     val passageUrn = CtsUrn("urn:cts:greekLit:tlg5026:1.1")
     val noPassageUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:")
@@ -127,6 +128,14 @@ class CtsUrnMatchingSpec extends FlatSpec {
   }
 
 
+
+  it should "take account of both work and passage hierarchy in the containment function >=" in {
+    val u1 = CtsUrn("urn:cts:ns:tg.w.v1:1.2.1")
+    val u2 = CtsUrn("urn:cts:ns:tg.w.v1:1.2")
+
+    assert(u1.passageContains(u2) == false)
+    assert(u2.passageContains(u1))
+  }
 
   it should "recognize that a unindexed node is URN-similar to an identical unindexed endpoint in a range" in pending
   /*

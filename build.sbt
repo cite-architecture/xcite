@@ -24,12 +24,13 @@ lazy val crossed = crossProject.in(file(".")).
       )
     ).
     jvmSettings(
-
+      tutTargetDirectory := file("docs"),
+      tutSourceDirectory := file("shared/src/main/tut")
     ).
     jsSettings(
       skip in packageJSDependencies := false,
       scalaJSUseMainModuleInitializer in Compile := true
     )
 
-lazy val crossedJVM = crossed.jvm
+lazy val crossedJVM = crossed.jvm.enablePlugins(TutPlugin)
 lazy val crossedJS = crossed.js.enablePlugins(ScalaJSPlugin)

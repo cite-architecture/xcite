@@ -1,0 +1,26 @@
+
+
+
+# Permalinks
+permalink:        pretty
+
+# Setup
+title:            xcite library
+tagline:          'URNs for scholarly citation'
+description:      ''
+
+
+baseurl: '/xcite/'
+
+
+author:
+  name:           'Neel Smith'
+
+
+links:
+  - title:  CITE Architecture home page
+    url:  https://github.com/cite-architecture
+    external: true
+  - title:  Github repository for xcite
+    url:  https://github.com/cite-architecture/xcite
+    external: true

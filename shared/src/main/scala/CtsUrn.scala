@@ -680,7 +680,20 @@ package cite {
     * @param urn CtsUrn to compare with this one.
     */
     def >=(urn: CtsUrn): Boolean = {
-      ((workContains(urn) || (urn.workComponent == this.workComponent )) && (passageContains(urn)) || (urn.passageComponent == this.passageComponent))
+      val returnVal:Boolean = {
+        this.passageComponentOption match {
+
+          case Some(tp) => {
+              urn.passageComponentOption match {
+                case Some(up) => ((urn.workContains(this) || (this.workComponent == urn.workComponent )) && (passageContains(urn) || (urn.passageComponent == this.passageComponent)))
+                case None => false
+              }
+          }
+
+          case None => ( (urn.workContains(this)) || (this.workComponent == urn.workComponent))
+          }
+        }
+      returnVal
     }
 
 
@@ -689,7 +702,23 @@ package cite {
     * @param urn CtsUrn to compare with this one.
     */
     def <=(urn: CtsUrn): Boolean = {
-      ((urn.workContains(this) || (urn.workComponent == this.workComponent )) && (urn.passageContains(this)) || (urn.passageComponent == this.passageComponent))
+      val returnVal:Boolean = {
+        this.passageComponentOption match {
+
+          case Some(tp) => {
+              urn.passageComponentOption match {
+                case Some(up) => ((workContains(urn) || (this.workComponent == urn.workComponent )) && (urn.passageContains(this) || (urn.passageComponent == this.passageComponent))) 
+                case None => (workContains(urn) || (this.workComponent == urn.workComponent ))
+              }
+          }
+          case None => 
+              urn.passageComponentOption match {
+                case Some(up) => false
+                case None => (workContains(urn) || (this.workComponent == urn.workComponent ))
+              }
+          }
+        }
+      returnVal
     }
 
     /** True if this [[CtsUrn]] is contained by a given [[CtsUrn]].

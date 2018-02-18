@@ -1,7 +1,8 @@
 # xcite: release notes
 
-**3.2.1**  Fixes a bug in the URN containment function `>=`.
+**3.2.2** Fixed bugs with `>=` and `<=` and CtsUrns; added tests.
 
+**3.2.1**  Fixes a bug in the URN containment function `>=`.
 
 **3.2.0**: Add boolean function determining if a CTS URN is concrete or notional.
 

@@ -19,7 +19,7 @@ See <https://cite-architecture.github.io/xcite/>.
 
 ## Using, building, testing
 
-`xcite` can be compiled for both the JVM and ScalaJS using scala versions 2.10, 2.11 or 2.12.  Binaries for Scala 2.12 available from jcenter.
+`xcite` can be compiled for both the JVM and ScalaJS using scala versions 2.10, 2.11 or 2.12.  Binaries for all three versions are available from jcenter.
 
 If you are using sbt, include `Resolver.jcenterRepo` in your list of resolvers
 

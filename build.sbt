@@ -20,7 +20,7 @@ lazy val crossed = crossProject.in(file(".")).
       licenses += ("GPL-3.0",url("https://opensource.org/licenses/gpl-3.0.html")),
       libraryDependencies ++= Seq(
         "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided",
-        "org.scalatest" %%% "scalatest" % "3.0.1" % "test"
+        "org.scalatest" %%% "scalatest" % "3.0.5" % "test"
       )
     ).
     jvmSettings(

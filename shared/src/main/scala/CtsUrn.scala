@@ -115,9 +115,6 @@ package cite {
       }
     }
 
-
-
-
     /** Create a new CtsUrn identifying this URN's exemplar.
     */
     def toExemplar: CtsUrn = {
@@ -126,6 +123,8 @@ package cite {
         case _ => CtsUrn(s"urn:cts:${namespace}:${textGroup}.${work}.${version}.${exemplar}:")
       }
     }
+
+
 
     /** Create a new [[CtsUrn]] by collapsing the passage hierarchy by `i` levels.
     *

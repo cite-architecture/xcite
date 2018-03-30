@@ -50,40 +50,6 @@ package cite {
       }
     }
 
-    /** Create a new [[CtsUrn]] by collapsing the passage hierarchy by `i` levels.
-    *
-    * @param i Number of levels to drop from passage hierarchy.
-    */
-    def collapsePassageBy(i: Int) : CtsUrn = {
-      if (passageNodeParts.size == 0) {
-        this.dropPassage
-      } else {
-        val citationLevels = passageNodeParts(0).split("\\.")
-        if (citationLevels.size > 1) {
-          CtsUrn(this.dropPassage.toString + citationLevels.dropRight(1).mkString("."))
-        } else {
-          this.dropPassage
-        }
-      }
-    }
-
-    /** Create a new [[CtsUrn]] by collapsing the passage hierarchy to a specified level.
-    *
-    * @param i Number of levels to include in the passage hierarchy.
-    */
-    def collapsePassageTo(i: Int) : CtsUrn = {
-      if (passageNodeParts.size == 0) {
-        throw CiteException("Two few levels in " + urnString + " - cannot collapse to " +  i + " levels.")
-      } else {
-        val citationLevels = passageNodeParts(0).split("\\.")
-        if (citationLevels.size >= i) {
-          CtsUrn(this.dropPassage.toString + citationLevels.take(i).mkString("."))
-        } else {
-          throw CiteException("Two few levels in " + urnString + " - cannot collapse to " +  i + " levels.")
-        }
-      }
-    }
-
 
     /** Optional version part of work hierarchy.
     */
@@ -122,6 +88,80 @@ package cite {
         case e: java.util.NoSuchElementException => throw CiteException("No exemplar defined in " + urnString)
       }
     }
+
+    /** Create a new CtsUrn identifying this URN's text group.
+    */
+    def toTextGroup: CtsUrn = {
+      CtsUrn(s"urn:cts:${namespace}:${textGroup}:")
+    }
+
+
+    /** Create a new CtsUrn identifying this URN's work.
+    */
+    def toWork: CtsUrn = {
+      workOption match {
+        case None => toTextGroup
+        case _ => CtsUrn(s"urn:cts:${namespace}:${textGroup}.${work}:")
+      }
+    }
+
+
+    /** Create a new CtsUrn identifying this URN's version.
+    */
+    def toVersion: CtsUrn = {
+      versionOption match {
+        case None => toWork
+        case _ => CtsUrn(s"urn:cts:${namespace}:${textGroup}.${work}.${version}:")
+      }
+    }
+
+
+
+
+    /** Create a new CtsUrn identifying this URN's exemplar.
+    */
+    def toExemplar: CtsUrn = {
+      exemplarOption match {
+        case None => toVersion
+        case _ => CtsUrn(s"urn:cts:${namespace}:${textGroup}.${work}.${version}.${exemplar}:")
+      }
+    }
+
+    /** Create a new [[CtsUrn]] by collapsing the passage hierarchy by `i` levels.
+    *
+    * @param i Number of levels to drop from passage hierarchy.
+    */
+    def collapsePassageBy(i: Int) : CtsUrn = {
+      if (passageNodeParts.size == 0) {
+        this.dropPassage
+      } else {
+        val citationLevels = passageNodeParts(0).split("\\.")
+        if (citationLevels.size > 1) {
+          CtsUrn(this.dropPassage.toString + citationLevels.dropRight(1).mkString("."))
+        } else {
+          this.dropPassage
+        }
+      }
+    }
+
+    /** Create a new [[CtsUrn]] by collapsing the passage hierarchy to a specified level.
+    *
+    * @param i Number of levels to include in the passage hierarchy.
+    */
+    def collapsePassageTo(i: Int) : CtsUrn = {
+      if (passageNodeParts.size == 0) {
+        throw CiteException("Two few levels in " + urnString + " - cannot collapse to " +  i + " levels.")
+      } else {
+        val citationLevels = passageNodeParts(0).split("\\.")
+        if (citationLevels.size >= i) {
+          CtsUrn(this.dropPassage.toString + citationLevels.take(i).mkString("."))
+        } else {
+          throw CiteException("Two few levels in " + urnString + " - cannot collapse to " +  i + " levels.")
+        }
+      }
+    }
+
+
 
     /** Enumerated WorkLevel for this workComponent.*/
     def workLevel = {
@@ -707,11 +747,11 @@ package cite {
 
           case Some(tp) => {
               urn.passageComponentOption match {
-                case Some(up) => ((workContains(urn) || (this.workComponent == urn.workComponent )) && (urn.passageContains(this) || (urn.passageComponent == this.passageComponent))) 
+                case Some(up) => ((workContains(urn) || (this.workComponent == urn.workComponent )) && (urn.passageContains(this) || (urn.passageComponent == this.passageComponent)))
                 case None => (workContains(urn) || (this.workComponent == urn.workComponent ))
               }
           }
-          case None => 
+          case None =>
               urn.passageComponentOption match {
                 case Some(up) => false
                 case None => (workContains(urn) || (this.workComponent == urn.workComponent ))

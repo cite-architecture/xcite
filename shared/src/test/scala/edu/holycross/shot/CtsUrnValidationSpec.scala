@@ -28,7 +28,7 @@ class CtsUrnValidationSpec extends FlatSpec {
        val u = CtsUrn("urn:cts:greekLit:tlg0012:tlg001:")
        fail("Should not have formed URN with " + u.components.size + " components.")
      } catch {
-       case ex : IllegalArgumentException => assert(ex.getMessage() == "requirement failed: invalid URN syntax: urn:cts:greekLit:tlg0012.tlg001. Wrong number of components.")
+       case ex : IllegalArgumentException => assert(ex.getMessage() == "requirement failed: invalid URN syntax: urn:cts:greekLit:tlg0012:tlg001:. Wrong number of components.")
        case ce : CiteException => assert(ce.message == "Invalid URN syntax: trailing colon in urn:cts:greekLit:tlg0012:tlg001:")
      }
   }

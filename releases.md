@@ -1,6 +1,8 @@
 # `xcite`: release notes
 
 
+**3.4.0**:  Adds `dropVersion` function on `Cite2Urn`
+
 
 **3.3.0**:  New functions for generating CtsUrns at a specified level of the work hierarchy.
 

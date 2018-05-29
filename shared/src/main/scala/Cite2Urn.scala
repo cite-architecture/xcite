@@ -367,7 +367,20 @@ package cite {
 
       require(versionOption == None, "cannot add version to a URN that already has one " + this.toString)
       val baseStr = Vector("urn","cite2",namespace).mkString(":")
-      Cite2Urn(baseStr + ":" + collection + "." + versionId + ":")
+
+      val objectPart = objectOption match  {
+        case None => ""
+        case _ => objectComponent
+      }
+
+
+      Cite2Urn(baseStr + ":" + collection + "." + versionId + ":" + objectPart)
+    }
+
+
+    def dropVersion : Cite2Urn = {
+      val baseStr = Vector("urn","cite2",namespace).mkString(":")
+      Cite2Urn(baseStr + ":" + collection + ":" + objectComponent)
     }
 
     /** Adds a property identifier to the object hierarchy.

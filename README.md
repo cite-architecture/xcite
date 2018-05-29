@@ -4,7 +4,7 @@
 
 `xcite` is a cross-platform library for semantic manipulation of scholarly references expressed in URN notation.
 
-## Current version: 3.3.0
+## Current version: 3.4.0
 
 Status:  **active development**. [Release notes](releases.md)
 

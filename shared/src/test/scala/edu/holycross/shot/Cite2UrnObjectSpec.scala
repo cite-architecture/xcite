@@ -143,7 +143,12 @@ class Cite2UrnObjectSpec extends FlatSpec {
     }
   }
 
-
+  it should "be able to drop a version" in {
+    val v1 = Cite2Urn("urn:cite2:hmt:persname.v2:pers22")
+    val v2 = v1.dropVersion
+    val expected = Cite2Urn("urn:cite2:hmt:persname:pers22")
+    assert(v2 == expected)
+  }
 
 
 }

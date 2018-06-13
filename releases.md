@@ -1,11 +1,10 @@
 # `xcite`: release notes
 
+**3.5.0**:  Adds `dropExemplar` function on `CtsUrn`
 
 **3.4.0**:  Adds `dropVersion` function on `Cite2Urn`
 
-
 **3.3.0**:  New functions for generating CtsUrns at a specified level of the work hierarchy.
-
 
 **3.2.2**: Fixed bugs with `>=` and `<=` and CtsUrns; added tests.
 

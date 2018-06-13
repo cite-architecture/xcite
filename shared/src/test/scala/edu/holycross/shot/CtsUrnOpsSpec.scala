@@ -57,17 +57,7 @@ class CtsUrnOpsSpec extends FlatSpec {
     assert(iliadUrn.dropSubref.isPoint)
   }
 
-  "A version-level CTS URN with passage component" should "be able to drop the version" in {
-    val iliadUrn = CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:1.1")
-    val expected = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.1")
-    assert (iliadUrn.dropVersion == expected)
 
-  }
-  it should "be able to add a new version identifer" in {
-    val iliadUrn = CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:1.1")
-    val expected = CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA_diplomatic:1.1")
-    assert (iliadUrn.addVersion("msA_diplomatic") == expected)
-  }
 
 
 

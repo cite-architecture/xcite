@@ -62,6 +62,7 @@ class Cite2UrnObjectSpec extends FlatSpec {
   }
 
 
+
   it should "be able to add a version identifier to a collection" in {
     val urn = Cite2Urn("urn:cite2:hmt:msA:")
     val expected = Cite2Urn("urn:cite2:hmt:msA.release1:")

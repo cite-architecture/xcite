@@ -627,6 +627,43 @@ package cite {
       }
     }
 
+
+    /** Create a new [[CtsUrn]] by dropping the exemplar
+    * part of the work component, if any.
+    */
+    def dropExemplar: CtsUrn = {
+      val psg = passageComponentOption match {
+        case None => ""
+        case _ => passageComponentOption.get
+      }
+      workLevel match {
+        case  WorkLevel.TextGroup => this
+        case WorkLevel.Work => this
+        case WorkLevel.Version => this
+        case WorkLevel.Exemplar =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + version + ":" + psg)
+      }
+    }
+
+  /** Create a new [[CtsUrn]] by adding or replacing the exemplar part
+  * of the passage component with a given value.
+  *
+  * @param v Exemplar identifier for new URN.
+  */
+  def addExemplar(ex: String): CtsUrn = {
+    val psg = passageComponentOption match {
+      case None => ""
+      case _ => passageComponentOption.get
+    }
+
+    workLevel match {
+
+      case  WorkLevel.TextGroup => throw (CiteException("Cannot add version to group-level URN"))
+      case  WorkLevel.Work => throw (CiteException("Cannot add version to work-level URN"))
+      case WorkLevel.Version =>  CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + version + "." + ex + ":" + psg)
+      case WorkLevel.Exemplar =>    CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + version + "." + ex + ":" + psg)
+    }
+  }
+
     /** Create a new [[CtsUrn]] by dropping any extended reference
     * parts from this CtsUrn.
     */

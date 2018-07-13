@@ -168,14 +168,14 @@ package cite {
       this.isRange match {
         case true => {
           Vector(
-              this.rangeBegin.split('.').size,
-              this.rangeEnd.split('.').size
+              this.rangeBeginRef.split('.').size,
+              this.rangeEndRef.split('.').size
           )
         }
         case false => {
           this.passageComponentOption match {
             case Some(pc) => {
-              Vector(pc.split('.').size)
+              Vector(this.dropSubref.passageComponent.split('.').size)
             }
             case None => {
               val v:Vector[Int] = Vector()

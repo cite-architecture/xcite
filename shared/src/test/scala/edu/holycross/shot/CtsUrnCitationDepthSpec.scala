@@ -44,6 +44,18 @@ class CtsUrnCitationDepthSpec extends FlatSpec {
     assert(urn.citationDepth == depth)
   }
 
+  it should "work if the URN has a subref with a period" in {
+    val urn:CtsUrn = CtsUrn("urn:cts:namespace:group.work.ed:1.2@a.b")
+    val depth:Vector[Int] = Vector(2)
+    assert(urn.citationDepth == depth)
+  }
+
+  it should "work if the URN has a subref" in {
+    val urn:CtsUrn = CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:1.1@μῆνιν")
+    val depth:Vector[Int] = Vector(2)
+    assert(urn.citationDepth == depth)
+  }
+
   
 
 

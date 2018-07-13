@@ -23,7 +23,7 @@ class Cite2UrnValidationSpec extends FlatSpec {
   it should "require explicit termination of collection component with colon delimiter" in {
     try {
       val u = Cite2Urn("urn:cite2:NAMESPACE:COLL")
-      fail ("Should not have created short urn: too short")
+      fail (s"Should not have created short urn: too short ${u}")
     } catch {
       case iae: IllegalArgumentException => assert(iae.getMessage() == "requirement failed: urn:cite2:NAMESPACE:COLL is invalid: collection component must be separated from empty object selection with :")
       case thr : Throwable => throw thr

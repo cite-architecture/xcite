@@ -1,5 +1,7 @@
 # `xcite`: release notes
 
+**3.6.0**: Adds `rangeToUrnVector` and `citationDepth` methods.
+
 **3.5.0**:  Adds `dropExemplar` function on `CtsUrn`
 
 **3.4.0**:  Adds `dropVersion` function on `Cite2Urn`

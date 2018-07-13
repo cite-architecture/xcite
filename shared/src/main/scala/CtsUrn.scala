@@ -160,6 +160,55 @@ package cite {
       }
     }
 
+    /** Return a Vector of integers representing the citation-depth of the passage component. 
+    * May be empty if there is no passage component. Will contain one integer if the URN 
+    * is not a range; two if it is.
+    */
+    def citationDepth:Vector[Int] = {
+      this.isRange match {
+        case true => {
+          Vector(
+              this.rangeBegin.split('.').size,
+              this.rangeEnd.split('.').size
+          )
+        }
+        case false => {
+          this.passageComponentOption match {
+            case Some(pc) => {
+              Vector(pc.split('.').size)
+            }
+            case None => {
+              val v:Vector[Int] = Vector()
+              v
+            }
+          } 
+        }
+      }
+    }
+
+
+    /** Return a Vector of CtsUrns representing the ends of a range-URN.
+    * If the URN is not a range, will return a one-element vector.
+    */
+    def rangeToUrnVector:Vector[CtsUrn] = {
+      this.isRange match {
+        case true => {
+          val uBase:CtsUrn = this.dropPassage
+          val passage1:String = this.rangeBegin
+          val passage2:String = this.rangeEnd
+          val u1:CtsUrn = CtsUrn(s"${uBase}${passage1}")
+          val u2:CtsUrn = CtsUrn(s"${uBase}${passage2}")
+          Vector(u1,u2)
+        }
+        case false => {
+          Vector(this)          
+        }
+      }
+
+    }
+
+
+
 
 
     /** Enumerated WorkLevel for this workComponent.*/

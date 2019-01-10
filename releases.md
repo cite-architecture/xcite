@@ -1,5 +1,9 @@
 # `xcite`: release notes
 
+
+**3.7.0**:   Adds `addPassage` function on `CtsUrn`.
+
+
 **3.6.0**: Adds `rangeToUrnVector` and `citationDepth` methods.
 
 **3.5.0**:  Adds `dropExemplar` function on `CtsUrn`

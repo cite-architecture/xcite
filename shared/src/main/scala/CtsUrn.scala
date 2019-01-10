@@ -160,8 +160,8 @@ package cite {
       }
     }
 
-    /** Return a Vector of integers representing the citation-depth of the passage component. 
-    * May be empty if there is no passage component. Will contain one integer if the URN 
+    /** Return a Vector of integers representing the citation-depth of the passage component.
+    * May be empty if there is no passage component. Will contain one integer if the URN
     * is not a range; two if it is.
     */
     def citationDepth:Vector[Int] = {
@@ -181,7 +181,7 @@ package cite {
               val v:Vector[Int] = Vector()
               v
             }
-          } 
+          }
         }
       }
     }
@@ -201,7 +201,7 @@ package cite {
           Vector(u1,u2)
         }
         case false => {
-          Vector(this)          
+          Vector(this)
         }
       }
 
@@ -638,6 +638,14 @@ package cite {
       CtsUrn("urn:cts:" + namespace + ":" + workComponent + ":")
     }
 
+    /** Create a new [[CtsUrn]] by adding or replacing the
+    * passage component with a given value.
+    *
+    * @param psg String value of new passage reference.
+    */
+    def addPassage(psg: String): CtsUrn = {
+      CtsUrn("urn:cts:" + namespace + ":" + workComponent + ":" + psg)
+    }
 
     /** Create a new [[CtsUrn]] by dropping the version part  from
     * the work component.
@@ -657,7 +665,7 @@ package cite {
 
 
     /** Create a new [[CtsUrn]] by adding or replacing the version part
-    * of the passage component with a given value.
+    * of the work hierarchy with a given value.
     *
     * @param v Version identifier for new URN.
     */

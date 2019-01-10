@@ -25,6 +25,19 @@ class CtsUrnPassageSpec extends FlatSpec {
       case exc : Throwable => fail("Should have thrown a CiteException: " + exc)
     }
   }
+
+  it should "add a passage component to a URN lacking one" in {
+    val original = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:")
+    val passage = "1.1"
+    val expected = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.1")
+    assert(original.addPassage(passage) == expected)
+  }
+  it should "replace a passage component when adding to a URN already having one" in {
+      val original = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.1")
+      val passage = "1.2"
+      val expected = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.2")
+      assert(original.addPassage(passage) == expected)
+  }
 /*
 
 

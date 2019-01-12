@@ -1,1 +1,26 @@
-theme: jekyll-theme-minimal
+
+
+
+# Permalinks
+permalink:        pretty
+
+# Setup
+title:            xcite library
+tagline:          'Work with citable scholarly resources'
+description:      'A library for working with canonicaly citable scholarly resources'
+
+url: 'http://cite-architecture.org'
+baseurl: '/code/citelibs/xcite/'
+
+
+author:
+  name:           'Neel Smith'
+
+
+links:
+  - title:  CITE Architecture
+    url:  http://cite-architecture.org/
+    external: true
+  - title:  Github repository
+    url:  https://github.com/cite-architecture/xcite
+    external: true

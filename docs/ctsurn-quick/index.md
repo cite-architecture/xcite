@@ -53,8 +53,8 @@ res3: edu.holycross.shot.cite.CtsUrn = urn:cts:greekLit:tlg0012.tlg001.msA:
 You can add particular parts (substituting for the value of that part, if any, in the source URN)
 
 ```scala
-scala> venetusA_1_1.addExemplar("msB")
-res4: edu.holycross.shot.cite.CtsUrn = urn:cts:greekLit:tlg0012.tlg001.msA.msB:1.1
+scala> venetusA_1_1.addVersion("msB")
+res4: edu.holycross.shot.cite.CtsUrn = urn:cts:greekLit:tlg0012.tlg001.msB:1.1
 ```
 
 

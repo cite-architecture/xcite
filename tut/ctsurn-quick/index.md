@@ -49,7 +49,7 @@ venetusA_1_1.dropPassage
 You can add particular parts (substituting for the value of that part, if any, in the source URN)
 
 ```tut
-venetusA_1_1.addExemplar("msB")
+venetusA_1_1.addVersion("msB")
 ```
 
 

@@ -65,7 +65,7 @@ res4: edu.holycross.shot.cite.CtsUrn = urn:cts:greekLit:tlg0012.tlg001.msB:1.1
 One of the most powerful features of the `CtsUrn` class is  comparison of two URNs following the semantics of the URN notation.
 
 ```scala
-val venetusA_1_2 = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.2")
+val venetusA_1_2 = CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:1.2")
 val iliad_1_1_notional = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.1")
 val iliad_bk1_notional = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1")
 
@@ -82,7 +82,7 @@ res5: Boolean = false
 
 
 ### URN containment
-The containment operator '>' tests whether one URN fully contains the other ('>=' tests "contains or is equal to").
+The containment operator '>' tests whether one URN fully contains the other ('>=' tests "contains or is equal to") in both the work and the passage hierarchies:
 
 ```scala
 scala> iliad_1_1_notional > venetusA_1_1
@@ -107,3 +107,5 @@ res9: Boolean = true
 scala> venetusA_1_1 ~~ venetusA_1_2
 res10: Boolean = false
 ```
+
+For more information, see a fuller discussion of [CTS URN algebra](../cts-algebra)

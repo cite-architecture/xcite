@@ -60,7 +60,7 @@ venetusA_1_1.addVersion("msB")
 One of the most powerful features of the `CtsUrn` class is  comparison of two URNs following the semantics of the URN notation.
 
 ```tut:silent
-val venetusA_1_2 = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.2")
+val venetusA_1_2 = CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:1.2")
 val iliad_1_1_notional = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.1")
 val iliad_bk1_notional = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1")
 
@@ -76,7 +76,7 @@ venetusA_1_1 == venetusA_1_2
 
 
 ### URN containment
-The containment operator '>' tests whether one URN fully contains the other ('>=' tests "contains or is equal to").
+The containment operator '>' tests whether one URN fully contains the other ('>=' tests "contains or is equal to") in both the work and the passage hierarchies:
 
 ```tut
 iliad_1_1_notional > venetusA_1_1
@@ -93,3 +93,5 @@ iliad_bk1_notional ~~ iliad_1_1_notional
 iliad_bk1_notional ~~ venetusA_1_1
 venetusA_1_1 ~~ venetusA_1_2
 ```
+
+For more information, see a fuller discussion of [CTS URN algebra](../cts-algebra)

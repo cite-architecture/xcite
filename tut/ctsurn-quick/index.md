@@ -7,7 +7,7 @@ title: "CTS URNs: quick start"
 
 ## Creating URNs
 
-Create `CtsUrn`s or `Cite2Urn`s directly from strings:
+Create `CtsUrn`s directly from strings:
 
 ```tut:invisible
 import edu.holycross.shot.cite._

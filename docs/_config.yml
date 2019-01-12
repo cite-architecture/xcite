@@ -10,7 +10,7 @@ tagline:          'Work with citable scholarly resources'
 description:      'A library for working with canonicaly citable scholarly resources'
 
 url: 'http://cite-architecture.org'
-baseurl: '/code/citelibs/xcite/'
+baseurl: '/xcite/'
 
 
 author:

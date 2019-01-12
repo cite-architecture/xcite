@@ -1,8 +1,12 @@
 ---
 layout: page
-title: The xcite library
+title: "xcite home page"
 ---
 
 The `xcite` library allows you to work with CTS URNs and CITE2 URNs to cite scholarly resources.
 
--  [Quick start](quick)
+
+## Working with CTS URNs
+
+-  [Quick start](ctsurn-quick/)
+-  [An algebra of CTS URNs](cts-algebra)

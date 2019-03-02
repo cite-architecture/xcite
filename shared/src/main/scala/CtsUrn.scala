@@ -748,13 +748,14 @@ package cite {
       val str = "(^" + wrk + """\.)|(^""" + wrk + "$)"
       val pttrn = str.r
 
-      val res = pttrn.findFirstIn(workComponent.toString)
+      val res = pttrn.findFirstIn(workComponent)
       //println("Result of matching  " + str + " in " + urn.toString + " == " + res)
       res match {
         case None => false
         case _ => true
       }
     }
+
     /** True if passage reference in `urn` is contained
     * in or equal to the passage reference of this CtsUrn.
     *

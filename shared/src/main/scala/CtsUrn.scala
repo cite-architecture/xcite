@@ -812,15 +812,9 @@ package cite {
     def passageContains(urn: CtsUrn): Boolean = {
       //println(s"LOOKING AT ${passageParts.size} PASSAGE PARTS: " + passageParts)
       //println("AND COMPARING " + urn.passageParts.size)
-      if (urn.passageParts.isEmpty) {
+      if (urn.passageParts.isEmpty || passageParts.isEmpty ){
+        false
 
-        val imEmpty = passageParts.nonEmpty
-        //println("This passage NON empty? " + imEmpty)
-        //println("Other passage empty? true")
-        imEmpty
-      } else if (passageParts.isEmpty) {
-
-          false
 
       } else {
         val psg = dropSubref.passageComponent.replaceAll("\\.","\\\\.")
@@ -862,20 +856,20 @@ package cite {
       ((this >= urn) && (urn != this))
     }
 
-
     /** True if this [[CtsUrn]] contains or is equal to a given [[CtsUrn]].
     *
     * @param urn CtsUrn to compare with this one.
     */
     def >=(urn: CtsUrn): Boolean = {
 
+
       if (passageComponent.nonEmpty) {
-        /*
+
         println("Work contatins? " + workContains(urn) )
         println("Euqal? " +  (this.workComponent == urn.workComponent) )
         println(s"Passage ${passageComponent} contains ${urn.passageComponent}? " + passageContains(urn))
         println("Passage equal? " + (passageComponent ==  urn.passageComponent))
-*/
+
         val bottomLine = (
           (workContains(urn)) || (this.workComponent == urn.workComponent )
         ) &&  (
@@ -884,27 +878,13 @@ package cite {
         println("Bottom line for URN with passage is " + bottomLine + "\n\n")
         bottomLine
 
-      } else {/*
-        println("Work contatins? " + workContains(urn) )
-        println("Euqal? " +  (this.workComponent == urn.workComponent) )
-        println(s"Passage ${passageComponent} contains ${urn.passageComponent}? " + passageContains(urn))
-        println("Passage equal? " + (passageComponent ==  urn.passageComponent))
-        */
+      } else {
         println("Same workcomponent? " + (this.workComponent == urn.workComponent))
         println("Other urn has passge? " + urn.passageComponent.nonEmpty)
-
-
         val bottomLine = (
           ((this.workComponent == urn.workComponent) && urn.passageComponent.nonEmpty) ||
           workContains(urn)
         )
-
-
-
-      /*  val bottomLine = (
-          workContains(urn) || ()(this.workComponent == urn.workComponent)) &&
-          (urn.passageComponent.nonEmpty)
-        )*/
        println("Bottom line for urn with no passage is " + bottomLine + "\n\n")
        bottomLine
       }

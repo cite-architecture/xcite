@@ -373,7 +373,7 @@ package cite {
     def rangeBeginOption: Option[String] = {
       if (passageParts.size > 1) {
         if (passageParts(0).last == '.') {
-          throw CiteException("Invalid URN: trailing period on range beginning reference " + passageParts(0))
+          throw CiteException("Invalid URN: trailing period on range beginning of " + urnString)
         }  else {
           Some(passageParts(0))
         }
@@ -479,7 +479,7 @@ package cite {
     def rangeEndOption: Option[String] = {
       if (passageParts.size > 1) {
         if (passageParts(1).last == '.') {
-          throw CiteException("Invalid URN: trailing period on range ending reference " + passageParts(1))
+          throw CiteException("Invalid URN: trailing period on range ending reference of " + urnString)
         } else {
           Some(passageParts(1))
         }
@@ -603,20 +603,26 @@ package cite {
     def passageSyntaxOk = {
       val repeatedPeriods = ".*\\.{2}.*"
       val illegalRepeatedPeriods = passageComponent.matches(repeatedPeriods)
-      require(illegalRepeatedPeriods == false, "Invalid URN syntax in passage component of " + urnString)
+      require(illegalRepeatedPeriods == false, "Invalid URN syntax: repeated periods in passage component of " + urnString)
 
       val leadingDot = "^\\..*"
       val illegalLeadingDot = passageComponent.matches(leadingDot)
-      require(illegalLeadingDot == false, "Invalid URN syntax in passage component of " + urnString)
+      require(illegalLeadingDot == false, "Invalid URN syntax: leading period in passage component of " + urnString)
 
 
       val trailingDot = ".+\\.$"
       if (isRange) {
         val rangeBeginTrailingDot = (rangeBegin.matches(trailingDot))
-        require(rangeBeginTrailingDot == false, "Invalid URN syntax in passage component of " + urnString)
+        require(rangeBeginTrailingDot == false, "Invalid URN syntax: trailing period in range beginning of " + urnString)
+
+        val rangeBeginLeadingDot = (rangeBegin.matches(leadingDot))
+        require(rangeBeginLeadingDot == false, "Invalid URN syntax: leading period in rage beginning of " + urnString)
 
         val rangeEndTrailingDot = (rangeEnd.matches(trailingDot))
-        require(rangeEndTrailingDot == false, "Invalid URN syntax in passage component of " + urnString)
+        require(rangeEndTrailingDot == false, "Invalid URN syntax:  trailing period in range ending of " + urnString)
+
+        val rangeEndLeadingDot = (rangeEnd.matches(leadingDot))
+        require(rangeEndLeadingDot == false, "Invalid URN syntax: leading period in range ending of " + urnString)
 
       } else {
         passageNodeRefOption match {

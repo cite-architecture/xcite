@@ -82,8 +82,6 @@ class CtsUrnValidationSpec extends FlatSpec {
       fail("Should not have formed URN")
     } catch {
       case e: java.lang.Exception => {
-        println("BAD RANGE: " + e)
-        println("MSG: " + msg)
         assert(e.getMessage().contains(msg))
 
       }
@@ -99,8 +97,6 @@ class CtsUrnValidationSpec extends FlatSpec {
       fail("Should not have formed URN")
     } catch {
       case e: java.lang.Exception => {
-        println("EXCEPTION " + e)
-        println("CAMEON " + noRangeEnd)
         assert (e.getMessage().contains(msg))
       }
 
@@ -127,6 +123,7 @@ class CtsUrnValidationSpec extends FlatSpec {
   }
   it should "throw an exception if there are empty components within a passage reference" in {
     val doubleDots = "urn:cts:greekLit:tlg0012.tlg001.msA:1...10:"
+    val msg = s"Invalid URN syntax: repeated periods in passage component of ${doubleDots}"
     try {
       val urn = CtsUrn(doubleDots)
       fail("Should not have created urn " + urn)
@@ -134,7 +131,7 @@ class CtsUrnValidationSpec extends FlatSpec {
     } catch {
 
      case e: java.lang.Exception => {
-       val msg = s"Invalid URN syntax in passage component of ${doubleDots}"
+
        assert(e.getMessage().contains(msg))
      }
    }
@@ -143,12 +140,12 @@ class CtsUrnValidationSpec extends FlatSpec {
 
   it should "throw an exception if there are empty components within the first node of a range reference" in {
     val dottedRange = "urn:cts:greekLit:tlg0012.tlg001.msA:1...1-1.7"
+    val msg = s"Invalid URN syntax: repeated periods in passage component of ${dottedRange}"
     try {
      val urn = CtsUrn(dottedRange)
      fail("Should not have created urn " + urn)
    } catch {
      case e: java.lang.Exception => {
-       val msg = s"Invalid URN syntax in passage component of ${dottedRange}"
        assert(e.getMessage().contains(msg))
      }
    }
@@ -156,7 +153,7 @@ class CtsUrnValidationSpec extends FlatSpec {
 
   it should "throw an exception if there are empty components within the second node of a range reference" in {
     val dottedRange2 = "urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1...7"
-    val msg = s"Invalid URN syntax in passage component of ${dottedRange2}"
+    val msg = s"Invalid URN syntax: repeated periods in passage component of ${dottedRange2}"
     try {
      val urn = CtsUrn(dottedRange2)
      fail("Should not have created urn " + urn)
@@ -181,7 +178,7 @@ class CtsUrnValidationSpec extends FlatSpec {
   it should "throw an exception if there are leading periods in the passage component" in {
 
     val badPassage = "urn:cts:greekLit:tlg0012.tlg001:.1.1"
-    val msg = s"Invalid URN syntax in passage component of ${badPassage}"
+    val msg = s"Invalid URN syntax: leading period in passage component of ${badPassage}"
     try {
       val urn = CtsUrn(badPassage)
       fail("Should not have created URN with bad passage component inluding leading period")
@@ -202,42 +199,55 @@ class CtsUrnValidationSpec extends FlatSpec {
       case e: java.lang.Exception =>  assert(e.getMessage().contains(msg))
     }
   }
-/*
+
   it should "throw an exception if there are leading periods in the range beginning part" in {
+    val illegalLeadingDot = "urn:cts:greekLit:tlg0012.tlg001:.1-12"
+    val msg = s"Invalid URN syntax: leading period in passage component of ${illegalLeadingDot}"
+
     try {
-      val urn = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:.1-12")
+      val urn = CtsUrn(illegalLeadingDot)
       fail("Should not have created URN with bad range reference including leading period")
     } catch {
-      case e: IllegalArgumentException => assert (e.getMessage() == "requirement failed: invalid passage syntax in range beginning of urn:cts:greekLit:tlg0012.tlg001:.1-12")
-      case exc  : Throwable => fail("Should have thrown IllegalArgumentException, not " + exc.getMessage())
+      case e: java.lang.Exception =>  assert(e.getMessage().contains(msg))
     }
   }
-  it should "throw an exception if there are trailing periods in the range beginning part" in {
+  it should "throw an exception if there are leading periods in the range ending part" in {
+    val illegalLeadingDot = "urn:cts:greekLit:tlg0012.tlg001:1-.12"
+    val msg = s"Invalid URN syntax: leading period in range ending of ${illegalLeadingDot}"
+
     try {
-      val urn = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.-12")
-      fail("Should not have created URN with bad range reference including trailing period")
+      val urn = CtsUrn(illegalLeadingDot)
+      fail("Should not have created URN with bad range reference including leading period")
     } catch {
-      case e: CiteException => assert (e.getMessage() == "Invalid URN: trailing period on range beginning reference 1.")
-      case exc  : Throwable => fail("Should have thrown CiteException, not " + exc.getMessage())
+      case e: java.lang.Exception =>  assert(e.getMessage().contains(msg))
     }
   }
 
-  it should "throw an exception if there are leading periods in the range ending part" in {
+
+  it should "throw an exception if there are trailing periods in the range beginning part" in  {
+    val illegalTrailingDot = "urn:cts:greekLit:tlg0012.tlg001:1.-12"
+    val msg = s"Invalid URN: trailing period on range beginning of ${illegalTrailingDot}"
+
     try {
-      val urn = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1-.12")
-      fail("Should not have created URN with bad range reference including leading period")
-    } catch {
-      case e: IllegalArgumentException => assert (e.getMessage() == "requirement failed: invalid passage syntax in range ending of urn:cts:greekLit:tlg0012.tlg001:1-.12")
-      case exc  : Throwable => fail("Should have thrown IllegalArgumentException, not " + exc.getMessage())
-    }
-  }
-  it should "throw an exception if there are trailing periods in the range ending part" in {
-    try {
-      val urn = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1-12.")
+      val urn = CtsUrn(illegalTrailingDot)
       fail("Should not have created URN with bad range reference including trailing period")
     } catch {
-      case e: CiteException => assert (e.getMessage() == "Invalid URN syntax in passage component 1-12.: trailing period.")
-      case exc  : Throwable => fail("Should have thrown CiteException, not " + exc.getMessage())
+      case e: java.lang.Exception =>  {
+        assert(e.getMessage().contains(msg))
+      }
+    }
+  }
+
+
+  it should "throw an exception if there are trailing periods in the range ending part" in {
+    val illegalTrailingDot = "urn:cts:greekLit:tlg0012.tlg001:1-12."
+    val msg = s"Invalid URN: trailing period on range ending reference of ${illegalTrailingDot}"
+
+    try {
+      val urn = CtsUrn(illegalTrailingDot)
+      fail("Should not have created URN with bad range reference including trailing period")
+    } catch {
+      case e: java.lang.Exception =>  assert(e.getMessage().contains(msg))
     }
   }
 
@@ -250,15 +260,16 @@ class CtsUrnValidationSpec extends FlatSpec {
 
 
 
-    it should "throw an exception if the wrong number of components are give n" in {
+  it should "throw an exception if the wrong number of components are give n" in {
+    val bogus = "NOT_A_URN"
+    val msg = s"Unable to parse URN string ${bogus}"
+    try {
+      val u = CtsUrn(bogus)
+      fail("Should not have made a URN from " + u)
+    } catch {
+      case e: java.lang.Exception => assert (e.getMessage().contains(msg))    
 
-        try {
-          val u = CtsUrn("NOT_A_URN")
-          fail("Should not have made a URN from " + u)
-        } catch {
-          case iae: IllegalArgumentException => assert (iae.getMessage() == "requirement failed: Invalid URN syntax: too few components in NOT_A_URN")
-          case t : Throwable =>       fail("Should have thrown an IllegalArgumentException instead of " + t)
-        }
-      }
-*/
+    }
+  }
+
 }

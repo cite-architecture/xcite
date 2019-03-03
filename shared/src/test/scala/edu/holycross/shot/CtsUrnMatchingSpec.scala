@@ -314,23 +314,7 @@ it should "identify containment of work component correctly" in {
 
 
 
-    it should "identify containment of URNs with and without passage components and including exemplars" in  {
-      val u1 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1:")
-      val u2 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1.tokens:")
-      val u3 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1:1.1")
-      val u4 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1.tokens:1.1")
-      assert( u1 >= u2)
-      assert( !(u2 >= u1))
-      assert( u3 >= u4)
-      assert(u1 >= u4)
-      assert( !(u4 >= u3) )
 
-      assert( u2 <= u1)
-      assert( !(u1 <= u2))
-      assert( u4 <= u3)
-      assert(u4 <= u1)
-      assert( !(u3 <= u4) )
-    }
 it should  "identify two URNs with the same work component as URN-similar if either passage component is empty" in  {
   val passageUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
   val noPassageUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:")
@@ -342,7 +326,7 @@ it should  "identify two URNs with the same work component as URN-similar if eit
     val urn1 = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
     val urn2 = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1.lemma")
 
-    println("\n\nTWIDEL " + urn1 + " against "+ urn2)
+    //println("\n\nTWIDEL " + urn1 + " against "+ urn2)
     assert  (urn1 ~~ urn2)
     assert (urn2 ~~ urn1)
   }

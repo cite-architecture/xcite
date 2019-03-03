@@ -908,10 +908,13 @@ package cite {
 
       } else {
         if (passageComponent.nonEmpty) {
+          //println("HAS passage " + passageComponent)
+          //println("work contained? " + urn.workContains(this))
+          //println("passage contained?" + urn.passageContains(this))
           val bottomLine = (
             (urn.workContains(this)) || (this.workComponent == urn.workComponent )
           ) &&  (
-            (urn.passageContains(this)) || (urn.passageComponent == this.passageComponent)
+            (urn.passageContains(this)) || (urn.passageComponent == this.passageComponent) || urn.passageComponent.isEmpty
           )
           bottomLine
         } else {

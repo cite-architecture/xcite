@@ -4,27 +4,11 @@ import org.scalatest.FlatSpec
 
 class CtsUrnPassageSpec extends FlatSpec {
 
-  "The passage component of a CtsUrn" should "have an empty option if no passage is given" in {
-    val noPassage = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:")
-    noPassage.passageComponentOption match {
-      case None => assert(true)
-      case _ => fail("Incorrect structure of passage option")
-    }
-  }
-  it should "retrieve a string value for a well-formed passage identifier" in {
+  "The passage component of a CtsUrn" should "retrieve a string value for a well-formed passage identifier" in {
     val singleNode = CtsUrn( "urn:cts:greekLit:tlg0012.tlg001:1.1")
     assert(singleNode.passageComponent == "1.1")
   }
-  it should "throw a CITE exception when trying to retrieve a non-existent passage component" in {
-    val iliad = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:")
-    try {
-      iliad.passageComponent
-      fail("Should not have found passage component")
-    } catch {
-      case ctsEx: CiteException => assert(ctsEx.message == "No passage component defined in urn:cts:greekLit:tlg0012.tlg001:")
-      case exc : Throwable => fail("Should have thrown a CiteException: " + exc)
-    }
-  }
+
 
   it should "add a passage component to a URN lacking one" in {
     val original = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:")

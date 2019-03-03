@@ -169,6 +169,12 @@ class CtsUrnSubrefTextSpec extends FlatSpec {
     }
   }
 
+  it should "allow period in subreference" in {
+    val withPeriod = CtsUrn( "urn:cts:greekLit:tlg0012.tlg001.msA:1.1@.")
+  }
 
+  it should "allow colon in subreference" in {
+    val withColon = CtsUrn( "urn:cts:greekLit:tlg0012.tlg001.msA:1.1@:")
+  }
 
 }

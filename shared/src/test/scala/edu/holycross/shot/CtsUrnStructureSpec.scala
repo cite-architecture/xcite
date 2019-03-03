@@ -18,13 +18,6 @@ class CtsUrnStructureSpec extends FlatSpec {
     assert(simplePassageUrn.workLevel == WorkLevel.Version)
   }
 
-  it should "allow a none option for passage component" in {
-    val workOnly = CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:")
 
-    workOnly.passageComponentOption match {
-      case None => assert(true)
-      case _ => fail("Should have been no passage component")
-    }
-  }
 
 }

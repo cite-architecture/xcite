@@ -12,24 +12,25 @@ package cite {
   */
   @JSExportAll case class CtsUrn  (val urnString: String) extends Urn {
 
-
-
-    /** Array of top-level, colon-delimited components.
-    *
-    * The Array will have 4 elements if the optional passage
-    * component is omitted;  if will have 5 elements if the passage
-    * component is included.
-    */
-    val components = urnString.split(":")
-    require(components.size > 3, "Invalid URN syntax: too few components in " + urnString)
-    require(components.size < 6, "Invalid URN syntax: too many components in " + urnString)
-
+    // Find top-level components of CtsUrn syntax
+    val componentsRE = "urn:cts:([^:]+):([^:]+):(.*)".r
+    val componentsTriple = try {
+      val componentsRE(namespace, workComponent, passageComponent) = urnString
+      (namespace, workComponent, passageComponent)
+    } catch {
+      case t : Throwable => {
+        throw new Exception("Unable to parse URN string " + urnString + ".  " + t)
+      }
+    }
     /** Required namespace component of the URN.*/
-    val namespace: String = components(2)
+    val namespace = componentsTriple._1
     /** Required work component of the URN.*/
-    val workComponent: String = components(3)
+    val workComponent = componentsTriple._2
+    /** Optional passage component of the URN.*/
+    val passageComponent = componentsTriple._3
+
     /** Array of dot-separate parts of the workComponent.*/
-    val workParts = workComponent.split("""\.""")
+    val workParts = workComponent.split("""\.""").toVector
     /** Required textgroup part of work hierarchy.*/
     val textGroup: String = workParts(0)
 
@@ -49,7 +50,6 @@ package cite {
         case e: java.util.NoSuchElementException => throw CiteException("No work defined in " + urnString)
       }
     }
-
 
     /** Optional version part of work hierarchy.
     */
@@ -95,7 +95,6 @@ package cite {
       CtsUrn(s"urn:cts:${namespace}:${textGroup}:")
     }
 
-
     /** Create a new CtsUrn identifying this URN's work.
     */
     def toWork: CtsUrn = {
@@ -104,7 +103,6 @@ package cite {
         case _ => CtsUrn(s"urn:cts:${namespace}:${textGroup}.${work}:")
       }
     }
-
 
     /** Create a new CtsUrn identifying this URN's version.
     */
@@ -123,7 +121,6 @@ package cite {
         case _ => CtsUrn(s"urn:cts:${namespace}:${textGroup}.${work}.${version}.${exemplar}:")
       }
     }
-
 
 
     /** Create a new [[CtsUrn]] by collapsing the passage hierarchy by `i` levels.
@@ -173,14 +170,11 @@ package cite {
           )
         }
         case false => {
-          this.passageComponentOption match {
-            case Some(pc) => {
+          if (passageComponent.nonEmpty) {
               Vector(this.dropSubref.passageComponent.split('.').size)
-            }
-            case None => {
-              val v:Vector[Int] = Vector()
-              v
-            }
+          } else {
+              Vector.empty
+
           }
         }
       }
@@ -207,10 +201,6 @@ package cite {
 
     }
 
-
-
-
-
     /** Enumerated WorkLevel for this workComponent.*/
     def workLevel = {
       workParts.size match {
@@ -222,7 +212,7 @@ package cite {
     }
 
     /** Optional passage component of the [[CtsUrn]].
-    */
+
     def passageComponentOption: Option[String] = {
       components.size match {
         case 5 => {
@@ -233,10 +223,10 @@ package cite {
         }
         case _ => None
       }
-    }
+    }*/
 
     /** String value of optional passage component of the URN.
-    */
+
     def passageComponent = {
       try {
         passageComponentOption.get
@@ -244,7 +234,7 @@ package cite {
           case e: java.util.NoSuchElementException => throw CiteException("No passage component defined in " + urnString)
         case otherEx : Throwable => throw( otherEx)
       }
-    }
+    }*/
 
     /** Array of hyphen-separated parts of the passageComponent.
     *
@@ -253,10 +243,8 @@ package cite {
     * 2 elements if the passageComponent is a range reference.
     */
     def passageParts: Array[String] ={
-      passageComponentOption match {
-        case None => Array.empty[String]
-        case s: Some[String] => s.get.split("-")
-      }
+      passageComponent.split("-")
+
     }
 
 
@@ -398,7 +386,7 @@ package cite {
       try {
         rangeBeginOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No range beginning defined in " + urnString)
+        case e: java.util.NoSuchElementException => throw CiteException("Invalid range syntax in " + urnString)
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -422,7 +410,7 @@ package cite {
       try {
         rangeBeginRefOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No range beginning reference defined in " + urnString)
+        case e: java.util.NoSuchElementException => throw CiteException("Invalid range syntax ind in " + urnString)
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -440,7 +428,7 @@ package cite {
       try {
         rangeBeginSubrefOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No range beginning subreference defined in " + urnString)
+        case e: java.util.NoSuchElementException => throw CiteException("Invalid range syntax in " + urnString)
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -593,37 +581,76 @@ package cite {
 
     /** True if the passage component refers to a range.*/
     def isRange = {
-      passageComponentOption match {
-        case None => false
-        case s: Some[String] =>   s.get contains "-"
-      }
+       passageComponent contains "-"
     }
     /** True if the URN refers to a point (leaf node or containing node).*/
     def isPoint = {
-      passageComponentOption match {
-        case None => false
-        case s: Some[String] => ((!isRange) && s.nonEmpty)
-      }
+      ((!isRange) && passageComponent.nonEmpty)
     }
 
     /** True if URN's syntax for required components is valid.*/
     def componentSyntaxOk = {
+      true
+      /*
       components.size match {
         case 5 => true
         case 4 => if (urnString.takeRight(1) == ":") true else false
         case _ => false
-      }
+      }*/
     }
 
     /** True if URN's syntax for optional passage component is valid.*/
     def passageSyntaxOk = {
-      passageParts.size match {
-        case 0 => {
-          passageComponentOption match {
-            case None => true
-            case _ => false
+      val repeatedPeriods = ".*\\.{2}.*"
+      val illegalRepeatedPeriods = passageComponent.matches(repeatedPeriods)
+      require(illegalRepeatedPeriods == false, "Invalid URN syntax in passage component of " + urnString)
+
+      val leadingDot = "^\\..*"
+      val illegalLeadingDot = passageComponent.matches(leadingDot)
+      require(illegalLeadingDot == false, "Invalid URN syntax in passage component of " + urnString)
+
+
+      val trailingDot = ".+\\.$"
+      if (isRange) {
+        val rangeBeginTrailingDot = (rangeBegin.matches(trailingDot))
+        require(rangeBeginTrailingDot == false, "Invalid URN syntax in passage component of " + urnString)
+
+        val rangeEndTrailingDot = (rangeEnd.matches(trailingDot))
+        require(rangeEndTrailingDot == false, "Invalid URN syntax in passage component of " + urnString)
+
+      } else {
+        passageNodeRefOption match {
+          case None => {}
+          case _ => {
+            val illegalTrailingDot = (passageNodeRef.matches(trailingDot))
+            require(illegalTrailingDot == false, "Invalid URN syntax in passage component of " + urnString)
           }
         }
+
+      }
+
+      //val noSubref = dropSubref.passageComponent
+  /*  if (isRange) {
+      if (rangeBeginRef == rangeEndRef) {
+        CtsUrn(baseString + rangeBeginRef)
+      } else {
+        CtsUrn(baseString + rangeBeginRef + "-" + rangeEndRef)
+      }
+
+    } else {*/
+      //CtsUrn(baseString + passageNodeRef)
+    //}
+      //if (isRange) {
+        // test each part
+      //} else {
+        //
+        //println("CHECK TRAIL FOR " + noSubref)
+        // (noSubref.last == '.')
+        //require(illegalTrailingDot == false, "Invalid URN syntax in passage component of " + urnString)
+      //}
+
+      passageParts.size match {
+        case 0 => true
         case 1 => if (passageComponent.contains("-")) false else true
         case 2 => ((rangeBegin.nonEmpty) && (rangeEnd.nonEmpty))
         case _ => throw CiteException("invalid URN string: more than two elements in range " + passageComponent)
@@ -651,15 +678,11 @@ package cite {
     * the work component.
     */
     def dropVersion: CtsUrn = {
-      val psg = passageComponentOption match {
-        case None => ""
-        case _ => passageComponentOption.get
-      }
       workLevel match {
         case  WorkLevel.TextGroup => this
         case WorkLevel.Work => this
-        case WorkLevel.Version =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + ":" + psg)
-        case WorkLevel.Exemplar =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + ":" + psg)
+        case WorkLevel.Version =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + ":" + passageComponent)
+        case WorkLevel.Exemplar =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + ":" + passageComponent)
       }
     }
 
@@ -670,17 +693,12 @@ package cite {
     * @param v Version identifier for new URN.
     */
     def addVersion(v: String): CtsUrn = {
-      val psg = passageComponentOption match {
-        case None => ""
-        case _ => passageComponentOption.get
-      }
-
       workLevel match {
 
         case  WorkLevel.TextGroup => throw (CiteException("Cannot add version to group-level URN"))
-        case WorkLevel.Work =>  CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + v + ":" + psg)
-        case WorkLevel.Version =>    CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + v + ":" + psg)
-        case WorkLevel.Exemplar =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + v + ":" + psg)
+        case WorkLevel.Work =>  CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + v + ":" + passageComponent)
+        case WorkLevel.Version =>    CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + v + ":" + passageComponent)
+        case WorkLevel.Exemplar =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + v + ":" + passageComponent)
       }
     }
 
@@ -689,15 +707,11 @@ package cite {
     * part of the work component, if any.
     */
     def dropExemplar: CtsUrn = {
-      val psg = passageComponentOption match {
-        case None => ""
-        case _ => passageComponentOption.get
-      }
       workLevel match {
         case  WorkLevel.TextGroup => this
         case WorkLevel.Work => this
         case WorkLevel.Version => this
-        case WorkLevel.Exemplar =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + version + ":" + psg)
+        case WorkLevel.Exemplar =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + version + ":" + passageComponent)
       }
     }
 
@@ -707,17 +721,12 @@ package cite {
   * @param v Exemplar identifier for new URN.
   */
   def addExemplar(ex: String): CtsUrn = {
-    val psg = passageComponentOption match {
-      case None => ""
-      case _ => passageComponentOption.get
-    }
-
     workLevel match {
 
       case  WorkLevel.TextGroup => throw (CiteException("Cannot add version to group-level URN"))
       case  WorkLevel.Work => throw (CiteException("Cannot add version to work-level URN"))
-      case WorkLevel.Version =>  CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + version + "." + ex + ":" + psg)
-      case WorkLevel.Exemplar =>    CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + version + "." + ex + ":" + psg)
+      case WorkLevel.Version =>  CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + version + "." + ex + ":" + passageComponent)
+      case WorkLevel.Exemplar =>    CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + version + "." + ex + ":" + passageComponent)
     }
   }
 
@@ -814,20 +823,13 @@ package cite {
     * @param urn CtsUrn to compare with this one.
     */
     def >=(urn: CtsUrn): Boolean = {
-      val returnVal:Boolean = {
-        this.passageComponentOption match {
-
-          case Some(tp) => {
-              urn.passageComponentOption match {
-                case Some(up) => ((urn.workContains(this) || (this.workComponent == urn.workComponent )) && (passageContains(urn) || (urn.passageComponent == this.passageComponent)))
-                case None => false
-              }
-          }
-
-          case None => ( (urn.workContains(this)) || (this.workComponent == urn.workComponent))
-          }
-        }
-      returnVal
+      if (passageComponent.nonEmpty) {
+        false
+        //((urn.workContains(this) || (this.workComponent == urn.workComponent )) && (passageContains(urn) || (urn.passageComponent == this.passageComponent)))
+      } else {
+        false
+      //  (urn.workContains(this)) || (this.workComponent == urn.workComponent))
+      }
     }
 
 
@@ -836,23 +838,12 @@ package cite {
     * @param urn CtsUrn to compare with this one.
     */
     def <=(urn: CtsUrn): Boolean = {
-      val returnVal:Boolean = {
-        this.passageComponentOption match {
+      if (passageComponent.nonEmpty) {
+        ((workContains(urn) || (this.workComponent == urn.workComponent )) && (urn.passageContains(this) || (urn.passageComponent == this.passageComponent)))
 
-          case Some(tp) => {
-              urn.passageComponentOption match {
-                case Some(up) => ((workContains(urn) || (this.workComponent == urn.workComponent )) && (urn.passageContains(this) || (urn.passageComponent == this.passageComponent)))
-                case None => (workContains(urn) || (this.workComponent == urn.workComponent ))
-              }
-          }
-          case None =>
-              urn.passageComponentOption match {
-                case Some(up) => false
-                case None => (workContains(urn) || (this.workComponent == urn.workComponent ))
-              }
-          }
-        }
-      returnVal
+      } else {
+        (workContains(urn) || (this.workComponent == urn.workComponent ))
+      }
     }
 
     /** True if this [[CtsUrn]] is contained by a given [[CtsUrn]].
@@ -914,58 +905,63 @@ package cite {
       urnString
     }
 
+
     /** True if value submitted to construct this [[CtsUrn]] complies
     * fully with the CtsUrn specification.
     */
     def fullyValid: Boolean = {
-
-
-
-      require(components(0) == "urn", "invalid URN syntax: " + urnString + ". First component must be 'urn'.")
-      require(components(1) == "cts", "invalid URN syntax: " + urnString + ". Second component must be 'cts'.")
-      require(componentSyntaxOk, "invalid URN syntax: " + urnString + ". Wrong number of components.")
       require((workParts.size < 5), "invalid URN syntax. Too many parts in work component " + workComponent )
 
       require(passageSyntaxOk, "Invalid URN syntax.  Error in passage component " + passageComponent)
 
+      val repeatedPeriods = ".*\\.{2}.*"
+      val badWorkSyntax = workComponent.matches(repeatedPeriods)
+      //println(s"MATCH REPEATED PERIODS on ${urnString} ? " + badWorkSyntax)
+      require(badWorkSyntax ==  false, "Invalid URN syntax in work component of " + urnString)
 
-      for (p <- workParts) {
-        require(p.nonEmpty, "invalid work syntax in " + urnString)
-      }
+
+
+/*
       for (p <- passageParts) {
         require(p.nonEmpty,"invalid passage syntax in " + urnString)
       }
       for (p <- passageNodeParts) {
-        require(p.nonEmpty, "invalid passage syntax in passage node " + urnString)
+        //require(p.nonEmpty, "invalid passage syntax in passage node " + urnString)
       }
+      */
       for (p <- rangeBeginParts) {
         require(p.nonEmpty,"invalid passage syntax in range beginning" + urnString)
       }
       for (p <- rangeEndParts) {
         require(p.nonEmpty,"invalid passage syntax in range ending" + urnString)
       }
-      passageComponentOption match {
-        case None => assert(true)
-        case _ => {
-          if (isRange) {
-            val r1DotParts = rangeBegin.split("""\.""")
-            for (p <- r1DotParts) {
-              require(p.nonEmpty,"invalid passage syntax in range beginning of " + urnString)
-            }
 
-            val r2DotParts = rangeEnd.split("""\.""")
-            for (p <- r2DotParts) {
-              require(p.nonEmpty,"invalid passage syntax in range ending of " + urnString)
-            }
-
-          }  else {
-            val nodeDotParts = passageNode.split("""\.""")
-            for (p <- nodeDotParts) {
-              require(p.nonEmpty,"invalid passage syntax in " + urnString)
-            }
+/*
+      if (passageComponent.nonEmpty) {
+        if (isRange) {
+          val r1DotParts = rangeBegin.split("""\.""")
+          for (p <- r1DotParts) {
+            require(p.nonEmpty,"invalid passage syntax in range beginning of " + urnString)
           }
+
+          val r2DotParts = rangeEnd.split("""\.""")
+          for (p <- r2DotParts) {
+            require(p.nonEmpty,"invalid passage syntax in range ending of " + urnString)
+          }
+          true
+
+        }  else {
+          val nodeDotParts = passageNode.split("""\.""")
+          for (p <- nodeDotParts) {
+            require(p.nonEmpty,"invalid passage syntax in " + urnString)
+          }
+          true
         }
+        true
       }
+*/
+
+      /*
       if (components.size == 5) {
         urnString.last match {
           case ':' => throw CiteException("Invalid URN syntax: trailing colon in " + urnString)
@@ -973,7 +969,8 @@ package cite {
         }
       } else {
         true
-      }
+      }*/
+      true
     }
 
 

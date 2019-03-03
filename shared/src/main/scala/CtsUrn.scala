@@ -760,6 +760,7 @@ package cite {
     * @param urn CtsUrn to compare to this one.
     */
     def workContains(urn: CtsUrn): Boolean = {
+      println("Compare workcomponent " + workComponent + " with " + urn.workComponent)
       if (workComponent == urn.workComponent) {
         false
 
@@ -810,8 +811,10 @@ package cite {
     * @param urn CtsUrn to compare to this one.
     */
     def passageContains(urn: CtsUrn): Boolean = {
-      //println(s"LOOKING AT ${passageParts.size} PASSAGE PARTS: " + passageParts)
-      //println("AND COMPARING " + urn.passageParts.size)
+      println(s"LOOKING AT ${passageParts.size} PASSAGE PARTS: " + passageParts)
+      println("AND COMPARING " + urn.passageParts.size)
+      println("Passage empty?" + passageParts.isEmpty)
+
       if (urn.passageParts.isEmpty || passageParts.isEmpty ){
         false
 
@@ -837,7 +840,7 @@ package cite {
     * @param urn CtsUrn to compare to this one
     */
     def passageMatch(urn: CtsUrn): Boolean = {
-      passageContains(urn) || urn.passageContains(this)
+      passageContains(urn) || urn.passageContains(this) || passageComponent.isEmpty || urn.passageComponent.isEmpty
     }
     /** true if the passage reference of either `urn`
     * of this CtsUrn is contained by the other.
@@ -845,7 +848,11 @@ package cite {
     * @param urn CtsUrn to compare to this one
     */
     def workMatch(urn: CtsUrn): Boolean = {
-      workContains(urn) || urn.workContains(this)
+      (
+        workContains(urn) ||
+        urn.workContains(this) ||
+        (this.workComponent == urn.workComponent)
+      )
     }
 
     /** True if this [[CtsUrn]] contains a given [[CtsUrn]].
@@ -896,11 +903,9 @@ package cite {
     * @param urn CtsUrn to compare with this one.
     */
     def <=(urn: CtsUrn): Boolean = {
-      if (passageComponent.nonEmpty) {
-        ((workContains(urn) || (this.workComponent == urn.workComponent )) && (urn.passageContains(this) || (urn.passageComponent == this.passageComponent)))
-
-      } else {
-        (workContains(urn) || (this.workComponent == urn.workComponent ))
+      if (urn == this) { true } else {
+        val opposite = (this >= urn)
+        ! opposite
       }
     }
 
@@ -908,7 +913,7 @@ package cite {
     *
     * @param urn CtsUrn to compare with this one.
     */
-    def <(urn: CtsUrn): Boolean = {
+    def < (urn: CtsUrn): Boolean = {
         ((this <= urn) && (urn != this))
     }
 
@@ -917,6 +922,10 @@ package cite {
     * @param u URN to compare.
     */
     def ~~(urn: CtsUrn): Boolean = {
+      println("Twiddleing with " + this +  " against " + urn)
+      println("NS == ? "+ namespace == urn.namespace )
+      println("workMatch? " + workMatch(urn))
+      println("passgeMatch? " + passageMatch(urn))
       namespace == urn.namespace && workMatch(urn) && passageMatch(urn)
     }
 
@@ -932,9 +941,6 @@ package cite {
         case _ => throw CiteException("Can only match CtsUrn against a second CtsUrn")
       }
     }
-
-
-
 
 
     /** True if this [[CtsUrn]] is NOT URN-similar to a given [[CtsUrn]].
@@ -977,16 +983,6 @@ package cite {
       //println(s"MATCH REPEATED PERIODS on ${urnString} ? " + badWorkSyntax)
       require(badWorkSyntax ==  false, "Invalid URN syntax in work component of " + urnString)
 
-
-
-/*
-      for (p <- passageParts) {
-        require(p.nonEmpty,"invalid passage syntax in " + urnString)
-      }
-      for (p <- passageNodeParts) {
-        //require(p.nonEmpty, "invalid passage syntax in passage node " + urnString)
-      }
-      */
       for (p <- rangeBeginParts) {
         require(p.nonEmpty,"invalid passage syntax in range beginning" + urnString)
       }

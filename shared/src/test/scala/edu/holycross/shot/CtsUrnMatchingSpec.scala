@@ -30,13 +30,8 @@ class CtsUrnMatchingSpec extends FlatSpec {
   it should "determine if a work reference in one URN contains the work hierarchy of another URN" in {
     val containingUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
     val containedUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:1.1")
-    assert(containedUrn.workContains(containingUrn))
-  }
 
-  it should "determine if a work reference in one URN contains the work hierarchy of another URN, when there is an exemplar" in {
-    val containingUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:1.1")
-    val containedUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt.tokens:1.1")
-    assert(containedUrn.workContains(containingUrn))
+    assert(containingUrn.workContains(containedUrn))
   }
 
   it should "properly protect periods in comparing work references" in {
@@ -96,14 +91,9 @@ class CtsUrnMatchingSpec extends FlatSpec {
     assert (u2 >< u1)
   }
 
-  it should "identify two URNs differing both in the depth of the passage hierarchy and depth of the work hierarchy when containment is maintained" in {
-    val urn1 = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
-    val urn2 = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1.lemma")
-    assert  (urn1 ~~ urn2)
-    assert (urn2 ~~ urn1)
-  }
 
-  it should "identify two URNs with the same work component as URN-similar if either passage component is empty" in pending/* {
+/*
+  it should "identify two URNs with the same work component as URN-similar if either passage component is empty" in pending{
     val passageUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
     val noPassageUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:")
     assert  (passageUrn ~~ noPassageUrn)
@@ -131,7 +121,12 @@ class CtsUrnMatchingSpec extends FlatSpec {
     assert ((nodeUrn ~~ indexedSpanningRef) == false)
 
   }
-
+it should "determine if a work reference in one URN contains the work hierarchy of another URN, when there is an exemplar" in {
+  val containingUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:1.1")
+  val containedUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt.tokens:1.1")
+  println("\n\nCONTAINMENT")
+  assert(containingUrn.workContains(containedUrn))
+}
 
 /*
   it should "take account of both work and passage hierarchy in the containment functions >= and <=" in pending{
@@ -165,8 +160,8 @@ class CtsUrnMatchingSpec extends FlatSpec {
     assert( !(u3 >= u1))
     assert( !(u3 >= u2))
   }*/
-
-  it should "identify containment of URNs without passage components and including exemplars" in pending /* {
+/*
+  it should "identify containment of URNs without passage components and including exemplars" in pending  {
     val u1 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1:")
     val u2 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1.tokens:")
     assert( u1 >= u2)
@@ -174,9 +169,9 @@ class CtsUrnMatchingSpec extends FlatSpec {
 
     assert( u2 <= u1)
     assert( !(u1 <= u2))
-  }*/
+  }*//*
 
-  it should "identify containment of URNs with and without passage components and including exemplars" in  pending /*{
+  it should "identify containment of URNs with and without passage components and including exemplars" in  pending {
     val u1 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1:")
     val u2 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1.tokens:")
     val u3 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1:1.1")
@@ -203,12 +198,7 @@ class CtsUrnMatchingSpec extends FlatSpec {
   }*/
 
 
-    it should "identify passage containment when one passage is empty" in {
-      val passageUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
-      val noPassageUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:")
-      assert(passageUrn.passageContains(noPassageUrn))
-      assert(noPassageUrn.passageContains(passageUrn) == false)
-    }
+
 
     it should "identify passage matching when either contains the other" in {
       val passageUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
@@ -273,4 +263,96 @@ it should "identify containment of work component correctly" in {
   assert(notional.workContains(concrete))
   assert(concrete.workContains(notional) == false)
 }
+
+  it should "recognize that empty passages do not contain another passage" in {
+    val noPsg = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1:")
+    val hasPsg = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1:1.2")
+    assert(noPsg.passageContains(hasPsg) == false)
+    assert(hasPsg.passageContains(noPsg) == false)
+  }
+
+  it should "identify >= relation of URNs without passage components" in  {
+    val u1 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1:")
+    val u2 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1:1.2")
+
+    println("\n\nCF " + u1 + " >= " + u2)
+    assert( u1 >= u2)
+    println("\n\n NOW CF " + u2 + " >= " + u1)
+    assert((u2 >= u1) == false)
+
+    val u3 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v2:")
+    assert( (u1 >= u3) == false)
+    assert((u3 >= u1) == false)
+    assert( (u3 >= u2) == false)
+  }
+
+  it should "identify containment of URNs without passage components and including exemplars" in  {
+    val u1 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1:")
+    val u2 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1.tokens:")
+
+    println("\n\nCF " + u1 + " and " + u2)
+    assert( u1 >= u2)
+
+
+
+    println("\n\nNOW CF " + u2 + " and " + u1)
+    assert( (u2 >= u1) == false)
+
+    //assert( u2 <= u1)
+    //assert( (u1 <= u2) == false)
+  }
+  it should "identify inverse containment of URNs without passage components and including exemplars" in  {
+    val u1 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1:")
+    val u2 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1.tokens:")
+
+    assert( (u1 <= u2) == false)
+    assert( u2 <= u1)
+
+  }
+
+
+
+
+
+    it should "identify containment of URNs with and without passage components and including exemplars" in  {
+      val u1 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1:")
+      val u2 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1.tokens:")
+      val u3 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1:1.1")
+      val u4 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1.tokens:1.1")
+      assert( u1 >= u2)
+      assert( !(u2 >= u1))
+      assert( u3 >= u4)
+      assert(u1 >= u4)
+      assert( !(u4 >= u3) )
+
+      assert( u2 <= u1)
+      assert( !(u1 <= u2))
+      assert( u4 <= u3)
+      assert(u4 <= u1)
+      assert( !(u3 <= u4) )
+    }
+it should  "identify two URNs with the same work component as URN-similar if either passage component is empty" in  {
+  val passageUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
+  val noPassageUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:")
+
+  assert  (passageUrn ~~ noPassageUrn)
+  assert (noPassageUrn ~~ passageUrn)
+}
+  it should "identify two URNs differing both in the depth of the passage hierarchy and depth of the work hierarchy when containment is maintained" in {
+    val urn1 = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
+    val urn2 = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1.lemma")
+
+    println("\n\nTWIDEL " + urn1 + " against "+ urn2)
+    assert  (urn1 ~~ urn2)
+    assert (urn2 ~~ urn1)
+  }
+
+      it should "identify passage containment when one passage is empty" in {
+        val passageUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA:1.1")
+        val noPassageUrn = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:")
+
+        println("\n\nPAssagecontainment on " + passageUrn + " and " + noPassageUrn)
+        assert(passageUrn.passageContains(noPassageUrn) == false)
+        assert(noPassageUrn.passageContains(passageUrn) == false)
+      }
 }

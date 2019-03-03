@@ -75,7 +75,7 @@ class CtsUrnValidationSpec extends FlatSpec {
   // Syntax of passage component:
   it should "throw a CiteException if a range has an empty first node" in {
     val noFirstNode = "urn:cts:greekLit:tlg0012.tlg001.msA:-1.10"
-    val msg = s"Invalid range syntax in ${noFirstNode}"
+    val msg = s"rangeBegin function: invalid range syntax in ${noFirstNode}"
 
     try {
       CtsUrn(noFirstNode)
@@ -91,7 +91,7 @@ class CtsUrnValidationSpec extends FlatSpec {
 
   it should "throw an IllegalArgumentException if a range has an empty second node" in {
     val noRangeEnd = "urn:cts:greekLit:tlg0012.tlg001.msA:1.1-"
-    val msg = s"Invalid range syntax in ${noRangeEnd}"
+    val msg = s"invalid range syntax in ${noRangeEnd}"
     try {
       CtsUrn(noRangeEnd)
       fail("Should not have formed URN")
@@ -267,7 +267,7 @@ class CtsUrnValidationSpec extends FlatSpec {
       val u = CtsUrn(bogus)
       fail("Should not have made a URN from " + u)
     } catch {
-      case e: java.lang.Exception => assert (e.getMessage().contains(msg))    
+      case e: java.lang.Exception => assert (e.getMessage().contains(msg))
 
     }
   }

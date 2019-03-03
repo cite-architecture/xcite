@@ -7,7 +7,7 @@ import org.scalatest.FlatSpec
 
 class CtsUrnSubrefSpec extends FlatSpec {
 
-  "A Cts URN" should "have a none value for all subref options when no subref is defined" in {
+  "A CtsUrn" should "have a none value for all subref options when no subref is defined" in {
     val noSubref = CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:1.1")
 
     noSubref.passageNodeSubrefOption match {
@@ -126,18 +126,32 @@ class CtsUrnSubrefSpec extends FlatSpec {
       case _ => fail("Should not have found a subreference")
     }
   }
-  it should "throw a Cite exception when trying to retrieve a non-existent subref value on the first node of a range" in {
-    val noSubref = CtsUrn( "urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
+  it should "throw a Cite exception when trying to retrieve a non-existent subref value on the first node of a range" in  {
+    val noSubref = "urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10"
+    val urn = CtsUrn(noSubref)
+    val msg = s"No subreference on range beginning in ${noSubref}"
     try {
-      noSubref.rangeBeginSubref
+      val subr = urn.rangeBeginSubref
       fail("Should not have found subref")
     } catch {
-      case citeEx: CiteException => assert(citeEx.message == "No range beginning subreference defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
-      case ex: Throwable => fail("Unrecognized exception " + ex)
+      case e : java.lang.Exception => {
+        assert(e.getMessage().contains(msg))
+      }
     }
   }
 
+  it should "throw a Cite exception when trying to retrieve non-existent subref values on the last node of a range" in {
+    val noSubref =  "urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10"
+    val urn = CtsUrn(noSubref)
+    val msg = s"No subreference on range ending in ${noSubref}"
 
+    try {
+      urn.rangeEndSubref
+      fail("Should not have found subref")
+    } catch {
+      case citeEx: CiteException => assert(citeEx.message.contains(msg))
+    }
+  }
 
   it should "have a string value for a subref on the second node of a range without index" in {
     val rangeSubref = CtsUrn( "urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.2@dogs")
@@ -173,7 +187,7 @@ class CtsUrnSubrefSpec extends FlatSpec {
       noSubref.rangeEndSubref
       fail("Should not have found subref")
     } catch {
-      case citeEx: CiteException => assert(citeEx.message == "No range ending subreference defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
+      case citeEx: CiteException => assert(citeEx.message == "No subreference on range ending in urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
       case ex: Throwable => fail("Unrecognized exception " + ex)
     }
   }
@@ -202,23 +216,7 @@ class CtsUrnSubrefSpec extends FlatSpec {
       case _ => fail("Should not have found a subreference")
     }
   }
-  it should "throw a Cite exception when trying to retrieve non-existent subref values on either node of a range" in {
-    val noSubref = CtsUrn( "urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
-    try {
-      noSubref.rangeBeginSubref
-      fail("Should not have found subref")
-    } catch {
-      case citeEx: CiteException => assert(citeEx.message == "No range beginning subreference defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
-      case ex: Throwable => fail("Unrecognized exception " + ex)
-    }
-    try {
-      noSubref.rangeEndSubref
-      fail("Should not have found subref")
-    } catch {
-      case citeEx: CiteException => assert(citeEx.message == "No range ending subreference defined in urn:cts:greekLit:tlg0012.tlg001.msA:1.1-1.10")
-      case ex: Throwable => fail("Unrecognized exception " + ex)
-    }
-  }
+
 
 
   /*(){

@@ -386,7 +386,9 @@ package cite {
       try {
         rangeBeginOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("Invalid range syntax in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          throw CiteException("rangeBegin function: invalid range syntax in " + urnString)
+        }
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -410,7 +412,7 @@ package cite {
       try {
         rangeBeginRefOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("Invalid range syntax ind in " + urnString)
+        case e: java.util.NoSuchElementException => throw CiteException("rangeBeginRef function: invalid range syntax in " + urnString)
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -428,7 +430,7 @@ package cite {
       try {
         rangeBeginSubrefOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("Invalid range syntax in " + urnString)
+        case e: java.util.NoSuchElementException => throw CiteException("No subreference on range beginning in " + urnString)
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -533,7 +535,7 @@ package cite {
       try {
         rangeEndSubrefOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No range ending subreference defined in " + urnString)
+        case e: java.util.NoSuchElementException => throw CiteException("No subreference on range ending in " + urnString)
         case otherEx : Throwable => throw( otherEx)
       }
     }

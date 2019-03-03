@@ -1,5 +1,9 @@
 # `xcite`: release notes
 
+**4.0.1**: Fix bug in `<=` function in CtsUrn.
+
+
+**4.0.0**: Rewrite of `CtsUrn` class with breaking API changes of some functions primiarly used internal to the class.  Public APIs should be largely or entirely unaffected, apart from now working correctly.
 
 **3.7.0**:   Adds `addPassage` function on `CtsUrn`.
 

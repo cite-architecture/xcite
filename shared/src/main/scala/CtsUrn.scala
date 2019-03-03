@@ -760,7 +760,7 @@ package cite {
     * @param urn CtsUrn to compare to this one.
     */
     def workContains(urn: CtsUrn): Boolean = {
-      println("Compare workcomponent " + workComponent + " with " + urn.workComponent)
+      //println("Compare workcomponent " + workComponent + " with " + urn.workComponent)
       if (workComponent == urn.workComponent) {
         false
 
@@ -811,9 +811,9 @@ package cite {
     * @param urn CtsUrn to compare to this one.
     */
     def passageContains(urn: CtsUrn): Boolean = {
-      println(s"LOOKING AT ${passageParts.size} PASSAGE PARTS: " + passageParts)
-      println("AND COMPARING " + urn.passageParts.size)
-      println("Passage empty?" + passageParts.isEmpty)
+      //println(s"LOOKING AT ${passageParts.size} PASSAGE PARTS: " + passageParts)
+      //println("AND COMPARING " + urn.passageParts.size)
+      //println("Passage empty?" + passageParts.isEmpty)
 
       if (urn.passageParts.isEmpty || passageParts.isEmpty ){
         false
@@ -872,27 +872,27 @@ package cite {
 
       if (passageComponent.nonEmpty) {
 
-        println("Work contatins? " + workContains(urn) )
-        println("Euqal? " +  (this.workComponent == urn.workComponent) )
-        println(s"Passage ${passageComponent} contains ${urn.passageComponent}? " + passageContains(urn))
-        println("Passage equal? " + (passageComponent ==  urn.passageComponent))
+        //println("Work contatins? " + workContains(urn) )
+        //println("Euqal? " +  (this.workComponent == urn.workComponent) )
+        //println(s"Passage ${passageComponent} contains ${urn.passageComponent}? " + passageContains(urn))
+        //println("Passage equal? " + (passageComponent ==  urn.passageComponent))
 
         val bottomLine = (
           (workContains(urn)) || (this.workComponent == urn.workComponent )
         ) &&  (
           (passageContains(urn)) || (urn.passageComponent == this.passageComponent)
         )
-        println("Bottom line for URN with passage is " + bottomLine + "\n\n")
+        //println("Bottom line for URN with passage is " + bottomLine + "\n\n")
         bottomLine
 
       } else {
-        println("Same workcomponent? " + (this.workComponent == urn.workComponent))
-        println("Other urn has passge? " + urn.passageComponent.nonEmpty)
+        //println("Same workcomponent? " + (this.workComponent == urn.workComponent))
+        //println("Other urn has passge? " + urn.passageComponent.nonEmpty)
         val bottomLine = (
           ((this.workComponent == urn.workComponent) && urn.passageComponent.nonEmpty) ||
           workContains(urn)
         )
-       println("Bottom line for urn with no passage is " + bottomLine + "\n\n")
+       //println("Bottom line for urn with no passage is " + bottomLine + "\n\n")
        bottomLine
       }
     }
@@ -903,9 +903,27 @@ package cite {
     * @param urn CtsUrn to compare with this one.
     */
     def <=(urn: CtsUrn): Boolean = {
-      if (urn == this) { true } else {
-        val opposite = (this >= urn)
-        ! opposite
+      if (urn == this) {
+        true
+
+      } else {
+        if (passageComponent.nonEmpty) {
+          val bottomLine = (
+            (urn.workContains(this)) || (this.workComponent == urn.workComponent )
+          ) &&  (
+            (urn.passageContains(this)) || (urn.passageComponent == this.passageComponent)
+          )
+          bottomLine
+        } else {
+          //println("Same workcomponent? " + (this.workComponent == urn.workComponent))
+          //println("Other urn has passge? " + urn.passageComponent.nonEmpty)
+          val bottomLine = (
+            ((this.workComponent == urn.workComponent) && urn.passageComponent.nonEmpty) ||
+            urn.workContains(this)
+          )
+         //println("Bottom line for urn with no passage is " + bottomLine + "\n\n")
+         bottomLine
+        }
       }
     }
 
@@ -922,10 +940,10 @@ package cite {
     * @param u URN to compare.
     */
     def ~~(urn: CtsUrn): Boolean = {
-      println("Twiddleing with " + this +  " against " + urn)
-      println("NS == ? "+ namespace == urn.namespace )
-      println("workMatch? " + workMatch(urn))
-      println("passgeMatch? " + passageMatch(urn))
+      //println("Twiddleing with " + this +  " against " + urn)
+      //println("NS == ? "+ namespace == urn.namespace )
+      //println("workMatch? " + workMatch(urn))
+      //println("passgeMatch? " + passageMatch(urn))
       namespace == urn.namespace && workMatch(urn) && passageMatch(urn)
     }
 

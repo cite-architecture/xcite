@@ -53,4 +53,11 @@ class CtsUrnTwiddleSpec extends FlatSpec {
    assert(u4 <= u1)
    assert((u1 <= u4) == false)
   }
+
+  it should "recognize the same urn as both >= and <= to itself" in {
+    val u1 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1:")
+    val u2 = u1
+    assert (u1 <= u2)
+    assert(u2 >= u1)
+  }
 }

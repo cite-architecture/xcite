@@ -1,5 +1,8 @@
 # `xcite`: release notes
 
+
+**4.0.2**:  Fix bug in `>=` function in CtsUrn.
+
 **4.0.1**: Fix bug in `<=` function in CtsUrn.
 
 

@@ -524,6 +524,22 @@ package cite {
     }
   }
 
+  @JSExportAll object Cite2Urn {
 
+    def nullable(urnString: String) : Option[Cite2Urn] = {
+      val urn = Cite2Urn(urnString)
+
+      urn.objectComponentOption match {
+        case None => Some(urn)
+
+        case selectorOpt: Option[String] => {
+          selectorOpt.get match {
+            case "null" => None
+            case _  => Some(urn)
+          }
+        }
+      }
+    }
+  }
 
 }

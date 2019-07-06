@@ -1,5 +1,6 @@
 # `xcite`: release notes
 
+**4.1.0**:  Adds `nullable` function on `Cite2Urn` object.
 
 **4.0.2**:  Fix bug in `>=` function in CtsUrn.
 

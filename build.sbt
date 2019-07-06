@@ -12,7 +12,7 @@ lazy val crossed = crossProject.in(file(".")).
     settings(
       name := "xcite",
       organization := "edu.holycross.shot.cite",
-      version := "4.0.2",
+      version := "4.1.0",
       licenses += ("GPL-3.0",url("https://opensource.org/licenses/gpl-3.0.html")),
       libraryDependencies ++= Seq(
         "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided",
@@ -30,5 +30,7 @@ lazy val crossed = crossProject.in(file(".")).
       crossScalaVersions := supportedScalaVersions
     )
 
-lazy val crossedJVM = crossed.jvm.enablePlugins(TutPlugin)
-lazy val crossedJS = crossed.js.enablePlugins(ScalaJSPlugin)
+//lazy val crossedJVM = crossed.jvm.enablePlugins(TutPlugin)
+//lazy val crossedJS = crossed.js.enablePlugins(ScalaJSPlugin)
+lazy val crossedJVM = crossed.jvm
+lazy val crossedJS = crossed.js

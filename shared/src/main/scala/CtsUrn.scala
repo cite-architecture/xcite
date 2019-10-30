@@ -128,14 +128,28 @@ package cite {
     * @param i Number of levels to drop from passage hierarchy.
     */
     def collapsePassageBy(i: Int) : CtsUrn = {
-      if (passageNodeParts.size == 0) {
-        this.dropPassage
+      if ( this.isRange ) {
+        val uv: Vector[CtsUrn] = this.rangeToUrnVector
+        val first = uv.head.collapsePassageBy(i)
+        val last = uv.last.collapsePassageBy(i) 
+        val psg = {
+          if (first == last) {
+            s"${first.passageComponent}"
+          } else {
+            s"${first.passageComponent}-${last.passageComponent}"
+          }
+        }
+        this.addPassage(psg)
       } else {
-        val citationLevels = passageNodeParts(0).split("\\.")
-        if (citationLevels.size > 1) {
-          CtsUrn(this.dropPassage.toString + citationLevels.dropRight(1).mkString("."))
-        } else {
+        if (passageNodeParts.size == 0) {
           this.dropPassage
+        } else {
+          val citationLevels = passageNodeParts(0).split("\\.")
+          if (citationLevels.size > i) {
+            CtsUrn(this.dropPassage.toString + citationLevels.dropRight(i).mkString("."))
+          } else {
+            this.dropPassage
+          }
         }
       }
     }
@@ -145,14 +159,34 @@ package cite {
     * @param i Number of levels to include in the passage hierarchy.
     */
     def collapsePassageTo(i: Int) : CtsUrn = {
+      /*
       if (passageNodeParts.size == 0) {
         throw CiteException("Two few levels in " + urnString + " - cannot collapse to " +  i + " levels.")
       } else {
-        val citationLevels = passageNodeParts(0).split("\\.")
-        if (citationLevels.size >= i) {
-          CtsUrn(this.dropPassage.toString + citationLevels.take(i).mkString("."))
-        } else {
+        */
+      if ( this.isRange) {
+        val uv: Vector[CtsUrn] = this.rangeToUrnVector
+        val first = uv.head.collapsePassageTo(i)
+        val last = uv.last.collapsePassageTo(i) 
+        val psg = {
+          if (first == last) {
+            s"${first.passageComponent}"
+          } else {
+            s"${first.passageComponent}-${last.passageComponent}"
+          }
+        }       
+        this.addPassage(psg)
+
+      } else {
+        if (passageNodeParts.size == 0) {
           throw CiteException("Two few levels in " + urnString + " - cannot collapse to " +  i + " levels.")
+        } else {
+          val citationLevels = passageNodeParts(0).split("\\.")
+          if (citationLevels.size >= i) {
+            CtsUrn(this.dropPassage.toString + citationLevels.take(i).mkString("."))
+          } else {
+            throw CiteException("Two few levels in " + urnString + " - cannot collapse to " +  i + " levels.")
+          }
         }
       }
     }
@@ -860,7 +894,19 @@ package cite {
     * @param urn CtsUrn to compare with this one.
     */
     def >(urn: CtsUrn): Boolean = {
-      ((this >= urn) && (urn != this))
+      val unlikelyThis: CtsUrn = {
+        if (this.isRange) {
+          val uv = this.rangeToUrnVector
+          if (uv.head == uv.last) uv.head else this
+        } else this
+      }
+      val unlikelyUrn: CtsUrn = {
+        if (urn.isRange) {
+          val uv = urn.rangeToUrnVector
+          if (uv.head == uv.last) uv.head else urn
+        } else urn
+      }
+      ((unlikelyThis >= unlikelyUrn) && (unlikelyUrn != unlikelyThis))
     }
 
     /** True if this [[CtsUrn]] contains or is equal to a given [[CtsUrn]].
@@ -871,19 +917,33 @@ package cite {
       if (urn == this) {true} else {
         if (passageComponent.nonEmpty) {
 
-          //println("Work contatins? " + workContains(urn) )
-          //println("Euqal? " +  (this.workComponent == urn.workComponent) )
-          //println(s"Passage ${passageComponent} contains ${urn.passageComponent}? " + passageContains(urn))
-          //println("Passage equal? " + (passageComponent ==  urn.passageComponent))
-
-          val bottomLine = (
-            (workContains(urn)) || (this.workComponent == urn.workComponent )
-          ) &&  (
-            (passageContains(urn)) || (urn.passageComponent == this.passageComponent)
-          )
-          //println("Bottom line for URN with passage is " + bottomLine + "\n\n")
-          bottomLine
-
+          if (this.isRange) {
+            val urnV: Vector[CtsUrn] = this.rangeToUrnVector
+            val checkFirst = urnV.head >= urn
+            val checkLast = urnV.last >= urn
+            ( checkFirst && checkLast )
+          } else if ( urn.isRange ) {
+            val urnV: Vector[CtsUrn] = urn.rangeToUrnVector
+            val checkFirst = this >= urnV.head 
+            val checkLast = this >= urnV.last
+            ( checkFirst && checkLast )
+          } else if (this.isRange && urn.isRange) {
+            val urnV: Vector[CtsUrn] = urn.rangeToUrnVector
+            val thisV: Vector[CtsUrn] = this.rangeToUrnVector
+            val checkFirstFirst = thisV.head >= urnV.head 
+            val checkFirstLast = thisV.head >= urnV.last
+            val checkLastFirst = thisV.last >= urnV.head
+            val checkLastLast = thisV.last >= urnV.last
+            ( checkFirstFirst && checkFirstLast && checkLastFirst && checkLastLast )
+          } else {
+            //println(s"got here with ${this} and ${urn}")
+            val bottomLine = (
+              (workContains(urn)) || (this.workComponent == urn.workComponent )
+            ) &&  (
+              (passageContains(urn)) || (urn.passageComponent == this.passageComponent)
+            )
+            bottomLine
+          }
         } else {
           //println("Same workcomponent? " + (this.workComponent == urn.workComponent))
           //println("Other urn has passge? " + urn.passageComponent.nonEmpty)
@@ -903,31 +963,7 @@ package cite {
     * @param urn CtsUrn to compare with this one.
     */
     def <=(urn: CtsUrn): Boolean = {
-      if (urn == this) {
-        true
-
-      } else {
-        if (passageComponent.nonEmpty) {
-          //println("HAS passage " + passageComponent)
-          //println("work contained? " + urn.workContains(this))
-          //println("passage contained?" + urn.passageContains(this))
-          val bottomLine = (
-            (urn.workContains(this)) || (this.workComponent == urn.workComponent )
-          ) &&  (
-            (urn.passageContains(this)) || (urn.passageComponent == this.passageComponent) || urn.passageComponent.isEmpty
-          )
-          bottomLine
-        } else {
-          //println("Same workcomponent? " + (this.workComponent == urn.workComponent))
-          //println("Other urn has passge? " + urn.passageComponent.nonEmpty)
-          val bottomLine = (
-            ((this.workComponent == urn.workComponent) && urn.passageComponent.nonEmpty) ||
-            urn.workContains(this)
-          )
-         //println("Bottom line for urn with no passage is " + bottomLine + "\n\n")
-         bottomLine
-        }
-      }
+      urn >= this
     }
 
     /** True if this [[CtsUrn]] is contained by a given [[CtsUrn]].

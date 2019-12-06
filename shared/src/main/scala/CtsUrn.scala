@@ -10,7 +10,9 @@ package cite {
   * @param urnString String representation of [[CtsUrn]] validating
   * againt the CtsUrn specification
   */
-  @JSExportAll case class CtsUrn  (val urnString: String) extends Urn {
+  @JSExportAll
+  @JSExportTopLevel("CtsUrn")
+  case class CtsUrn  (val urnString: String) extends Urn {
 
     // Find top-level components of CtsUrn syntax
     val componentsRE = "urn:cts:([^:]+):([^:]+):(.*)".r
@@ -747,6 +749,7 @@ package cite {
     /** Create a new [[CtsUrn]] by dropping the exemplar
     * part of the work component, if any.
     */
+    @JSExport
     def dropExemplar: CtsUrn = {
       workLevel match {
         case  WorkLevel.TextGroup => this
@@ -1126,10 +1129,12 @@ package cite {
 
     // Require fully valid syntax:
     require(fullyValid)
+
   }
 
 
   /** Enumeration of levels of the CTS work hierarchy. */
+  @JSExportTopLevel("WorkLevel")
   object WorkLevel extends Enumeration {
     val TextGroup, Work, Version, Exemplar = Value
   }

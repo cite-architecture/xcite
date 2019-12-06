@@ -1,5 +1,6 @@
 package edu.holycross.shot
-
+import scala.scalajs.js
+import scala.scalajs.js.annotation._
 
 package cite {
 
@@ -10,6 +11,7 @@ package cite {
   }
 
 
+  @JSExportTopLevel("Urn")
   class CiteExport(urn: Urn )
   /** Trait for any citable scholarly resource.
   *

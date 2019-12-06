@@ -16,7 +16,7 @@ package cite {
   * against the Cite2Urn specification
   */
   @JSExportAll
-  @JSExportTopLevel("Cite2Urn")
+  @JSExportNamed
   case class Cite2Urn (val urnString: String) extends Urn {
 
     require(urnString.endsWith("-") == false, "URN cannot end with trailing -")

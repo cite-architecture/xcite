@@ -11,7 +11,7 @@ package cite {
   * againt the CtsUrn specification
   */
   @JSExportAll
-  @JSExportTopLevel("CtsUrn")
+  @JSExportNamed
   case class CtsUrn  (val urnString: String) extends Urn {
 
     // Find top-level components of CtsUrn syntax

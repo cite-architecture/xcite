@@ -4,7 +4,7 @@
 
 `xcite` is a cross-platform library for semantic manipulation of scholarly references expressed in URN notation.
 
-## Current version: 4.1.2
+## Current version: 4.2.0
 
 Status:  **active development**. [Release notes](releases.md)
 
@@ -39,7 +39,7 @@ To build from source and test, use normal sbt commands (`compile`, `test` ...).
 
 In SBT, `fullOptJS` will build a JS library, and save it as `js/target/scala-2.12/xcite-opt.js`.
 
-Include this in an HTML file as you would any other JS library: 
+Include this in an HTML file as you would any other JS library:
 
 ~~~html
 <script type="text/javascript" src="xcite-opt.js"></script>

@@ -1,5 +1,5 @@
 
-lazy val supportedScalaVersions = List("2.10.6", "2.11.8", "2.12.4")
+lazy val supportedScalaVersions = List("2.12.4") //List("2.10.6", "2.11.8", "2.12.4")
 
 lazy val root = project.in(file(".")).
     aggregate(crossedJVM, crossedJS).
@@ -12,11 +12,12 @@ lazy val crossed = crossProject.in(file(".")).
     settings(
       name := "xcite",
       organization := "edu.holycross.shot.cite",
-      version := "4.1.2",
+      version := "4.2.0",
       licenses += ("GPL-3.0",url("https://opensource.org/licenses/gpl-3.0.html")),
       libraryDependencies ++= Seq(
         "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided",
-        "org.scalatest" %%% "scalatest" % "3.0.5" % "test"
+        "org.scalatest" %%% "scalatest" % "3.0.5" % "test",
+        "org.wvlet.airframe" %%% "airframe-log" % "19.8.10"
       )
     ).
     jvmSettings(

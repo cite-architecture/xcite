@@ -2,6 +2,10 @@ package edu.holycross.shot
 import scala.scalajs.js
 import scala.scalajs.js.annotation._
 
+import wvlet.log._
+import wvlet.log.LogFormatter.SourceCodeLogFormatter
+
+
 package cite {
 
 
@@ -17,7 +21,7 @@ package cite {
   */
   @JSExportAll
   @JSExportNamed
-  case class Cite2Urn (val urnString: String) extends Urn {
+  case class Cite2Urn (val urnString: String) extends Urn with LogSupport{
 
     require(urnString.endsWith("-") == false, "URN cannot end with trailing -")
     /** Array of top-level, colon-delimited components.
@@ -61,7 +65,11 @@ package cite {
       try {
         versionOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No version defined in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No version defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
       }
     }
 
@@ -81,7 +89,12 @@ package cite {
       try {
         propertyOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No property defined in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No property defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
+
       }
     }
 
@@ -111,10 +124,19 @@ package cite {
       try {
         objectComponentOption.get
       } catch {
-        case e: NoSuchElementException => throw CiteException("No object component defined in " + urnString)
-        case otherE: Throwable => "ERROR: " + otherE
+        case e: NoSuchElementException => {
+          val msg = "No object component defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
+        case otherE: Throwable => {
+          val msg = "ERROR: " + otherE
+          warn(msg)
+          throw(otherE)
       }
     }
+  }
+
 
     /** For non-empty object component, hyphen-separated
     * parts allowed in ordered collections.
@@ -127,7 +149,11 @@ package cite {
           parts.size match {
             case 2 => parts.toVector
             case 1 => parts.toVector
-            case _ => throw CiteException("Invalid object component syntax: " + urnString)
+            case _ => {
+              val msg = "Invalid object component syntax: " + urnString
+              warn(msg)
+              throw CiteException(msg)
+            }
           }
         }
       }
@@ -180,7 +206,11 @@ package cite {
       try {
         rangeBeginOption.get
       } catch {
-        case e: NoSuchElementException => throw CiteException("No range beginning defined in " + urnString)
+        case e: NoSuchElementException => {
+          val msg = "No range beginning defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
         case ex: Throwable => throw(ex)
       }
     }
@@ -200,7 +230,11 @@ package cite {
       try {
         rangeEndOption.get
       } catch {
-        case e: NoSuchElementException => throw CiteException("No range ending defined in " + urnString)
+        case e: NoSuchElementException => {
+          val msg = "No range ending defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
         case ex: Throwable => throw(ex)
       }
     }
@@ -225,7 +259,9 @@ package cite {
         case 1 => {
           val objParts = objectParts(0).split("@")
           if (objParts.size > 2) {
-            throw CiteException("Invalid extended reference in " + urnString)
+            val msg = "Invalid extended reference in " + urnString
+            warn(msg)
+            throw CiteException(msg)
           } else {
             objParts.toVector
           }
@@ -241,7 +277,9 @@ package cite {
         if (isRange) {
           val rbegin = rangeBegin.split("@").toVector
           if (rbegin.size > 2) {
-            throw CiteException("Invalid extended reference on range beginning part of " + urnString)
+            val msg = "Invalid extended reference on range beginning part of " + urnString
+            warn(msg)
+            throw CiteException(msg)
           } else {
             rbegin
           }
@@ -258,7 +296,9 @@ package cite {
         if (isRange) {
           val rend = rangeEnd.split("@").toVector
           if (rend.size > 2) {
-            throw CiteException("Invalid extended reference on range ending part of " + urnString)
+            val msg = "Invalid extended reference on range ending part of " + urnString
+            warn(msg)
+            throw CiteException(msg)
           } else {
             rend
           }
@@ -274,7 +314,9 @@ package cite {
       if (this.isRange) {
         Cite2Urn(this.dropSelector + this.rangeBegin)
       } else {
-        throw CiteException(s"Function rangeBeginUrn only applicable to range expressions: ${urnString}")
+        val msg = s"Function rangeBeginUrn only applicable to range expressions: ${urnString}"
+        warn(msg)
+        throw CiteException(msg)
       }
     }
 
@@ -282,7 +324,9 @@ package cite {
       if (this.isRange) {
         Cite2Urn(this.dropSelector + this.rangeEnd)
       } else {
-        throw CiteException(s"Function rangeEndUrn only applicable to range expressions: ${urnString}")
+        val msg = s"Function rangeEndUrn only applicable to range expressions: ${urnString}"
+        warn(msg)
+        throw CiteException(msg)
       }
     }
 
@@ -295,7 +339,11 @@ package cite {
     }
     def objectExtension = {
       objectExtensionOption match {
-        case None => throw CiteException("No extended reference in " + urnString)
+        case None => {
+          val msg = "No extended reference in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
         case s: Some[String] => s.get
       }
     }
@@ -311,7 +359,11 @@ package cite {
     }
     def rangeBeginExtension = {
       rangeBeginExtensionOption match {
-        case None => throw CiteException("No extended reference in range beginning of " + urnString)
+        case None => {
+          val msg = "No extended reference in range beginning of " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
         case s: Some[String] => s.get
       }
     }
@@ -325,7 +377,11 @@ package cite {
     }
     def rangeEndExtension = {
       rangeEndExtensionOption match {
-        case None => throw CiteException("No extended reference in range ending of " + urnString)
+        case None => {
+          val msg = "No extended reference in range ending of " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
         case s: Some[String] => s.get
       }
     }
@@ -443,7 +499,7 @@ package cite {
       val pttrn = str.r
 
       val res = pttrn.findFirstIn(collectionComponent.toString)
-      //println("Result of matching  " + str + " in " + urn.toString + " == " + res)
+      //info("Result of matching  " + str + " in " + urn.toString + " == " + res)
       res match {
         case None => false
         case _ => true
@@ -470,7 +526,11 @@ package cite {
     def ~~(u: Urn): Boolean = {
       u match {
         case urn: Cite2Urn => ~~(urn)
-        case _ => throw CiteException("Can only match Cite2Urn against a second Cite2Urn")
+        case _ => {
+          val msg = "Can only match Cite2Urn against a second Cite2Urn"
+          warn(msg)
+          throw CiteException(msg)
+        }
       }
     }
     def ~~(u: Cite2Urn): Boolean = {

@@ -2,6 +2,12 @@ package edu.holycross.shot
 import scala.scalajs.js
 import scala.scalajs.js.annotation._
 
+
+import wvlet.log._
+import wvlet.log.LogFormatter.SourceCodeLogFormatter
+
+
+
 package cite {
 
   /** A URN for a canonically citable text or passage of text.
@@ -12,7 +18,7 @@ package cite {
   */
   @JSExportAll
   @JSExportNamed
-  case class CtsUrn  (val urnString: String) extends Urn {
+  case class CtsUrn  (val urnString: String) extends Urn with LogSupport {
 
     // Find top-level components of CtsUrn syntax
     val componentsRE = "urn:cts:([^:]+):([^:]+):(.*)".r
@@ -21,7 +27,9 @@ package cite {
       (namespace, workComponent, passageComponent)
     } catch {
       case t : Throwable => {
-        throw new Exception("Unable to parse URN string " + urnString + ".  " + t)
+        val msg = "Unable to parse URN string " + urnString + ".  " + t
+        warn(msg)
+        throw new Exception(msg)
       }
     }
     /** Required namespace component of the URN.*/
@@ -49,7 +57,11 @@ package cite {
       try {
         workOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No work defined in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No work defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
       }
     }
 
@@ -68,7 +80,11 @@ package cite {
       try {
         versionOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No version defined in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No version defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
       }
     }
 
@@ -87,7 +103,11 @@ package cite {
       try {
         exemplarOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No exemplar defined in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No exemplar defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
       }
     }
 
@@ -133,7 +153,7 @@ package cite {
       if ( this.isRange ) {
         val uv: Vector[CtsUrn] = this.rangeToUrnVector
         val first = uv.head.collapsePassageBy(i)
-        val last = uv.last.collapsePassageBy(i) 
+        val last = uv.last.collapsePassageBy(i)
         val psg = {
           if (first == last) {
             s"${first.passageComponent}"
@@ -163,31 +183,40 @@ package cite {
     def collapsePassageTo(i: Int) : CtsUrn = {
       /*
       if (passageNodeParts.size == 0) {
-        throw CiteException("Two few levels in " + urnString + " - cannot collapse to " +  i + " levels.")
+        val msg = "Two few levels in " + urnString + " - cannot collapse to " +  i + " levels."
+        warn(msg)
+        throw CiteException(msg)
+
       } else {
         */
       if ( this.isRange) {
         val uv: Vector[CtsUrn] = this.rangeToUrnVector
         val first = uv.head.collapsePassageTo(i)
-        val last = uv.last.collapsePassageTo(i) 
+        val last = uv.last.collapsePassageTo(i)
         val psg = {
           if (first == last) {
             s"${first.passageComponent}"
           } else {
             s"${first.passageComponent}-${last.passageComponent}"
           }
-        }       
+        }
         this.addPassage(psg)
 
       } else {
         if (passageNodeParts.size == 0) {
-          throw CiteException("Two few levels in " + urnString + " - cannot collapse to " +  i + " levels.")
+          val msg = "Two few levels in " + urnString + " - cannot collapse to " +  i + " levels."
+          warn(msg)
+          throw CiteException(msg)
+
         } else {
           val citationLevels = passageNodeParts(0).split("\\.")
           if (citationLevels.size >= i) {
             CtsUrn(this.dropPassage.toString + citationLevels.take(i).mkString("."))
+
           } else {
-            throw CiteException("Two few levels in " + urnString + " - cannot collapse to " +  i + " levels.")
+            val msg = "Two few levels in " + urnString + " - cannot collapse to " +  i + " levels."
+            warn(msg)
+            throw CiteException(msg)
           }
         }
       }
@@ -295,7 +324,12 @@ package cite {
       try {
         passageNodeOption.get
       }  catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No individual node defined in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No individual node defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
+
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -321,7 +355,11 @@ package cite {
       try {
         passageNodeRefOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No passage component defined in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No passage component defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
       case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -343,7 +381,11 @@ package cite {
       try {
         passageNodeSubrefOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No individual node subref defined in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No individual node subref defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -373,7 +415,11 @@ package cite {
       try {
         passageNodeSubrefTextOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No individual node subreference defined in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No individual node subreference defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -388,7 +434,11 @@ package cite {
       }
 
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No individual node subreference index defined in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No individual node subreference index defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -398,7 +448,11 @@ package cite {
       try {
         passageNodeSubrefIndexOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No individual node subreference index defined in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No individual node subreference index defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -408,7 +462,9 @@ package cite {
     def rangeBeginOption: Option[String] = {
       if (passageParts.size > 1) {
         if (passageParts(0).last == '.') {
-          throw CiteException("Invalid URN: trailing period on range beginning of " + urnString)
+          val msg = "Invalid URN: trailing period on range beginning of " + urnString
+          warn(msg)
+          throw CiteException(msg)
         }  else {
           Some(passageParts(0))
         }
@@ -422,7 +478,9 @@ package cite {
         rangeBeginOption.get
       } catch {
         case e: java.util.NoSuchElementException => {
-          throw CiteException("rangeBegin function: invalid range syntax in " + urnString)
+          val msg = "rangeBegin function: invalid range syntax in " + urnString
+          warn(msg)
+          throw CiteException(msg)
         }
         case otherEx : Throwable => throw( otherEx)
       }
@@ -447,7 +505,11 @@ package cite {
       try {
         rangeBeginRefOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("rangeBeginRef function: invalid range syntax in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "rangeBeginRef function: invalid range syntax in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -465,7 +527,11 @@ package cite {
       try {
         rangeBeginSubrefOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No subreference on range beginning in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No subreference on range beginning in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -484,7 +550,11 @@ package cite {
       try {
         rangeBeginSubrefTextOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No range beginning subreference text defined in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No range beginning subreference text defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -506,7 +576,11 @@ package cite {
       try {
         rangeBeginSubrefIndexOption.get
       } catch {
-        case e: java.util.NoSuchElementException =>throw CiteException("No range beginning subreference index defined in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No range beginning subreference index defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -516,7 +590,10 @@ package cite {
     def rangeEndOption: Option[String] = {
       if (passageParts.size > 1) {
         if (passageParts(1).last == '.') {
-          throw CiteException("Invalid URN: trailing period on range ending reference of " + urnString)
+          val msg = "Invalid URN: trailing period on range ending reference of " + urnString
+          warn(msg)
+          throw CiteException(msg)
+
         } else {
           Some(passageParts(1))
         }
@@ -528,7 +605,11 @@ package cite {
       try {
         rangeEndOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No range ending defined in " + urnString + " from passage parts " + passageParts.toVector)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No range ending defined in " + urnString + " from passage parts " + passageParts.toVector
+          warn(msg)
+          throw CiteException(msg)
+        }
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -551,7 +632,11 @@ package cite {
       try {
         rangeEndRefOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No range ending reference defined in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No range ending reference defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -570,7 +655,11 @@ package cite {
       try {
         rangeEndSubrefOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No subreference on range ending in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No subreference on range ending in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -589,7 +678,11 @@ package cite {
       try {
         rangeEndSubrefTextOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No range ending subreference text defined in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No range ending subreference text defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -610,7 +703,11 @@ package cite {
       try {
         rangeEndSubrefIndexOption.get
       } catch {
-        case e: java.util.NoSuchElementException => throw CiteException("No range ending subreference index defined in " + urnString)
+        case e: java.util.NoSuchElementException => {
+          val msg = "No range ending subreference index defined in " + urnString
+          warn(msg)
+          throw CiteException(msg)
+        }
         case otherEx : Throwable => throw( otherEx)
       }
     }
@@ -687,7 +784,7 @@ package cite {
         // test each part
       //} else {
         //
-        //println("CHECK TRAIL FOR " + noSubref)
+        //debug("CHECK TRAIL FOR " + noSubref)
         // (noSubref.last == '.')
         //require(illegalTrailingDot == false, "Invalid URN syntax in passage component of " + urnString)
       //}
@@ -696,7 +793,11 @@ package cite {
         case 0 => true
         case 1 => if (passageComponent.contains("-")) false else true
         case 2 => ((rangeBegin.nonEmpty) && (rangeEnd.nonEmpty))
-        case _ => throw CiteException("invalid URN string: more than two elements in range " + passageComponent)
+        case _ => {
+          val msg = "invalid URN string: more than two elements in range " + passageComponent
+          warn(msg)
+          throw CiteException(msg)
+        }
       }
     }
 
@@ -738,7 +839,11 @@ package cite {
     def addVersion(v: String): CtsUrn = {
       workLevel match {
 
-        case  WorkLevel.TextGroup => throw (CiteException("Cannot add version to group-level URN"))
+        case  WorkLevel.TextGroup => {
+          val msg = "Cannot add version to group-level URN"
+          warn(msg)
+          throw (CiteException(msg))
+        }
         case WorkLevel.Work =>  CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + v + ":" + passageComponent)
         case WorkLevel.Version =>    CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + v + ":" + passageComponent)
         case WorkLevel.Exemplar =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + v + ":" + passageComponent)
@@ -767,8 +872,16 @@ package cite {
   def addExemplar(ex: String): CtsUrn = {
     workLevel match {
 
-      case  WorkLevel.TextGroup => throw (CiteException("Cannot add version to group-level URN"))
-      case  WorkLevel.Work => throw (CiteException("Cannot add version to work-level URN"))
+      case  WorkLevel.TextGroup => {
+        val msg = "Cannot add version to group-level URN"
+        warn(msg)
+        throw (CiteException(msg))
+      }
+      case  WorkLevel.Work => {
+        val msg = "Cannot add version to work-level URN"
+        warn(msg)
+        throw (CiteException(msg))
+      }
       case WorkLevel.Version =>  CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + version + "." + ex + ":" + passageComponent)
       case WorkLevel.Exemplar =>    CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + version + "." + ex + ":" + passageComponent)
     }
@@ -797,7 +910,7 @@ package cite {
     * @param urn CtsUrn to compare to this one.
     */
     def workContains(urn: CtsUrn): Boolean = {
-      //println("Compare workcomponent " + workComponent + " with " + urn.workComponent)
+      //debug("Compare workcomponent " + workComponent + " with " + urn.workComponent)
       if (workComponent == urn.workComponent) {
         false
 
@@ -831,11 +944,11 @@ package cite {
         val pttrn = str.r
 
         val res = pttrn.findFirstIn(wrk)
-        println("Result of matching  " + str + " in " + urn.toString + " == " + res)
+        debug("Result of matching  " + str + " in " + urn.toString + " == " + res)
         res match {
           case None => false
           case _ => {
-            println("THIS " +  urn.workComponent + " contains " + urn.workComponent)
+            debug("THIS " +  urn.workComponent + " contains " + urn.workComponent)
             true
           }
         }*/
@@ -848,9 +961,9 @@ package cite {
     * @param urn CtsUrn to compare to this one.
     */
     def passageContains(urn: CtsUrn): Boolean = {
-      //println(s"LOOKING AT ${passageParts.size} PASSAGE PARTS: " + passageParts)
-      //println("AND COMPARING " + urn.passageParts.size)
-      //println("Passage empty?" + passageParts.isEmpty)
+      //debug(s"LOOKING AT ${passageParts.size} PASSAGE PARTS: " + passageParts)
+      //debug("AND COMPARING " + urn.passageParts.size)
+      //debug("Passage empty?" + passageParts.isEmpty)
 
       if (urn.passageParts.isEmpty || passageParts.isEmpty ){
         false
@@ -860,8 +973,8 @@ package cite {
         val psg = dropSubref.passageComponent.replaceAll("\\.","\\\\.")
         val str = "(^" + psg + "\\.)|(^" + psg + "$)"
         val pttrn = str.r
-        //println("Use pattern " + pttrn )
-        //println("against " + dropSubref.passageComponent.toString)
+        //debug("Use pattern " + pttrn )
+        //debug("against " + dropSubref.passageComponent.toString)
         val res = pttrn.findFirstIn(urn.dropSubref.passageComponent.toString)
 
         res match {
@@ -927,19 +1040,19 @@ package cite {
             ( checkFirst && checkLast )
           } else if ( urn.isRange ) {
             val urnV: Vector[CtsUrn] = urn.rangeToUrnVector
-            val checkFirst = this >= urnV.head 
+            val checkFirst = this >= urnV.head
             val checkLast = this >= urnV.last
             ( checkFirst && checkLast )
           } else if (this.isRange && urn.isRange) {
             val urnV: Vector[CtsUrn] = urn.rangeToUrnVector
             val thisV: Vector[CtsUrn] = this.rangeToUrnVector
-            val checkFirstFirst = thisV.head >= urnV.head 
+            val checkFirstFirst = thisV.head >= urnV.head
             val checkFirstLast = thisV.head >= urnV.last
             val checkLastFirst = thisV.last >= urnV.head
             val checkLastLast = thisV.last >= urnV.last
             ( checkFirstFirst && checkFirstLast && checkLastFirst && checkLastLast )
           } else {
-            //println(s"got here with ${this} and ${urn}")
+            //debug(s"got here with ${this} and ${urn}")
             val bottomLine = (
               (workContains(urn)) || (this.workComponent == urn.workComponent )
             ) &&  (
@@ -948,13 +1061,13 @@ package cite {
             bottomLine
           }
         } else {
-          //println("Same workcomponent? " + (this.workComponent == urn.workComponent))
-          //println("Other urn has passge? " + urn.passageComponent.nonEmpty)
+          //debug("Same workcomponent? " + (this.workComponent == urn.workComponent))
+          //debug("Other urn has passge? " + urn.passageComponent.nonEmpty)
           val bottomLine = (
             ((this.workComponent == urn.workComponent) && urn.passageComponent.nonEmpty) ||
             workContains(urn)
           )
-         //println("Bottom line for urn with no passage is " + bottomLine + "\n\n")
+         //debug("Bottom line for urn with no passage is " + bottomLine + "\n\n")
          bottomLine
         }
       }
@@ -982,10 +1095,10 @@ package cite {
     * @param u URN to compare.
     */
     def ~~(urn: CtsUrn): Boolean = {
-      //println("Twiddleing with " + this +  " against " + urn)
-      //println("NS == ? "+ namespace == urn.namespace )
-      //println("workMatch? " + workMatch(urn))
-      //println("passgeMatch? " + passageMatch(urn))
+      //debug("Twiddleing with " + this +  " against " + urn)
+      //debug("NS == ? "+ namespace == urn.namespace )
+      //debug("workMatch? " + workMatch(urn))
+      //debug("passgeMatch? " + passageMatch(urn))
       namespace == urn.namespace && workMatch(urn) && passageMatch(urn)
     }
 
@@ -998,7 +1111,11 @@ package cite {
     def ~~ (u: Urn) : Boolean = {
       u match {
         case urn: CtsUrn => ~~(urn)
-        case _ => throw CiteException("Can only match CtsUrn against a second CtsUrn")
+        case _ => {
+          val msg = "Can only match CtsUrn against a second CtsUrn"
+          warn(msg)
+          throw CiteException(msg)
+        }
       }
     }
 
@@ -1020,7 +1137,11 @@ package cite {
     def >< (u: Urn) : Boolean = {
       u match {
         case urn: CtsUrn => ><(urn)
-        case _ => throw CiteException("Can only match CtsUrn against a second CtsUrn")
+        case _ => {
+          val msg = "Can only match CtsUrn against a second CtsUrn"
+          warn(msg)
+          throw CiteException(msg)
+        }
       }
     }
 
@@ -1040,7 +1161,7 @@ package cite {
 
       val repeatedPeriods = ".*\\.{2}.*"
       val badWorkSyntax = workComponent.matches(repeatedPeriods)
-      //println(s"MATCH REPEATED PERIODS on ${urnString} ? " + badWorkSyntax)
+      //debug(s"MATCH REPEATED PERIODS on ${urnString} ? " + badWorkSyntax)
       require(badWorkSyntax ==  false, "Invalid URN syntax in work component of " + urnString)
 
       for (p <- rangeBeginParts) {
@@ -1078,7 +1199,11 @@ package cite {
       /*
       if (components.size == 5) {
         urnString.last match {
-          case ':' => throw CiteException("Invalid URN syntax: trailing colon in " + urnString)
+          case ':' => {
+            val msg = "Invalid URN syntax: trailing colon in " + urnString
+            warn(msg)
+            throw CiteException(msg)
+          }
           case _ =>  true
         }
       } else {

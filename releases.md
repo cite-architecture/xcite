@@ -1,5 +1,7 @@
 # `xcite`: release notes
 
+**4.2.0**: Adds logging support with `airframe` logger.
+
 **4.1.2**:  Updated compiler-directives to allow calling this library from regular Javascript.
 
 **4.1.1**:  Fixed bugs in collapsePassageBy and collapsePassageTo, fixed functionality of algebra with range-urns.

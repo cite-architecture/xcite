@@ -21,7 +21,11 @@ class CtsUrnTwiddleSpec extends FlatSpec {
     assert(cf == false)
   }
 
-
+ it should "twiddle without spamming the console with errors" in {
+    val containingUrn = CtsUrn("urn:cts:greekLit:group.work:1.1")
+    val containedUrn = CtsUrn("urn:cts:greekLit:group.work:1.1.lemma")
+    assert( containingUrn ~~ containedUrn)
+  }
 
   it should "identify containment of URNs with no passage components and including exemplars" in  {
     val u1 = CtsUrn("urn:cts:greekLit:tlg5026.msA.v1:")

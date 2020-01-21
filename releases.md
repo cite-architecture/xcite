@@ -1,5 +1,7 @@
 # `xcite`: release notes
 
+**4.2.1**: No longer throwing a million exception in the normal course of work, because it is using `.workOption`, `.versionOption`, and `.exemplarOption` correctly, and failing gracefully on calls to the (deprecated) `.version`, `.work` and `.exemplar`.
+
 **4.2.0**: Adds logging support with `airframe` logger.
 
 **4.1.2**:  Updated compiler-directives to allow calling this library from regular Javascript.

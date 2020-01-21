@@ -12,7 +12,7 @@ lazy val crossed = crossProject.in(file(".")).
     settings(
       name := "xcite",
       organization := "edu.holycross.shot.cite",
-      version := "4.2.0",
+      version := "4.2.1",
       licenses += ("GPL-3.0",url("https://opensource.org/licenses/gpl-3.0.html")),
       libraryDependencies ++= Seq(
         "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided",

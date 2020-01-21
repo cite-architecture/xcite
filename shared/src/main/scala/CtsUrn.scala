@@ -52,10 +52,15 @@ package cite {
       }
     }
 
-    /** String value of optional work part of work hierarchy.  */
+    /** String value of optional work part of work hierarchy.
+      * DEPRECATED in favor of workOption
+      */
     def work = {
       try {
-        workOption.get
+        workOption match {
+          case Some(s) => s
+          case None => ""
+        }
       } catch {
         case e: java.util.NoSuchElementException => {
           val msg = "No work defined in " + urnString
@@ -75,10 +80,14 @@ package cite {
     }
 
     /** String value of optional version part of work hierarchy.
-    */
+      * DEPRECATED in favor of versionOption
+      */
     def version: String = {
       try {
-        versionOption.get
+        versionOption match {
+          case Some(s) => s
+          case None => ""
+        }
       } catch {
         case e: java.util.NoSuchElementException => {
           val msg = "No version defined in " + urnString
@@ -98,10 +107,14 @@ package cite {
     }
 
     /** String value of optional exemplar part of work hierarchy.
-    */
+      * DEPRECATED in favor of exemplarOption
+      */
     def exemplar: String = {
       try {
-        exemplarOption.get
+        exemplarOption match {
+          case Some(s) => s
+          case None => ""
+        }
       } catch {
         case e: java.util.NoSuchElementException => {
           val msg = "No exemplar defined in " + urnString
@@ -131,7 +144,7 @@ package cite {
     def toVersion: CtsUrn = {
       versionOption match {
         case None => toWork
-        case _ => CtsUrn(s"urn:cts:${namespace}:${textGroup}.${work}.${version}:")
+        case _ => CtsUrn(s"urn:cts:${namespace}:${textGroup}.${work}.${versionOption.get}:")
       }
     }
 
@@ -140,7 +153,7 @@ package cite {
     def toExemplar: CtsUrn = {
       exemplarOption match {
         case None => toVersion
-        case _ => CtsUrn(s"urn:cts:${namespace}:${textGroup}.${work}.${version}.${exemplar}:")
+        case _ => CtsUrn(s"urn:cts:${namespace}:${textGroup}.${work}.${versionOption.get}.${exemplar}:")
       }
     }
 
@@ -860,7 +873,7 @@ package cite {
         case  WorkLevel.TextGroup => this
         case WorkLevel.Work => this
         case WorkLevel.Version => this
-        case WorkLevel.Exemplar =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + version + ":" + passageComponent)
+        case WorkLevel.Exemplar =>   CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + versionOption.get + ":" + passageComponent)
       }
     }
 
@@ -882,8 +895,8 @@ package cite {
         warn(msg)
         throw (CiteException(msg))
       }
-      case WorkLevel.Version =>  CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + version + "." + ex + ":" + passageComponent)
-      case WorkLevel.Exemplar =>    CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + version + "." + ex + ":" + passageComponent)
+      case WorkLevel.Version =>  CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + versionOption.get + "." + ex + ":" + passageComponent)
+      case WorkLevel.Exemplar =>    CtsUrn("urn:cts:" + namespace + ":" + textGroup + "." +  work + "." + versionOption.get + "." + ex + ":" + passageComponent)
     }
   }
 
@@ -920,7 +933,7 @@ package cite {
           case WorkLevel.TextGroup => (textGroup == urn.textGroup)
           case WorkLevel.Work => {
             try {
-              (textGroup == urn.textGroup) && (work == urn.work)
+              (textGroup == urn.textGroup) && (workOption != None) && (workOption == urn.workOption)
             } catch {
               case e: java.lang.Exception => false
             }
@@ -928,7 +941,7 @@ package cite {
           }
           case WorkLevel.Version => {
             try {
-              (textGroup == urn.textGroup) && (work == urn.work) && (version == urn.version)
+              (textGroup == urn.textGroup) && (work == urn.work) && (urn.versionOption != None) && (versionOption == urn.versionOption)
             } catch {
               case e: java.lang.Exception => false
             }

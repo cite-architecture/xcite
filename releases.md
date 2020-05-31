@@ -1,6 +1,8 @@
 # `xcite`: release notes
 
-**4.2.1**: No longer throwing a million exception in the normal course of work, because it is using `.workOption`, `.versionOption`, and `.exemplarOption` correctly, and failing gracefully on calls to the (deprecated) `.version`, `.work` and `.exemplar`.
+**4.3.0**: Uses sbt 1.3 to build for ScalaJS 1.0. 
+
+**4.2.1**: No longer throwing a million exceptions in the normal course of work, because it is using `.workOption`, `.versionOption`, and `.exemplarOption` correctly, and failing gracefully on calls to the (deprecated) `.version`, `.work` and `.exemplar`.
 
 **4.2.0**: Adds logging support with `airframe` logger.
 

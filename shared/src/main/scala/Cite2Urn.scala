@@ -1,9 +1,10 @@
 package edu.holycross.shot
+
 import scala.scalajs.js
 import scala.scalajs.js.annotation._
 
 import wvlet.log._
-import wvlet.log.LogFormatter.SourceCodeLogFormatter
+//import wvlet.log.LogFormatter.SourceCodeLogFormatter
 
 
 package cite {
@@ -20,7 +21,6 @@ package cite {
   * against the Cite2Urn specification
   */
   @JSExportAll
-  @JSExportNamed
   case class Cite2Urn (val urnString: String) extends Urn with LogSupport{
 
     require(urnString.endsWith("-") == false, "URN cannot end with trailing -")

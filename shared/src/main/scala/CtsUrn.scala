@@ -4,7 +4,7 @@ import scala.scalajs.js.annotation._
 
 
 import wvlet.log._
-import wvlet.log.LogFormatter.SourceCodeLogFormatter
+//import wvlet.log.LogFormatter.SourceCodeLogFormatter
 
 
 
@@ -17,7 +17,6 @@ package cite {
   * againt the CtsUrn specification
   */
   @JSExportAll
-  @JSExportNamed
   case class CtsUrn  (val urnString: String) extends Urn with LogSupport {
 
     // Find top-level components of CtsUrn syntax
@@ -867,7 +866,6 @@ package cite {
     /** Create a new [[CtsUrn]] by dropping the exemplar
     * part of the work component, if any.
     */
-    @JSExport
     def dropExemplar: CtsUrn = {
       workLevel match {
         case  WorkLevel.TextGroup => this

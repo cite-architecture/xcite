@@ -2,7 +2,7 @@ package edu.holycross.shot.cite
 
 import scala.scalajs.js
 
-object Main extends js.JSApp {
+object Main {
   def main(): Unit = {
 
     val mini = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.1")

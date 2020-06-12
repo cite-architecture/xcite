@@ -4,6 +4,7 @@ lazy val scala212 = "2.12.10"
 lazy val supportedScalaVersions = List(scala212, scala211)
 
 ThisBuild / scalaVersion := scala212
+ThisBuild / turbo := true
 
 lazy val root = (project in file("."))
   .aggregate(crossed.js, crossed.jvm)

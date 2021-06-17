@@ -1,5 +1,7 @@
 # `xcite`: release notes
 
+**4.3.1**: Artifact published now at https://terracotta.hpcc.uh.edu/nexus/repository/maven-releases/
+
 **4.3.0**: Uses sbt 1.3 to build for ScalaJS 1.0. 
 
 **4.2.1**: No longer throwing a million exceptions in the normal course of work, because it is using `.workOption`, `.versionOption`, and `.exemplarOption` correctly, and failing gracefully on calls to the (deprecated) `.version`, `.work` and `.exemplar`.

@@ -4,7 +4,7 @@
 
 `xcite` is a cross-platform library for semantic manipulation of scholarly references expressed in URN notation.
 
-## Current version: 4.3.0
+## Current version: 4.3.1
 
 Status:  **active development**. [Release notes](releases.md)
 
@@ -20,11 +20,22 @@ See <https://cite-architecture.github.io/xcite/>.
 
 ## Using, building, testing
 
-`xcite` can be compiled for both the JVM and ScalaJS using scala versions 2.10, 2.11 or 2.12.  Binaries for all three versions are available from jcenter.
+`xcite` can be compiled for both the JVM and ScalaJS using scala versions 2.10, 2.11 or 2.12.  Binaries for all three versions are available from the Nexus repository on <terracotta.hpcc.uh.edu/nexus>.
 
 If you are using sbt, include `Resolver.jcenterRepo` in your list of resolvers
 
-    resolvers += Resolver.jcenterRepo
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    name := "HelloURN",
+	resolvers += "Nexus" at "https://terracotta.hpcc.uh.edu/nexus/repository/maven-releases/",
+  libraryDependencies ++= Seq(
+      "org.scalatest" %% "scalatest" % "3.1.2" % "test",
+      "edu.holycross.shot.cite" %% "xcite" % "4.3.1"
+    )
+  )
+
+```
 
 and add this to your library dependencies:
 

@@ -18,14 +18,19 @@ lazy val crossed = crossProject(JSPlatform, JVMPlatform).in(file(".")).
   settings(
     name := "xcite",
     organization := "edu.holycross.shot.cite",
-    version := "4.3.0",
+    version := "4.3.1",
     licenses += ("GPL-3.0",url("https://opensource.org/licenses/gpl-3.0.html")),
 
-    resolvers += Resolver.jcenterRepo,
+    resolvers += "Nexus" at "https://terracotta.hpcc.uh.edu/nexus/repository/maven-releases/",
     libraryDependencies ++= Seq(
       "org.scalatest" %%% "scalatest" % "3.1.2" % "test",
       "org.wvlet.airframe" %%% "airframe-log" % "20.5.2"
-    )
+    ),
+    
+    credentials += Credentials(Path.userHome / ".sbt" / ".credentials"),
+
+    publishTo := Some("releases" at "https://terracotta.hpcc.uh.edu/nexus/repository/maven-releases/")
+
   ).
   jvmSettings(
     // JVM-specific settings:
@@ -37,6 +42,7 @@ lazy val crossed = crossProject(JSPlatform, JVMPlatform).in(file(".")).
     // JS-specific settings:
     scalaJSUseMainModuleInitializer := true,
   )
+
   
 lazy val docs = project       // new documentation project
   .in(file("docs-build")) // important: it must not be docs/
